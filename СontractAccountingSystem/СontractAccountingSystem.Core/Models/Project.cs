@@ -8,13 +8,12 @@ using СontractAccountingSystem.Core.Models.Interfaces;
 
 namespace СontractAccountingSystem.Core.Models;
 
-public class Role : IEntity
+public class Project : IEntity
 {
     [Key]
     public int Id { get; set; }
-    public string Name { get; set; } = "null";
-    public Role()
+    public string Name { get; set; }
+    public Project()
     {
-
     }
 }
