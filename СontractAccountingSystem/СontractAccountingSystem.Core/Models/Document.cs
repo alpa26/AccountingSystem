@@ -28,6 +28,8 @@ namespace СontractAccountingSystem.Core.Models
         public decimal? Price { get; set; }
         public string WorkDescription { get; set; } = "null";
         public string Comment { get; set; } = "null";
+        public string Path { get; set; } = "null";
+
         // Другие свойства
         public Organization Organization { get; set; } = new();
         public KontrAgent KontrAgent { get; set; } = new();

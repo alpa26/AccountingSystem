@@ -12,7 +12,7 @@ using СontractAccountingSystem.Server.Data;
 namespace СontractAccountingSystem.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240309185553_InitialMigration")]
+    [Migration("20240311061308_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -98,7 +98,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 3, 11, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<DateTime>("DeadlineEnd")
                         .HasColumnType("timestamp with time zone");
@@ -122,6 +122,10 @@ namespace СontractAccountingSystem.Server.Migrations
 
                     b.Property<int>("OrganizationId")
                         .HasColumnType("integer");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<int>("PayStatusId")
                         .HasColumnType("integer");
@@ -215,7 +219,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 3, 9, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 3, 11, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<int>("DocumentId")
                         .HasColumnType("integer");

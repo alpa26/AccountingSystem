@@ -11,13 +11,13 @@ namespace СontractAccountingSystem.Server.Controllers
 {
     [Route("api/paystatus")]
     [ApiController]
-    public class PayStatusController : ControllerBase
+    public class PayStatusesController : ControllerBase
     {
         private readonly IMediator _mediator;
         //private readonly AppDbContext _appDbContext;
 
 
-        public PayStatusController(IMediator mediator)
+        public PayStatusesController(IMediator mediator)
         {
             _mediator = mediator;
         }
