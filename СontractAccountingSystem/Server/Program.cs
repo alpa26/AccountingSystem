@@ -8,6 +8,8 @@ using ÑontractAccountingSystem.Server;
 using ÑontractAccountingSystem.Server.Data;
 using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Identity;
+using ÑontractAccountingSystem.Core.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,20 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+
+builder.Services.AddIdentity<User, Role>(options =>
+{
+    options.Password.RequiredLength = 8;
+    options.Password.RequireDigit = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.SignIn.RequireConfirmedEmail = false;
+})
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+
+
 
 builder.Services.AddSwaggerGen(options =>
 {

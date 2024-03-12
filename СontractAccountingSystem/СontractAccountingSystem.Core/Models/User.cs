@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
@@ -9,16 +10,16 @@ using СontractAccountingSystem.Core.Models.Interfaces;
 
 namespace СontractAccountingSystem.Core.Models;
 
-public class User : IEntity
+public class User : IdentityUser<int>
 {
     [Key]
-    public int Id { get; set; }
-    public string Name { get; set; } = "null";
+    public override int Id { get; set; }
+    public override string UserName { get; set; } = "null";
+    public string FirstName { get; set; } = "null";
     public string SecondName { get; set; } = "null";
     public string LastName { get; set; } = "null";
-    public string Phone { get; set; } = "null";
-    public string Mail { get; set; } = "null";
-    public bool IsBlocked { get; set; }=false;
+    public override string PhoneNumber { get; set; } = "null";
+    public override string Email { get; set; } = "null";
     public int RoleId { get; set; }
     public Role Role { get; set; } = new();
 

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Salazki.Security;
 using System.Collections.Generic;
 using System.Reflection;
@@ -61,54 +62,62 @@ public class AppDbContext : DbContext
 
         //KontrAgent
         modelBuilder.Entity<KontrAgent>().HasOne(k => k.User).WithMany()
-        .HasForeignKey(k => k.UserId);
+        .HasForeignKey(k => k.UserId).OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<KontrAgent>().HasOne(d => d.Type).WithMany()
-        .HasForeignKey(x => x.TypeId);
+        .HasForeignKey(x => x.TypeId).OnDelete(DeleteBehavior.Restrict);
 
         //Document
         modelBuilder.Entity<Document>().HasOne(d => d.Organization).WithMany()
-        .HasForeignKey(x => x.OrganizationId);
+        .HasForeignKey(x => x.OrganizationId).OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Document>().HasOne(d => d.Type).WithMany()
-        .HasForeignKey(x => x.TypeId);
+        .HasForeignKey(x => x.TypeId).OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Document>().HasOne(d => d.PayStatus).WithMany()
-        .HasForeignKey(x => x.PayStatusId);
+        .HasForeignKey(x => x.PayStatusId).OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Document>().HasOne(d => d.PaymentType).WithMany()
-        .HasForeignKey(x => x.PaymentTypeId);
+        .HasForeignKey(x => x.PaymentTypeId).OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Document>().HasOne(d => d.Employer).WithMany()
-        .HasForeignKey(x => x.EmployerId);
+        .HasForeignKey(x => x.EmployerId).OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Document>().HasOne(d => d.KontrAgent).WithMany()
-        .HasForeignKey(x => x.KontrAgentId);
+        .HasForeignKey(x => x.KontrAgentId).OnDelete(DeleteBehavior.Restrict);
 
         // User 
         modelBuilder.Entity<User>().HasOne(k => k.Role).WithMany()
-        .HasForeignKey(r => r.RoleId);
+        .HasForeignKey(r => r.RoleId).OnDelete(DeleteBehavior.Restrict);
 
         //RelatedDocuments 
         modelBuilder.Entity<RelateDocuments>().HasOne(d => d.Document1).WithMany()
-        .HasForeignKey(x => x.Document1Id);
+        .HasForeignKey(x => x.Document1Id).OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<RelateDocuments>().HasOne(d => d.Document2).WithMany()
-        .HasForeignKey(x => x.Document2Id);
+        .HasForeignKey(x => x.Document2Id).OnDelete(DeleteBehavior.Restrict);
 
         //Notification 
         modelBuilder.Entity<Notification>().HasOne(d => d.Project).WithMany()
-        .HasForeignKey(x => x.ProjectId);
+        .HasForeignKey(x => x.ProjectId).OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Notification>().HasOne(d => d.Document).WithMany()
-        .HasForeignKey(x => x.DocumentId);
+        .HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.Restrict);
 
         //ProjectDocuments 
         modelBuilder.Entity<ProjectDocuments>().HasOne(d => d.Project).WithMany()
-        .HasForeignKey(x => x.ProjectId);
+        .HasForeignKey(x => x.ProjectId).OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<ProjectDocuments>().HasOne(d => d.Document).WithMany()
-        .HasForeignKey(x => x.DocumentId);
+        .HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.Restrict);
 
         //DocPaymentDeadlines 
         modelBuilder.Entity<DocPaymentDeadlines>().HasOne(d => d.Document).WithMany()
-        .HasForeignKey(x => x.DocumentId);
+        .HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.Restrict);
+
+        // Identity
+        modelBuilder.Entity<IdentityUserRole<string>>()
+            .HasKey(x => new { x.UserId, x.RoleId });
+        modelBuilder.Entity<IdentityUserLogin<string>>()
+            .HasKey(x => new { x.LoginProvider, x.ProviderKey });
+        modelBuilder.Entity<IdentityUserToken<string>>()
+            .HasKey(x => new { x.UserId, x.LoginProvider, x.Name });
 
     }
 }
