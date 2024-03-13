@@ -23,7 +23,7 @@ namespace СontractAccountingSystem.Server.Features.RoleCreate
                 var role = request.Role;
 
                 await _roleManager.CreateAsync(role);
-                await _mediator.Publish(new PayStatusCreated(role.Id));
+                await _mediator.Publish(new RoleCreated(role.Id));
                 return role.Id;
             }
         }

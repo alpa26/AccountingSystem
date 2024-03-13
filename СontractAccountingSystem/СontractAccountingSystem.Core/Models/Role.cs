@@ -9,7 +9,7 @@ using СontractAccountingSystem.Core.Models.Interfaces;
 
 namespace СontractAccountingSystem.Core.Models;
 
-public class Role : IdentityRole<int>
+public class Role : IdentityRole<int>, IEntity
 {
     [Key]
     public override int Id { get; set; }

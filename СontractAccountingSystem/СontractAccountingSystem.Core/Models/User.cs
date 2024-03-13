@@ -10,7 +10,7 @@ using СontractAccountingSystem.Core.Models.Interfaces;
 
 namespace СontractAccountingSystem.Core.Models;
 
-public class User : IdentityUser<int>
+public class User : IdentityUser<int>, IEntity
 {
     [Key]
     public override int Id { get; set; }
