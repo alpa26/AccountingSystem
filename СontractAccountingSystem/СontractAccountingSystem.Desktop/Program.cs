@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using СontractAccountingSystem.Server;
+using СontractAccountingSystem.Core;
 
 namespace СontractAccountingSystem.Desktop
 {

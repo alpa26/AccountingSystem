@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Salazki.Presentation.Elements;
 using СontractAccountingSystem.Core.Models;
-using СontractAccountingSystem.Server.Data;
-using СontractAccountingSystem.Server.Features.PayStatusCreate;
+using СontractAccountingSystem.Core.Data;
+using СontractAccountingSystem.Core.Features.PayStatusCreate;
 
 namespace СontractAccountingSystem.Server.Controllers
 {

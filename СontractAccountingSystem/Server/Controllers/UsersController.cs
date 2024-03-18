@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using СontractAccountingSystem.Core.Models;
-using СontractAccountingSystem.Server.Features;
-using СontractAccountingSystem.Server.Features.UserCreate;
+using СontractAccountingSystem.Core.Features;
+using СontractAccountingSystem.Core.Features.UserCreate;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
@@ -25,7 +25,7 @@ namespace СontractAccountingSystem.Server.Controllers
         }
 
         [HttpPost("getbyname")]
-        public async Task<User> GetUserList(Features.GetUserByName.Query query)
+        public async Task<User> GetUserList(Core.Features.GetUserByName.Query query)
         {
             return await _mediator.Send(query);
         }
@@ -33,7 +33,7 @@ namespace СontractAccountingSystem.Server.Controllers
         [HttpGet("list")]
         public async Task<User[]> GetUserList()
         {
-            return await _mediator.Send(new Features.GetUsersList.Query());
+            return await _mediator.Send(new Core.Features.GetUsersList.Query());
         }
 
 

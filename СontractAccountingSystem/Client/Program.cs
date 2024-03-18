@@ -11,13 +11,13 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SampleApp.Browser
+namespace СontractAccountingSystem.Client
 {
     public class Program
     {
         public static async Task Main(string[] args)
         {
-            //await Platform.StartApplication(new ContractApp(), new CoreModule());
+            await Platform.StartApplication(new ContractApp(), new CoreModule());
         }
     }
 }

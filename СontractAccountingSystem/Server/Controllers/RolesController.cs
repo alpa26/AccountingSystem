@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using СontractAccountingSystem.Server.Features.RoleCreate;
+using СontractAccountingSystem.Core.Features.RoleCreate;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
