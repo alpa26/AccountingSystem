@@ -130,6 +130,7 @@ namespace СontractAccountingSystem.Core.Pages.Main
                 ActionDelegate = async () => {
                     var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
                     var response = await httpClient.PostAsync("api/auth/logout", null);
+                    Application.Current.Logoff();
                 },
         };
 
