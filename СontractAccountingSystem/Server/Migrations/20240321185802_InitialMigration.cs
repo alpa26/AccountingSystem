@@ -217,7 +217,7 @@ namespace СontractAccountingSystem.Server.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Number = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 3, 18, 0, 0, 0, 0, DateTimeKind.Utc)),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 3, 21, 0, 0, 0, 0, DateTimeKind.Utc)),
                     DeadlineStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeadlineEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     OrganizationId = table.Column<int>(type: "integer", nullable: false),
@@ -302,7 +302,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     ProjectId = table.Column<int>(type: "integer", nullable: false),
                     DocumentId = table.Column<int>(type: "integer", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 3, 18, 0, 0, 0, 0, DateTimeKind.Utc))
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 3, 21, 0, 0, 0, 0, DateTimeKind.Utc))
                 },
                 constraints: table =>
                 {

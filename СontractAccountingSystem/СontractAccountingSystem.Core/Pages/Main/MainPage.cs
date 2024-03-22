@@ -1,5 +1,10 @@
 ﻿using Salazki.Presentation.Elements;
+using System.Net.Http.Json;
+using System.Net.Http;
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Core.Services.Interfaces;
+using СontractAccountingSystem.Core.Services;
+using СontractAccountingSystem.Core.Pages.Logon;
 
 namespace СontractAccountingSystem.Core.Pages.Main
 {
@@ -119,8 +124,17 @@ namespace СontractAccountingSystem.Core.Pages.Main
                     Text = "РАЗДЕЛ СПРАВКА В РАЗРАБОТКЕ"
                 }
             };
+            var logoutButton = new BarButton(PanelIconType.None)
+            {
+                Hint = "Выход",
+                ActionDelegate = async () => {
+                    var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
+                    var response = await httpClient.PostAsync("api/auth/logout", null);
+                },
+        };
+
             //Application.Current.Bar.Buttons.Add(profileButton);
-            Application.Current.Bar.Buttons.AddRange(supportButton, infoButton);
+            Application.Current.Bar.Buttons.AddRange(supportButton, infoButton,logoutButton);
         }
     }
 }

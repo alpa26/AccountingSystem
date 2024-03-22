@@ -6,11 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models.Interfaces;
 
-namespace СontractAccountingSystem.Core.Services
+namespace СontractAccountingSystem.Core.Services.Interfaces
 {
     public interface IRepository
     {
-        public  Task<T?> CreateAsync<T>(T item) where T : class, IEntity;
+        public Task<T?> CreateAsync<T>(T item) where T : class, IEntity;
 
         public Task<List<T>> FindAsync<T>() where T : class, IEntity;
 

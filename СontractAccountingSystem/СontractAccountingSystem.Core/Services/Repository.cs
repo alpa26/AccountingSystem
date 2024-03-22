@@ -6,6 +6,7 @@ using System.Xml.Linq;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Models.Interfaces;
 using СontractAccountingSystem.Core.Data;
+using СontractAccountingSystem.Core.Services.Interfaces;
 
 namespace СontractAccountingSystem.Core.Services
 {

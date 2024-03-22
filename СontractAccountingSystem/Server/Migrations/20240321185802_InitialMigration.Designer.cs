@@ -12,7 +12,7 @@ using СontractAccountingSystem.Core.Data;
 namespace СontractAccountingSystem.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240318184126_InitialMigration")]
+    [Migration("20240321185802_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -149,7 +149,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 3, 18, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 3, 21, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<DateTime>("DeadlineEnd")
                         .HasColumnType("timestamp with time zone");
@@ -270,7 +270,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 3, 18, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 3, 21, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<int>("DocumentId")
                         .HasColumnType("integer");

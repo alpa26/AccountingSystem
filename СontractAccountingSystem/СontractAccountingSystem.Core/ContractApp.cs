@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DK.WebClient.Core.Services;
+using System.Net;
+using СontractAccountingSystem.Core.Pages.Logon;
 
 namespace СontractAccountingSystem.Core
 {
@@ -39,7 +42,41 @@ namespace СontractAccountingSystem.Core
 
         protected override LogonPage CreateLogonPage()
         {
+            // Кнопка выхода удаляет куки но не обновляет страницу
+
             return new AppLogonPage();
+
+            /*
+             Страница регистрации настроена только для добавления пользователя.
+             Чтобы сделать автоматический код с куки нужно раскомментировать Close(); в AppRegisterPage()
+             и добавить HttpContext.SignInAsync(...) в контроллер регистрации. 
+            */
+            //return new AppRegisterPage();
+        }
+
+        protected override async Task<bool> TryAuthorize()
+        {
+            var cookieService = Service<ICookieService>.GetInstance();
+            var sid = await cookieService.GetValue(".AspNetCore.Cookies");
+            try
+            {
+                if ((!string.IsNullOrEmpty(sid)))
+                {
+                    return true;
+                }
+            }
+            catch(HttpRequestException ex) 
+            {
+                if(ex.StatusCode is HttpStatusCode.Unauthorized)
+                {
+                    await cookieService.SetValue(".AspNetCore.Cookies", null);
+                }
+                else
+                {
+                    throw;
+                } 
+            }
+            return false;
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace СontractAccountingSystem.Core
+namespace СontractAccountingSystem.Core.Services
 {
     public class CoreConfigure
     {

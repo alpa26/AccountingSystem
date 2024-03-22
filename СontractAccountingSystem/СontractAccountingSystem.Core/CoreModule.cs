@@ -10,33 +10,21 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using СontractAccountingSystem.Core.Data;
+using СontractAccountingSystem.Core.Services;
+using СontractAccountingSystem.Core.Services.Interfaces;
+using DK.WebClient.Core.Services;
 
 namespace СontractAccountingSystem.Core
 {
     public class CoreModule : Module
-    {
-        //public CoreModule(IConfiguration configuration)
-        //{
-        //    Configuration = configuration;
-        //}
-
-        //public IConfiguration Configuration { get; }
-        
+    { 
         public override void ConfigureServices(IServiceCollection services)
         {
             //services.AddSingleton<Services.INotificationsService, Services.Fakes.NotificationsService>();
             services.AddAssemblyControllers();
-            //IConfiguration Configuration = services.BuildServiceProvider().GetService<IConfiguration>();
-            services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseNpgsql("Server=localhost;Port=5432;Database=;User Id=;Password=;");
-            });
-
-            //using (var services1 = services.BuildServiceProvider())
-            //{
-            //    var context = services1.GetRequiredService<AppDbContext>();
-            //    context.Database.Migrate();
-            //}
+            services.AddSingleton<IHttpClient>(x => new SingletonHttpClient());
+            services.AddSingleton<ICookieService>(x => new CookieService());
+            
 
         }
     }
