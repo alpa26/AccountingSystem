@@ -9,7 +9,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using СontractAccountingSystem.Core.Data;
 using СontractAccountingSystem.Core.Services;
 using СontractAccountingSystem.Core.Services.Interfaces;
 using DK.WebClient.Core.Services;

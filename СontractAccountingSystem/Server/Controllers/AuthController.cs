@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using СontractAccountingSystem.Core.Models;
 using System.Security.Claims;
+using СontractAccountingSystem.Server.Entities;
 
 namespace СontractAccountingSystem.Server.Controllers
 {

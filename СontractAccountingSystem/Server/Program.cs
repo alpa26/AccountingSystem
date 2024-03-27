@@ -3,22 +3,19 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using System;
 using ÑontractAccountingSystem.Server;
-using ÑontractAccountingSystem.Core.Data;
-using Microsoft.AspNetCore.Mvc.NewtonsoftJson;
-using Microsoft.Extensions.Options;
+using ÑontractAccountingSystem.Server.Data;
+
 using Microsoft.AspNetCore.Identity;
-using ÑontractAccountingSystem.Core.Models;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using ÑontractAccountingSystem.Server.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"),
-        b => b.MigrationsAssembly("ÑontractAccountingSystem.Server"));
+    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
 
@@ -55,6 +52,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
 var app = builder.Build();
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;

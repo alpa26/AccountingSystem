@@ -5,6 +5,8 @@ using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Services.Interfaces;
 using СontractAccountingSystem.Core.Services;
 using СontractAccountingSystem.Core.Pages.Logon;
+using СontractAccountingSystem.Core.Pages.DocumentList;
+using СontractAccountingSystem.Core.Pages.DocumentTypesList;
 
 namespace СontractAccountingSystem.Core.Pages.Main
 {
@@ -24,6 +26,8 @@ namespace СontractAccountingSystem.Core.Pages.Main
 
         public MainPage()
         {
+           
+
             NotificationsMenuItem = new NavigationButton
             {
                 Text = "Уведомления",
@@ -51,12 +55,17 @@ namespace СontractAccountingSystem.Core.Pages.Main
 
             DocsItem = new NavigationButton
             {
-                Text = "Документы",
+                Text = "Договоры",
                 Icon = PanelIconType.Pile,
-                //CreatePageDelegate = () => new StylesPage()
+                CreatePageDelegate = () => new DocumentListPage()
             };
 
-
+            AddButton = new NavigationButton
+            {
+                Text = "Новый договор",
+                Icon = PanelIconType.Plus,
+                CreatePageDelegate = () => new DocumentTypesListPage()
+            };
             Settings = new NavigationButton
             {
                 Text = "Настройки",
@@ -77,12 +86,6 @@ namespace СontractAccountingSystem.Core.Pages.Main
                 //CreatePageDelegate = () => new Calendar.CalendarSamplesListPage()
             };
 
-            AddButton = new NavigationButton
-            {
-                Text = "Новый договор",
-                Icon = PanelIconType.Plus,
-                //CreatePageDelegate = () => new DocumentTypesListPage()
-            };
 
             FeedbackItem = new NavigationButton("Техподдержка");
 

@@ -1,0 +1,60 @@
+﻿using Salazki.Presentation.Elements;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using СontractAccountingSystem.Core.Models;
+
+namespace СontractAccountingSystem.Core.Pages.DocumentList
+{
+    public class DocumentItem : Item<DocumentListItemModel>
+    {
+        public Label DocumentNumber { get; } = new Label { Length = 9 };
+        public Label<DateTime> CreateDate { get; } = new Label<DateTime>();
+        public Label KontrAgentName { get; } = new Label();
+        public Label DocumentType { get; } = new Label();
+        public BadgesCollection Badges { get; } = new BadgesCollection();
+        public Label EssenceOfAgreement { get; } = new Label();
+        public Label Name { get; } = new Label();
+
+
+
+        public DocumentItem(DocumentListItemModel model) : base(model)
+        {
+            CreateDate.TextAlignment = TextAlignment.Right;
+            CreateDate.Formatter = Formatters.HistoricalDateTimeFormatter;
+
+            Layout = BuildLayout();
+        }
+
+        protected override void Setup()
+        {
+            DocumentNumber.Text = "№{0}".FormatWith(Model.DocumentNumber);
+            CreateDate.Value = Model.CreateDate;
+            KontrAgentName.Text = Model.KontrAgentName;
+            EssenceOfAgreement.Text = Model.EssenceOfAgreement;
+            Name.Text = Model.Name;
+
+            DocumentType.Text = Model.DocumentType;
+            Badges.Items.AddRange(new Badge
+            {
+                Text = "Проверен",
+                Color = BadgeColor.Success
+            });
+        }
+
+        private Layout BuildLayout()
+        {
+            return new GridLayout(grid =>
+            {
+                grid.Add(DocumentNumber).Row(0).Column(0).StretchedHorizontally();
+                grid.Add(DocumentType).Row(0).Column(1);
+                grid.Add(KontrAgentName).Row(0).Column(2);
+                grid.Add(Name).Row(0).Columns(3);
+                grid.Add(EssenceOfAgreement).Row(0).Column(5);
+                grid.Add(new HorizontalStack(Badges, CreateDate)).Row(0).Column(5).AlignedToRight();
+            });
+        }
+    }
+}
