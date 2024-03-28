@@ -62,8 +62,6 @@ public class AppDbContext : DbContext
 
 
         //KontrAgent
-        modelBuilder.Entity<KontrAgent>().HasOne(k => k.User).WithMany()
-        .HasForeignKey(k => k.UserId).OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<KontrAgent>().HasOne(d => d.Type).WithMany()
         .HasForeignKey(x => x.TypeId).OnDelete(DeleteBehavior.Restrict);
 

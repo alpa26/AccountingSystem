@@ -3,7 +3,8 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
-
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using СontractAccountingSystem.Server.Data;
 
 #nullable disable
@@ -11,7 +12,7 @@ using СontractAccountingSystem.Server.Data;
 namespace СontractAccountingSystem.Server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240321185802_InitialMigration")]
+    [Migration("20240328080929_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -75,7 +76,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("IdentityUserToken<string>");
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.DocPayStatus", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocPayStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -92,7 +93,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("doc_pay_statuses", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.DocPaymentDeadlines", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocPaymentDeadlines", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -116,7 +117,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("document_deadlines", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.DocType", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -133,7 +134,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("document_types", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.Document", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Document", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -148,7 +149,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 3, 21, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 3, 28, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<DateTime>("DeadlineEnd")
                         .HasColumnType("timestamp with time zone");
@@ -183,7 +184,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<int>("PaymentTypeId")
                         .HasColumnType("integer");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("numeric");
 
                     b.Property<int>("TypeId")
@@ -210,7 +211,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("documents", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.KontrAgent", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.KontrAgent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -222,26 +223,41 @@ namespace СontractAccountingSystem.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("ContactEmail")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContactPerson")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("ContactPhone")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
                     b.Property<string>("INN")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("KPP")
                         .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<int>("TypeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
                     b.HasKey("Id");
 
                     b.HasIndex("TypeId");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("kontr_agents", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.KontrAgentType", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.KontrAgentType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -258,7 +274,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("kontr_agent_types", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.Notification", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Notification", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -269,7 +285,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 3, 21, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 3, 28, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<int>("DocumentId")
                         .HasColumnType("integer");
@@ -290,7 +306,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("notifications", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.Organization", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Organization", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -307,7 +323,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("organizations", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.PaymentType", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.PaymentType", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -324,7 +340,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("payment_types", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.Project", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Project", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -341,7 +357,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("projects", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.ProjectDocuments", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.ProjectToDocuments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -364,7 +380,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("projects_to_documents", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.RelateDocuments", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.RelateDocuments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -387,7 +403,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("related_documents", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.Role", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Role", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -410,7 +426,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("user_roles", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.User", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -485,9 +501,9 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.DocPaymentDeadlines", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocPaymentDeadlines", b =>
                 {
-                    b.HasOne("СontractAccountingSystem.Core.Models.Document", "Document")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Document", "Document")
                         .WithMany()
                         .HasForeignKey("DocumentId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -496,39 +512,39 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Navigation("Document");
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.Document", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Document", b =>
                 {
-                    b.HasOne("СontractAccountingSystem.Core.Models.User", "Employer")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.User", "Employer")
                         .WithMany()
                         .HasForeignKey("EmployerId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Core.Models.KontrAgent", "KontrAgent")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.KontrAgent", "KontrAgent")
                         .WithMany()
                         .HasForeignKey("KontrAgentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Core.Models.Organization", "Organization")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Organization", "Organization")
                         .WithMany()
                         .HasForeignKey("OrganizationId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Core.Models.DocPayStatus", "PayStatus")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.DocPayStatus", "PayStatus")
                         .WithMany()
                         .HasForeignKey("PayStatusId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Core.Models.PaymentType", "PaymentType")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.PaymentType", "PaymentType")
                         .WithMany()
                         .HasForeignKey("PaymentTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Core.Models.DocType", "Type")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.DocType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -547,34 +563,26 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.KontrAgent", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.KontrAgent", b =>
                 {
-                    b.HasOne("СontractAccountingSystem.Core.Models.KontrAgentType", "Type")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.KontrAgentType", "Type")
                         .WithMany()
                         .HasForeignKey("TypeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Core.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.Navigation("Type");
-
-                    b.Navigation("User");
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.Notification", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Notification", b =>
                 {
-                    b.HasOne("СontractAccountingSystem.Core.Models.Document", "Document")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Document", "Document")
                         .WithMany()
                         .HasForeignKey("DocumentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Core.Models.Project", "Project")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -585,15 +593,15 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.ProjectDocuments", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.ProjectToDocuments", b =>
                 {
-                    b.HasOne("СontractAccountingSystem.Core.Models.Document", "Document")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Document", "Document")
                         .WithMany()
                         .HasForeignKey("DocumentId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Core.Models.Project", "Project")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Project", "Project")
                         .WithMany()
                         .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -604,15 +612,15 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Navigation("Project");
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.RelateDocuments", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.RelateDocuments", b =>
                 {
-                    b.HasOne("СontractAccountingSystem.Core.Models.Document", "Document1")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Document", "Document1")
                         .WithMany()
                         .HasForeignKey("Document1Id")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Core.Models.Document", "Document2")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Document", "Document2")
                         .WithMany()
                         .HasForeignKey("Document2Id")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -623,9 +631,9 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Navigation("Document2");
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Core.Models.User", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.User", b =>
                 {
-                    b.HasOne("СontractAccountingSystem.Core.Models.Role", "Role")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Restrict)

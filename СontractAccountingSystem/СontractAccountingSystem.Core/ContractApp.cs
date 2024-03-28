@@ -42,7 +42,6 @@ namespace СontractAccountingSystem.Core
 
         protected override LogonPage CreateLogonPage()
         {
-            // Кнопка выхода удаляет куки но не обновляет страницу
 
             return new AppLogonPage();
 
