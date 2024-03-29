@@ -12,6 +12,8 @@ namespace СontractAccountingSystem.Server.Services.Interfaces
     {
         public Task<T?> CreateAsync<T>(T item) where T : class, IEntity;
 
+        public Task<bool> ChangeAsync<T>(T item) where T : class, IEntity;
+
         public Task<List<T>> FindAsync<T>() where T : class, IEntity;
 
         //public Task<List<T>> FindAsync<T>(Expression<Func<T, bool>> predicate) where T : class, IEntity

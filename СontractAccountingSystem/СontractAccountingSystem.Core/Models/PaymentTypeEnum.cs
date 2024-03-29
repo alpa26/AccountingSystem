@@ -11,6 +11,8 @@ namespace СontractAccountingSystem.Core.Models
     {
         [Description("ПредОплата")] FullPrePayment,
         [Description("ПостОплата")] FullPostPayment,
-        [Description("Частичная")] Partial
+        [Description("Частичная")] Partial,
+        [Description("Ежемесячно")] Monthly
+
     }
 }

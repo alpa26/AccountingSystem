@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Core.Pages.ViewPages;
 
 namespace СontractAccountingSystem.Core.Pages.DocumentList
 {
@@ -17,6 +18,10 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
             ListEmptyText = "Нет договоров";
 
             RegisterBuildItemDelegate(x => new DocumentItem(x));
+
+            CreateItemPageDelegate = x => new ViewDocumentPage(x.Id, x.DocumentNumber);
+            AutoSelectFirstItem = true;
+
         }
     }
 }

@@ -34,6 +34,24 @@ namespace СontractAccountingSystem.Server.Services
             return result.Entity;
         }
 
+        public async Task<bool> ChangeAsync<T>(T item) where T : class, IEntity
+        {
+            var result = await GetCollection<T>().FindAsync(item.Id);
+            if(result==null)
+                return false;
+            GetCollection<T>().Update(item);
+            try
+            {
+                await SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+            return true;
+        }
+
+
         public async Task<List<T>> FindAsync<T>() where T : class, IEntity
         {
             return await GetCollection<T>().ToListAsync();
@@ -73,6 +91,8 @@ namespace СontractAccountingSystem.Server.Services
                 throw e;
             }
         }
+
+        
 
         private DbSet<T?> GetCollection<T>() where T : class, IEntity
         {

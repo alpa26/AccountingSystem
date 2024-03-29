@@ -21,7 +21,6 @@ namespace СontractAccountingSystem.Server.Features.RoleCreate
             public async Task<int> Handle(Command request, CancellationToken cancellationToken)
             {
                 var role = request.Role;
-
                 await _roleManager.CreateAsync(role);
                 await _mediator.Publish(new RoleCreated(role.Id));
                 return role.Id;

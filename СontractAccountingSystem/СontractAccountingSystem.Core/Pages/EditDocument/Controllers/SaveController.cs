@@ -9,6 +9,7 @@ using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Services.Interfaces;
 using СontractAccountingSystem.Core.Services;
 using System.Xml.Linq;
+using Salazki.Presentation.Elements;
 
 namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
 {
@@ -24,12 +25,14 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
 
         private ArchiveDocumentModel UpdateModel()
         {
-            Console.WriteLine("Флаг1");
+            var date = Element.CreateDate.Value ?? DateTime.Now;
+            Element.Model.DocumentType = "Договор на работы";
+            Console.WriteLine(date);
             return new ArchiveDocumentModel
             {
                 Id = Element.Model.Id,
-                Name = "Договор на работы от 1.1.2001",
-                DocumentType= "Договор на работы",
+                Name = $"{Element.Model.DocumentType} от {date.ToString("dd.MM.yyyy")}",
+                DocumentType= Element.Model.DocumentType,
                 DocumentNumber = Element.DocumentNumber.Text,
                 EssenceOfAgreement = Element.EssenceOfAgreement.Text,
                 KontrAgentName = Element.KontrAgentName.Value,
@@ -38,7 +41,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                 Comment = Element.Comment.Text ?? "Нет комментариев",
                 PaymentType = Element.PaymentType.Value.Value,
                 OrganizationName = Element.OrganizationName.Value,
-                CreateDate = Element.CreateDate.Value ?? DateTime.Now,
+                CreateDate = date,
                 DeadlineStart = Element.Deadline.Value.From.Value,
                 DeadlineEnd = Element.Deadline.Value.To.Value,
                 RelatedDocuments = new RelateDocumentModel[] { null },
@@ -53,7 +56,10 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                     "application/json");
             Console.WriteLine("Флаг2");
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-            var response = await httpClient.PostAsync("api/documents/create", jsonContent);
+            if(model.Id == 0)
+                await httpClient.PostAsync("api/documents/create", jsonContent);
+            else
+                await httpClient.PostAsync("api/documents/edit", jsonContent);
         }
     }
 }

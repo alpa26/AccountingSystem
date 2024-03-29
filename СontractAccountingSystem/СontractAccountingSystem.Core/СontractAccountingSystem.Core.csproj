@@ -16,9 +16,5 @@
     <PackageReference Include="Salazki.Presentation" Version="2.0.33" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Pages\Новая папка\" />
-  </ItemGroup>
-
 	
 </Project>

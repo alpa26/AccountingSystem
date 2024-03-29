@@ -36,7 +36,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         public OrganizationAutocomplete OrganizationName { get; } = new OrganizationAutocomplete("Название организации");
 
         [Required]
-        public ValueInput<decimal> FullPrice { get; } = new ValueInput<decimal>("Сумма", x =>
+        public ValueInput<decimal> FullPrice { get; } = new ValueInput<decimal>("Общая Сумма", x =>
         {
             decimal result;
             if (decimal.TryParse(x, out result))
@@ -80,13 +80,10 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
 
             DocumentNumber.Text = Model.DocumentNumber;
             EssenceOfAgreement.Text = Model.EssenceOfAgreement;
-
+            FullPrice.Value = Model.FullPrice;
             KontrAgentName.Value = Model.KontrAgentName;
-
             OrganizationName.Value = Model.OrganizationName;
-
             EmployerName.Value = Model.EmployerName;
-
             Comment.Text = Model.Comment;
             PaymentType.Value = Model.PaymentType;
             CreateDate.Value = Model.CreateDate;
@@ -104,7 +101,6 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         {
             return new ArchiveDocumentModel()
             {
-                Id = Guid.NewGuid()
             };
         }
     }

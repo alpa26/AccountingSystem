@@ -8,7 +8,7 @@ namespace СontractAccountingSystem.Core.Models
 {
     public class ArchiveDocumentModel
     {
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         public string DocumentNumber { get; set; }
 
         public string Name { get; set; }
