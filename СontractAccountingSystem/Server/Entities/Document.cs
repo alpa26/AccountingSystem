@@ -20,9 +20,9 @@ namespace СontractAccountingSystem.Server.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime DeadlineStart { get; set; }
         public DateTime DeadlineEnd { get; set; }
-        public int OrganizationId { get; set; } = 1;
-        public int KontrAgentId { get; set; } = 1;
-        public int EmployerId { get; set; } = 1;
+        public int OrganizationId { get; set; } 
+        public int KontrAgentId { get; set; } 
+        public int EmployerId { get; set; } 
         public int PaymentTypeId { get; set; } = 1;
         public int PayStatusId { get; set; } = 1;
         public int TypeId { get; set; } = 1;

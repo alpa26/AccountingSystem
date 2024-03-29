@@ -5,6 +5,8 @@ using СontractAccountingSystem.Server.Features.UserCreate;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using СontractAccountingSystem.Server.Entities;
+using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Server.Features.GetRoleList;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
@@ -37,6 +39,27 @@ namespace СontractAccountingSystem.Server.Controllers
             return await _mediator.Send(new Features.GetUsersList.Query());
         }
 
-
+        [HttpGet("employeelist")]
+        public async Task<List<PersonModel>> GetEmployeeList()
+        {
+            var userlist = await _mediator.Send(new Features.GetUsersList.Query());
+            var rolelist = await _mediator.Send(new RoleListQuery());
+            var res = new List<PersonModel>();
+            foreach(var item in userlist)
+            {
+                var role = rolelist.First(x => x.Id == item.RoleId) as Role;
+                if (role.Name == "admin")
+                    continue;
+                res.Add(new PersonModel()
+                {
+                    Id = item.Id,
+                    FullName = item.GetFullName(),
+                    Role = role.Name
+                });
+            }
+            if (res.Count == 0)
+                return null;
+            return res;
+        }
     }
 }

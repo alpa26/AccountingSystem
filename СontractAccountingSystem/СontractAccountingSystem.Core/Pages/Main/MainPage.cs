@@ -93,7 +93,7 @@ namespace СontractAccountingSystem.Core.Pages.Main
                 .AddRange(AddButton, DocsItem, NotificationsMenuItem, Calendar, KontrAgentIcon, EmployersItem, Settings);
 
             //FeedbackItem.Selected = true;
-            //ArchiveMenuItem.Selected = true;
+            DocsItem.Selected = true;
 
             AddToolbar();
         }

@@ -13,7 +13,7 @@ namespace СontractAccountingSystem.Core.Models
         public string DocumentType  { get; set; }
         public string Name { get; set; }
         public string EssenceOfAgreement { get; set; }
-        public string KontrAgentName { get;set; }
+        public KontrAgentModel KontrAgentName { get;set; }
         public DateTime CreateDate { get; set; }
 
         public override string ToString()

@@ -24,6 +24,8 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
         {
             CreateDate.TextAlignment = TextAlignment.Right;
             CreateDate.Formatter = Formatters.HistoricalDateTimeFormatter;
+            EssenceOfAgreement.Style = TextStyle.LightDescription;
+            KontrAgentName.Style = TextStyle.LightDescription;
 
             Layout = BuildLayout();
         }
@@ -32,7 +34,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
         {
             DocumentNumber.Text = "№{0}".FormatWith(Model.DocumentNumber);
             CreateDate.Value = Model.CreateDate;
-            KontrAgentName.Text = Model.KontrAgentName;
+            KontrAgentName.Text = Model.KontrAgentName.FullName;
             EssenceOfAgreement.Text = Model.EssenceOfAgreement;
             Name.Text = Model.Name;
 
@@ -48,12 +50,19 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
         {
             return new GridLayout(grid =>
             {
-                grid.Add(DocumentNumber).Row(0).Column(0).StretchedHorizontally();
+                grid.Add(DocumentNumber).Row(0).Column(0);
                 grid.Add(DocumentType).Row(0).Column(1);
-                grid.Add(KontrAgentName).Row(0).Column(2);
-                grid.Add(Name).Row(0).Columns(3);
-                grid.Add(EssenceOfAgreement).Row(0).Column(5);
-                grid.Add(new HorizontalStack(Badges, CreateDate)).Row(0).Column(5).AlignedToRight();
+                //grid.Add(KontrAgentName).Row(0).Column(2);
+                grid.Add(Name).Row(0).Column(2);
+                grid.Add(new HorizontalStack(Badges, CreateDate)).Row(0).Column(3).AlignedToRight();
+                grid.Add(new GridLayout(x =>
+                {
+                    x.Add(KontrAgentName).StretchedHorizontally();
+                })).Row(1).Columns(from: 1, to: 2).StretchedHorizontally();
+                grid.Add(new GridLayout(x =>
+                {
+                    x.Add(EssenceOfAgreement).StretchedHorizontally();
+                })).Row(1).Columns(from: 2, to: 3).StretchedHorizontally();
             });
         }
     }

@@ -19,7 +19,6 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
         {
             Element.DataSource.SetupPaging(25);
             Element.DataSource.LoadAsyncDelegate = LoadDocuments;
-
             //Element.Filtering.ShowFilterPanel();
         }
 

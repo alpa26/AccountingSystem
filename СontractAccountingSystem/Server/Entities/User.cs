@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Salazki.Presentation.Elements;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -26,5 +27,10 @@ public class User : IdentityUser<int>, IEntity
     public User()
     {
 
+    }
+
+    public string GetFullName()
+    {
+        return String.Format("{0} {1}.{2}.", SecondName, FirstName[0], LastName[0]);
     }
 }

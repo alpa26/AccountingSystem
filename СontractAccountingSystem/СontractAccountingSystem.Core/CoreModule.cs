@@ -19,8 +19,10 @@ namespace СontractAccountingSystem.Core
     { 
         public override void ConfigureServices(IServiceCollection services)
         {
+
             //services.AddSingleton<Services.INotificationsService, Services.Fakes.NotificationsService>();
             services.AddAssemblyControllers();
+            services.AddSingleton<IOrgStructureService>(x => new OrgStructureService());
             services.AddSingleton<IHttpClient>(x => new SingletonHttpClient());
             services.AddSingleton<ICookieService>(x => new CookieService());
             

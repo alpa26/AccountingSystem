@@ -3,8 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Core.Pages.Autocomplete;
 
 namespace СontractAccountingSystem.Core.Pages.EditDocument
 {
@@ -26,6 +26,14 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         [Required]
         public ComboBox<PaymentTypeEnum?> PaymentType { get; } = new ComboBox<PaymentTypeEnum?>("Тип оплаты");
 
+        [Required]
+        public EmployeeAutocomplete EmployerName { get; } = new EmployeeAutocomplete("Сотрудник");
+
+        [Required]
+        public KontrAgentAutocomplete KontrAgentName { get; } = new KontrAgentAutocomplete("КонтрАгент");
+
+        [Required]
+        public OrganizationAutocomplete OrganizationName { get; } = new OrganizationAutocomplete("Название организации");
 
         [Required]
         public ValueInput<decimal> FullPrice { get; } = new ValueInput<decimal>("Сумма", x =>
@@ -35,14 +43,6 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 return result;
             return 0;
         });
-
-        [Required]
-        public TextInput KontrAgentName { get; } = new TextInput("КонтрАгент");
-        [Required]
-        public TextInput EmployerName { get; } = new TextInput("Сотрудник");
-        [Required]
-        public TextInput OrganizationName { get; } = new TextInput("Название организации");
-
 
 
         public TextInput Comment { get; } = new TextInput("Комментарий") { Placeholder = "Комментарий", Multiline = true };
@@ -69,7 +69,6 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         {
             CreateModelDelegate = CreateModel;
             DeleteButton.Hidden = true;
-
         }
 
         protected override void Setup()
@@ -81,20 +80,16 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
 
             DocumentNumber.Text = Model.DocumentNumber;
             EssenceOfAgreement.Text = Model.EssenceOfAgreement;
-            KontrAgentName.Text = Model.KontrAgentName;
-            OrganizationName.Text = Model.OrganizationName;
-            EmployerName.Text = Model.EmployerName;
-            Comment.Text = Model.Comment;
 
+            KontrAgentName.Value = Model.KontrAgentName;
+
+            OrganizationName.Value = Model.OrganizationName;
+
+            EmployerName.Value = Model.EmployerName;
+
+            Comment.Text = Model.Comment;
             PaymentType.Value = Model.PaymentType;
             CreateDate.Value = Model.CreateDate;
-
-            //FullPrice.ValueFormatter = x =>
-            //{
-            //    if (x == 0)
-            //        return null;
-            //    return x.ToString();
-            //};
 
             FullPrice.DisplayTextDelegate = x =>
             {

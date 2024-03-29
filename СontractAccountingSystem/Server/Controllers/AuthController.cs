@@ -69,10 +69,12 @@ namespace СontractAccountingSystem.Server.Controllers
             var user = new User
             {
                 UserName = request.Login,
-                FirstName = fullname[0],
-                SecondName = fullname[1],
+                FirstName = fullname[1],
+                SecondName = fullname[0],
                 LastName = fullname[2],
-                Email = request.Mail
+                Email = request.Mail,
+                Role = null,
+                RoleId = 2
             };
             var res = await _userManager.CreateAsync(user, request.Password);
             if(res.Succeeded)

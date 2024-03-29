@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Entities;
 using СontractAccountingSystem.Server.Features.DocumentCreate;
@@ -10,6 +11,7 @@ using СontractAccountingSystem.Server.Features.GetKontrAgentList;
 using СontractAccountingSystem.Server.Features.GetOrganizationList;
 using СontractAccountingSystem.Server.Features.GetPaymentTypeList;
 using СontractAccountingSystem.Server.Features.GetPayStatusList;
+using СontractAccountingSystem.Server.Features.GetRoleList;
 using static СontractAccountingSystem.Server.Controllers.AuthController;
 
 namespace СontractAccountingSystem.Server.Controllers
@@ -20,14 +22,13 @@ namespace СontractAccountingSystem.Server.Controllers
     {
         private readonly IMediator _mediator;
 
-
         public DocumentController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateRole([FromBody] ArchiveDocumentModel request)
+        public async Task<IActionResult> CreateDocument([FromBody] ArchiveDocumentModel request)
         {
             var doc = new Document()
             {
@@ -39,6 +40,9 @@ namespace СontractAccountingSystem.Server.Controllers
                 Price = request.FullPrice,
                 Comment = request.Comment,
                 WorkDescription = request.EssenceOfAgreement,
+                OrganizationId = request.OrganizationName.Id,
+                EmployerId = request.EmployerName.Id,
+                KontrAgentId = request.KontrAgentName.Id,
             };
             var res = await _mediator.Send(new DocumentCreate.Command(doc));
             if (res)
@@ -59,16 +63,17 @@ namespace СontractAccountingSystem.Server.Controllers
             var reslist = new List<ArchiveDocumentModel>();
 
             var docList = await _mediator.Send(new DocumentListQuery());
-
             var orgList = await _mediator.Send(new OrganizationListQuery());
             var userList = await _mediator.Send(new Features.GetUsersList.Query());
-            var payStatusList = await _mediator.Send(new PayStatusListQuery());
-            var paymentTypeList = await _mediator.Send(new PaymentTypeListQuery());
+            var roleList = await _mediator.Send(new RoleListQuery());
             var docTypeList = await _mediator.Send(new DocTypeListQuery());
             var kontrAgentList = await _mediator.Send(new KontrAgentListQuery());
 
             foreach (var item in docList)
             {
+                var ka = kontrAgentList.FirstOrDefault(x => x.Id == item.KontrAgentId);
+                var empl = userList.FirstOrDefault(x => x.Id == item.EmployerId);
+                var org = orgList.FirstOrDefault(x => x.Id == item.OrganizationId);
                 reslist.Add(new ArchiveDocumentModel()
                 {
                     Id = new Guid(),
@@ -77,12 +82,13 @@ namespace СontractAccountingSystem.Server.Controllers
                     DocumentType = docTypeList.FirstOrDefault(x => x.Id == item.TypeId).Name ?? "Дефолт договор",
                     EssenceOfAgreement = item.WorkDescription,
                     //KontrAgentName = item.KontrAgentId.ToString(),
-                    KontrAgentName = "КонтрАгент"+ item.KontrAgentId.ToString(),
+                    KontrAgentName = new KontrAgentModel() { Id= ka.Id, FullName = ka.FullName, INN = ka.INN},
                     FullPrice = item.Price,
-                    EmployerName = userList.FirstOrDefault(x => x.Id == item.EmployerId).FirstName ?? "Васек",
+                    EmployerName = new PersonModel() { Id = empl.Id,FullName = empl.GetFullName(),
+                        Role = roleList.FirstOrDefault(x => x.Id == empl.RoleId).Name},
                     Comment = item.Comment,
                     PaymentType = Core.Models.PaymentTypeEnum.FullPostPayment,
-                    OrganizationName = orgList.FirstOrDefault(x => x.Id == item.OrganizationId).Name ?? "Шаурмячная",
+                    OrganizationName = new OrganizationModel() { Id = org.Id, Name = org.Name},
                     CreateDate = item.CreatedDate,
                     DeadlineStart = item.DeadlineStart,
                     DeadlineEnd = item.DeadlineEnd,
