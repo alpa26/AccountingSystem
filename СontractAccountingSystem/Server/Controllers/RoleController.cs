@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using СontractAccountingSystem.Server.Features.RoleCreate;
+using СontractAccountingSystem.Server.Commands.Roles.RoleCreate;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
@@ -18,7 +18,7 @@ namespace СontractAccountingSystem.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<int> CreateRole(RoleCreate.Command cmd)
+        public async Task<int> CreateRole(RoleCreateCommand cmd)
         {
             return await _mediator.Send(cmd);
         }

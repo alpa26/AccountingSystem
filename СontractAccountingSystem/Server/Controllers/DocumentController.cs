@@ -7,20 +7,18 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Server.Commands.Documents.ChangeDocument;
 using СontractAccountingSystem.Server.Entities;
-using СontractAccountingSystem.Server.Features.ChangeDocument;
 using СontractAccountingSystem.Server.Features.DocumentCreate;
-using СontractAccountingSystem.Server.Features.GetDocTypeList;
-using СontractAccountingSystem.Server.Features.GetDocumentById;
-using СontractAccountingSystem.Server.Features.GetDocumentList;
-using СontractAccountingSystem.Server.Features.GetKontrAgentById;
-using СontractAccountingSystem.Server.Features.GetKontrAgentList;
-using СontractAccountingSystem.Server.Features.GetOrganizationById;
-using СontractAccountingSystem.Server.Features.GetOrganizationList;
-using СontractAccountingSystem.Server.Features.GetPaymentTypeList;
-using СontractAccountingSystem.Server.Features.GetPayStatusList;
-using СontractAccountingSystem.Server.Features.GetRoleList;
-using СontractAccountingSystem.Server.Features.GetUserById;
+using СontractAccountingSystem.Server.Queries.DocTypes.GetDocTypeList;
+using СontractAccountingSystem.Server.Queries.Documents.GetDocumentById;
+using СontractAccountingSystem.Server.Queries.Documents.GetDocumentList;
+using СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentList;
+using СontractAccountingSystem.Server.Queries.Organizations.GetOrganizationList;
+using СontractAccountingSystem.Server.Queries.PaymentTypes.GetPaymentTypeList;
+using СontractAccountingSystem.Server.Queries.Roles.GetRoleList;
+using СontractAccountingSystem.Server.Queries.Users.GetUserById;
+using СontractAccountingSystem.Server.Queries.Users.GetUsersList;
 using СontractAccountingSystem.Server.Services.Interfaces;
 using static СontractAccountingSystem.Server.Controllers.AuthController;
 
@@ -59,11 +57,11 @@ namespace СontractAccountingSystem.Server.Controllers
                 TypeId = doctypes.First(x => x.Name == request.DocumentType).Id,
                 PayStatusId= paystatuses.First(x=>x.Name == request.PaymentType.ToString()).Id
             };
-            var res = await _mediator.Send(new DocumentCreate.Command(doc));
-            if (res)
-                return Ok();
-            else
+            var res = await _mediator.Send(new DocumentCreateCommand(doc));
+            if (res == -1)
                 return BadRequest();
+            else
+                return Ok();
         }
 
         [HttpPost("edit")]
@@ -71,7 +69,7 @@ namespace СontractAccountingSystem.Server.Controllers
         {
             var paystatuses = await _mediator.Send(new PaymentTypeListQuery());
             var doctypes = await _mediator.Send(new DocTypeListQuery());
-            var doc = await _mediator.Send(new GetDocumentByIdQuery(request.Id));
+            var doc = await _mediator.Send(new DocumentByIdQuery(request.Id));
 
             doc.Number = request.DocumentNumber;
             doc.Name = request.Name;
@@ -97,15 +95,15 @@ namespace СontractAccountingSystem.Server.Controllers
         [HttpGet("getbyid")]
         public async Task<Document> GetDocumentById(int id)
         {
-            var res = await _mediator.Send(new GetDocumentByIdQuery(id));
+            var res = await _mediator.Send(new DocumentByIdQuery(id));
             return res;
         }
 
         [HttpGet("getmodelbyid")]
         public async Task<ArchiveDocumentModel> GetDocumentModelById(int id)
         {
-            var doc = await _mediator.Send(new GetDocumentByIdQuery(id));
-            var empl = await _mediator.Send(new GetUserByIdQuery(doc.EmployerId));
+            var doc = await _mediator.Send(new DocumentByIdQuery(id));
+            var empl = await _mediator.Send(new UserByIdQuery(doc.EmployerId));
 
             var model = new ArchiveDocumentModel()
             {
@@ -124,7 +122,7 @@ namespace СontractAccountingSystem.Server.Controllers
                 },
                 Comment = doc.Comment,
                 PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), doc.PaymentType.Name),
-            OrganizationName = new OrganizationModel() { Id = doc.Organization.Id, Name = doc.Organization.Name },
+                OrganizationName = new OrganizationModel() { Id = doc.Organization.Id, Name = doc.Organization.Name },
                 CreateDate = doc.CreatedDate,
                 DeadlineStart = doc.DeadlineStart,
                 DeadlineEnd = doc.DeadlineEnd,
@@ -147,7 +145,7 @@ namespace СontractAccountingSystem.Server.Controllers
 
             var docList = await _mediator.Send(new DocumentListQuery());
             var orgList = await _mediator.Send(new OrganizationListQuery());
-            var userList = await _mediator.Send(new Features.GetUsersList.Query());
+            var userList = await _mediator.Send(new UserListQuery());
             var roleList = await _mediator.Send(new RoleListQuery());
             var docTypeList = await _mediator.Send(new DocTypeListQuery());
             var kontrAgentList = await _mediator.Send(new KontrAgentListQuery());

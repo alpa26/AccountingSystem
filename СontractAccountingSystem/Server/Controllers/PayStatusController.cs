@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Salazki.Presentation.Elements;
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Server.Commands.PayStatuses.PayStatusCreate;
 using СontractAccountingSystem.Server.Data;
-using СontractAccountingSystem.Server.Features.PayStatusCreate;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
@@ -23,7 +23,7 @@ namespace СontractAccountingSystem.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<int> CreatePayStatus(PayStatusCreate.Command cmd)
+        public async Task<int> CreatePayStatus(PayStatusCreateCommand cmd)
         {
             return await _mediator.Send(cmd);
         }
