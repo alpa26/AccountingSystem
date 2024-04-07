@@ -1,12 +1,13 @@
 ﻿using MediatR;
+using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Entities;
 
 namespace СontractAccountingSystem.Server.Features.DocumentCreate
 {
     public class DocumentCreateCommand : IRequest<int>
     {
-        public Document Document { get; set; }
-        public DocumentCreateCommand(Document document)
+        public ArchiveDocumentModel Document { get; set; }
+        public DocumentCreateCommand(ArchiveDocumentModel document)
         {
             Document = document;
         }

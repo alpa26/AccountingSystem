@@ -19,7 +19,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
 
             RegisterBuildItemDelegate(x => new DocumentItem(x));
 
-            CreateItemPageDelegate = x => new ViewDocumentPage(x.Id, x.DocumentNumber);
+            CreateItemPageDelegate = x => new ViewDocumentPage(x.Id);
             AutoSelectFirstItem = true;
 
         }

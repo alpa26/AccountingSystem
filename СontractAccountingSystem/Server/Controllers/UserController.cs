@@ -6,6 +6,7 @@ using СontractAccountingSystem.Server.Queries.Users.GetUserByName;
 using СontractAccountingSystem.Server.Commands.Users.UserCreate;
 using СontractAccountingSystem.Server.Queries.Users.GetUsersList;
 using СontractAccountingSystem.Server.Queries.Roles.GetRoleList;
+using СontractAccountingSystem.Server.Features.Queries.Users.GetEmployeeList;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
@@ -41,24 +42,7 @@ namespace СontractAccountingSystem.Server.Controllers
         [HttpGet("employeelist")]
         public async Task<List<PersonModel>> GetEmployeeList()
         {
-            var userlist = await _mediator.Send(new UserListQuery());
-            var rolelist = await _mediator.Send(new RoleListQuery());
-            var res = new List<PersonModel>();
-            foreach(var item in userlist)
-            {
-                var role = rolelist.First(x => x.Id == item.RoleId) as Role;
-                if (role.Name == "admin")
-                    continue;
-                res.Add(new PersonModel()
-                {
-                    Id = item.Id,
-                    FullName = item.GetFullName(),
-                    Role = role.Name
-                });
-            }
-            if (res.Count == 0)
-                return null;
-            return res;
+            return await _mediator.Send(new EmployeeListQuery());
         }
     }
 }

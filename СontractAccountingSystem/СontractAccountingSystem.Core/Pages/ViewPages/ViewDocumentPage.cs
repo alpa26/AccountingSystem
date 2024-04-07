@@ -1,7 +1,10 @@
-﻿using Salazki.Presentation.Elements;
+﻿using Newtonsoft.Json.Linq;
+using Salazki.Presentation.Elements;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
@@ -21,7 +24,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
         public TextField<DateTime> DeadlineStart { get; } = new TextField<DateTime>("Начало срока исполнения");
         public TextField<DateTime> DeadlineEnd { get; } = new TextField<DateTime>("Конец срока исполнения");
 
-        public TextField<PaymentTypeEnum?> PaymentType { get; } = new TextField<PaymentTypeEnum?>("Тип оплаты");
+        public TextField PaymentType { get; } = new TextField("Тип оплаты");
 
         public TextField<PersonModel> EmployerName { get; } = new TextField<PersonModel>("Сотрудник");
 
@@ -33,9 +36,8 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 
         public Button EditButton { get; } = new Button { Icon = IconType.Pencil, Hint = "Редактировать" };
 
-        public ViewDocumentPage(int Id, string number)
+        public ViewDocumentPage(int Id)
         {
-            Title = $"Документ {number}";
             DocumentId = Id ;
             HeaderActionPanel.Buttons.AddRange(EditButton);
 
@@ -56,12 +58,17 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 
         protected override void Setup()
         {
+            Title = $"Документ {Model.DocumentNumber}";
             DocumentName.Text = Model.Name;
             CreateDate.Value = Model.CreateDate;
             DeadlineStart.Value = Model.DeadlineStart;
             DeadlineEnd.Value = Model.DeadlineEnd;
             EssenceOfAgreement.Text = Model.EssenceOfAgreement;
-            PaymentType.Value = Model.PaymentType;
+            PaymentType.Text = typeof(PaymentTypeEnum)
+                                .GetField(Model.PaymentType.ToString())
+                                .GetCustomAttribute<DescriptionAttribute>()
+                                ?.Description;
+
             KontrAgentName.Value = Model.KontrAgentName;
             OrganizationName.Value = Model.OrganizationName;
             EmployerName.Value = Model.EmployerName;
