@@ -74,15 +74,21 @@ namespace СontractAccountingSystem.Server.Controllers
                 LastName = fullname[2],
                 Email = request.Mail,
                 Role = null,
-                RoleId = 2
+                RoleId = 0
             };
-            var res = await _userManager.CreateAsync(user, request.Password);
-            if(res.Succeeded)
-            {
-                return Ok("Succeeded");
+            try {
+                var res = await _userManager.CreateAsync(user, request.Password);
+                if (res.Succeeded)
+                {
+                    return Ok("Succeeded");
+                }
+                else
+                    return BadRequest("NotSucceeded");
             }
-            else 
-                return BadRequest("NotSucceeded");
+            catch (Exception ex) {
+
+            }
+            return BadRequest("NotSucceeded");
         }
 
         [HttpPost("logout")]

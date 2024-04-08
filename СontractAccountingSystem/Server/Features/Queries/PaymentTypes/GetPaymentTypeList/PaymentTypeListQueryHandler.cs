@@ -4,7 +4,7 @@ using СontractAccountingSystem.Server.Services;
 
 namespace СontractAccountingSystem.Server.Queries.PaymentTypes.GetPaymentTypeList
 {
-    public class PaymentTypeListQueryHandler : IRequestHandler<PaymentTypeListQuery, List<PaymentType>>
+    public class PaymentTypeListQueryHandler : IRequestHandler<PaymentTypeListQuery, List<DocPayType>>
     {
         private readonly Repository _repository;
         public PaymentTypeListQueryHandler(Repository repository)
@@ -12,9 +12,9 @@ namespace СontractAccountingSystem.Server.Queries.PaymentTypes.GetPaymentTypeLi
             _repository = repository;
         }
 
-        public async Task<List<PaymentType>> Handle(PaymentTypeListQuery request, CancellationToken cancellationToken)
+        public async Task<List<DocPayType>> Handle(PaymentTypeListQuery request, CancellationToken cancellationToken)
         {
-            var items = await _repository.FindAsync<PaymentType>();
+            var items = await _repository.FindAsync<DocPayType>();
             return items;
         }
     }

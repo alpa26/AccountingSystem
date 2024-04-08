@@ -73,7 +73,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("IdentityUserToken<string>");
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocPayStatus", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.ContrPayStatus", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -87,10 +87,10 @@ namespace СontractAccountingSystem.Server.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("doc_pay_statuses", (string)null);
+                    b.ToTable("contract_pay_statuses", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocPaymentDeadlines", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.ContractPayments", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,7 +98,10 @@ namespace СontractAccountingSystem.Server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("Deadline")
+                    b.Property<DateTime>("DeadlineEnd")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("DeadlineStart")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<int>("DocumentId")
@@ -107,11 +110,53 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<bool>("IsPaidOut")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("PayStatusId")
+                        .HasColumnType("integer");
+
+                    b.Property<decimal>("Price")
+                        .HasColumnType("numeric");
+
                     b.HasKey("Id");
 
                     b.HasIndex("DocumentId");
 
-                    b.ToTable("document_deadlines", (string)null);
+                    b.HasIndex("PayStatusId");
+
+                    b.ToTable("contract_payments", (string)null);
+                });
+
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocPayType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("doc_pay_types", (string)null);
+                });
+
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("doc_statuses", (string)null);
                 });
 
             modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocType", b =>
@@ -146,13 +191,16 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 3, 28, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 4, 8, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<DateTime>("DeadlineEnd")
                         .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("DeadlineStart")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("DocStatusId")
+                        .HasColumnType("integer");
 
                     b.Property<int>("EmployerId")
                         .HasColumnType("integer");
@@ -175,9 +223,6 @@ namespace СontractAccountingSystem.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("PayStatusId")
-                        .HasColumnType("integer");
-
                     b.Property<int>("PaymentTypeId")
                         .HasColumnType("integer");
 
@@ -193,19 +238,52 @@ namespace СontractAccountingSystem.Server.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("DocStatusId");
+
                     b.HasIndex("EmployerId");
 
                     b.HasIndex("KontrAgentId");
 
                     b.HasIndex("OrganizationId");
 
-                    b.HasIndex("PayStatusId");
-
                     b.HasIndex("PaymentTypeId");
 
                     b.HasIndex("TypeId");
 
                     b.ToTable("documents", (string)null);
+                });
+
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Employee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("FullName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Position")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("SecondName")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("employees", (string)null);
                 });
 
             modelBuilder.Entity("СontractAccountingSystem.Server.Entities.KontrAgent", b =>
@@ -282,7 +360,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 3, 28, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 4, 8, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<int>("DocumentId")
                         .HasColumnType("integer");
@@ -318,23 +396,6 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("organizations", (string)null);
-                });
-
-            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.PaymentType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("payment_types", (string)null);
                 });
 
             modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Project", b =>
@@ -498,7 +559,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.DocPaymentDeadlines", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.ContractPayments", b =>
                 {
                     b.HasOne("СontractAccountingSystem.Server.Entities.Document", "Document")
                         .WithMany()
@@ -506,12 +567,26 @@ namespace СontractAccountingSystem.Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("СontractAccountingSystem.Server.Entities.ContrPayStatus", "PaymentStatus")
+                        .WithMany()
+                        .HasForeignKey("PayStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("Document");
+
+                    b.Navigation("PaymentStatus");
                 });
 
             modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Document", b =>
                 {
-                    b.HasOne("СontractAccountingSystem.Server.Entities.User", "Employer")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.DocStatus", "DocStatus")
+                        .WithMany()
+                        .HasForeignKey("DocStatusId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Employee", "Employee")
                         .WithMany()
                         .HasForeignKey("EmployerId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -529,13 +604,7 @@ namespace СontractAccountingSystem.Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.HasOne("СontractAccountingSystem.Server.Entities.DocPayStatus", "PayStatus")
-                        .WithMany()
-                        .HasForeignKey("PayStatusId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("СontractAccountingSystem.Server.Entities.PaymentType", "PaymentType")
+                    b.HasOne("СontractAccountingSystem.Server.Entities.DocPayType", "PaymentType")
                         .WithMany()
                         .HasForeignKey("PaymentTypeId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -547,13 +616,13 @@ namespace СontractAccountingSystem.Server.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
-                    b.Navigation("Employer");
+                    b.Navigation("DocStatus");
+
+                    b.Navigation("Employee");
 
                     b.Navigation("KontrAgent");
 
                     b.Navigation("Organization");
-
-                    b.Navigation("PayStatus");
 
                     b.Navigation("PaymentType");
 

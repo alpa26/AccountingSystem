@@ -8,12 +8,15 @@ using СontractAccountingSystem.Server.Entities.Interfaces;
 
 namespace СontractAccountingSystem.Server.Entities;
 
-public class PaymentType : IEntity
+public class DocStatus : IEntity
 {
     [Key]
     public int Id { get; set; }
     public string Name { get; set; }
-    public PaymentType()
+    public DocStatus() { }
+    public DocStatus(int id, string name)
     {
+        Id = id;
+        Name = name;
     }
 }

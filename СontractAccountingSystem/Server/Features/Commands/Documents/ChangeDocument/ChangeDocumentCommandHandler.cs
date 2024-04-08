@@ -22,7 +22,7 @@ namespace СontractAccountingSystem.Server.Commands.Documents.ChangeDocument
         public async Task<bool> Handle(ChangeDocumentCommand request, CancellationToken cancellationToken)
         {
 
-            var paymentTypes = await _repository.FindAsync<PaymentType>();
+            var paymentTypes = await _repository.FindAsync<DocPayType>();
             var doctypes = await _repository.FindAsync<DocType>();
             var doc = await _repository.FindByIdAsync<Document>(request.Document.Id);
 

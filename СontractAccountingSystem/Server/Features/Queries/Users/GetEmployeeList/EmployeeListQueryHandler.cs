@@ -18,19 +18,15 @@ namespace СontractAccountingSystem.Server.Features.Queries.Users.GetEmployeeLis
 
         public async Task<List<PersonModel>> Handle(EmployeeListQuery request, CancellationToken cancellationToken)
         {
-            var userlist = await _repository.FindAsync<User>();
-            var rolelist = await _repository.FindAsync<Role>();
+            var employeelist = await _repository.FindAsync<Employee>();
             var res = new List<PersonModel>();
-            foreach (var item in userlist)
+            foreach (var item in employeelist)
             {
-                var role = rolelist.First(x => x.Id == item.RoleId) as Role;
-                if (role.Name == "admin")
-                    continue;
                 res.Add(new PersonModel()
                 {
                     Id = item.Id,
                     FullName = item.GetFullName(),
-                    Role = role.Name
+                    Role = item.Position
                 });
             }
             return res.ToList();

@@ -3,7 +3,7 @@ using СontractAccountingSystem.Server.Entities;
 
 namespace СontractAccountingSystem.Server.Queries.PayStatuses.GetPayStatusList
 {
-    public class PayStatusListQuery : IRequest<List<DocPayStatus>>
+    public class PayStatusListQuery : IRequest<List<DocStatus>>
     {
     }
 }

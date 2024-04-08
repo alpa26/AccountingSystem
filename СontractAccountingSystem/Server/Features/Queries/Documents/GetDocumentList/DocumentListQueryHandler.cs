@@ -24,15 +24,14 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
 
             var docList = await _repository.FindAsync<Document>();
             var orgList = await _repository.FindAsync<Organization>();
-            var userList = await _repository.FindAsync<User>();
-            var roleList = await _repository.FindAsync<Role>();
+            var employeeList = await _repository.FindAsync<Employee>();
             var docTypeList = await _repository.FindAsync<DocType>();
             var kontrAgentList = await _repository.FindAsync<KontrAgent>();
 
             foreach (var item in docList)
             {
                 var ka = kontrAgentList.FirstOrDefault(x => x.Id == item.KontrAgentId);
-                var empl = userList.FirstOrDefault(x => x.Id == item.EmployerId);
+                var empl = employeeList.FirstOrDefault(x => x.Id == item.EmployerId);
                 var org = orgList.FirstOrDefault(x => x.Id == item.OrganizationId);
                 reslist.Add(new ArchiveDocumentModel()
                 {
@@ -47,7 +46,7 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
                     {
                         Id = empl.Id,
                         FullName = empl.GetFullName(),
-                        Role = roleList.FirstOrDefault(x => x.Id == empl.RoleId).Name
+                        Role = empl.Position
                     },
                     Comment = item.Comment,
                     PaymentType = PaymentTypeEnum.FullPostPayment,    /// !!!!!!!!!!!!!!

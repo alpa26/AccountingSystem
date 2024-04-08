@@ -4,7 +4,7 @@ using СontractAccountingSystem.Server.Services;
 
 namespace СontractAccountingSystem.Server.Queries.PayStatuses.GetPayStatusList
 {
-    public class PayStatusListQueryHandler : IRequestHandler<PayStatusListQuery, List<DocPayStatus>>
+    public class PayStatusListQueryHandler : IRequestHandler<PayStatusListQuery, List<DocStatus>>
     {
         private readonly Repository _repository;
         public PayStatusListQueryHandler(Repository repository)
@@ -12,9 +12,9 @@ namespace СontractAccountingSystem.Server.Queries.PayStatuses.GetPayStatusList
             _repository = repository;
         }
 
-        public async Task<List<DocPayStatus>> Handle(PayStatusListQuery request, CancellationToken cancellationToken)
+        public async Task<List<DocStatus>> Handle(PayStatusListQuery request, CancellationToken cancellationToken)
         {
-            var items = await _repository.FindAsync<DocPayStatus>();
+            var items = await _repository.FindAsync<DocStatus>();
             return items;
         }
     }

@@ -21,7 +21,7 @@ namespace СontractAccountingSystem.Server.Features.DocumentCreate
 
         public async Task<int> Handle(DocumentCreateCommand request, CancellationToken cancellationToken)
         {
-            var paymentTypes = await _repository.FindAsync<PaymentType>();
+            var paymentTypes = await _repository.FindAsync<DocPayType>();
             var doctypes = await _repository.FindAsync<DocType>();
             var doc = new Document()
             {

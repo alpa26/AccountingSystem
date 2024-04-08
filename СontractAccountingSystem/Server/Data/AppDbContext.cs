@@ -16,34 +16,43 @@ public class AppDbContext : DbContext
     public AppDbContext()
     {
     }
-    public DbSet<DocPayStatus> DocPayStatuses { get; set; }
-    public DbSet<DocType> DocTypes { get; set; }
     public DbSet<Document> Documents { get; set; }
-    public DbSet<DocPaymentDeadlines> DocPaymentDeadlines { get; set; }
+    public DbSet<DocType> DocTypes { get; set; }
+    public DbSet<DocPayType> DocPayTypes { get; set; }
+    public DbSet<DocStatus> DocPayStatuses { get; set; }
+
+    public DbSet<ContractPayments> ContractPayments { get; set; }
+    public DbSet<ContrPayStatus> ContrPayStatus { get; set; }
+
+    public DbSet<Employee> Employees { get; set; }
     public DbSet<KontrAgent> KontrAgents { get; set; }
     public DbSet<KontrAgentType> KontrAgentTypes { get; set; }
-    public DbSet<Notification> Notifications { get; set; }
+
     public DbSet<Organization> Organizations { get; set; }
-    public DbSet<PaymentType> PaymentTypes { get; set; }
+
     public DbSet<Project> Projects { get; set; }
-    public DbSet<ProjectToDocuments> ProjectDocuments { get; set; }
+    public DbSet<ProjectToDocuments> ProjectToDocuments { get; set; }
     public DbSet<RelateDocuments> RelateDocuments { get; set; }
+    public DbSet<Notification> Notifications { get; set; }
+
+
     public DbSet<Role> UserRoles { get; set; }
     public DbSet<User> Users { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
-        modelBuilder.Entity<DocPayStatus>().ToTable("doc_pay_statuses");
+        modelBuilder.Entity<Employee>().ToTable("employees");
+        modelBuilder.Entity<DocStatus>().ToTable("doc_statuses");
         modelBuilder.Entity<DocType>().ToTable("document_types");
         modelBuilder.Entity<Document>().ToTable("documents");
-        modelBuilder.Entity<DocPaymentDeadlines>().ToTable("document_deadlines");
+        modelBuilder.Entity<ContractPayments>().ToTable("contract_payments");
+        modelBuilder.Entity<ContrPayStatus>().ToTable("contract_pay_statuses");
         modelBuilder.Entity<KontrAgent>().ToTable("kontr_agents");
         modelBuilder.Entity<KontrAgentType>().ToTable("kontr_agent_types");
         modelBuilder.Entity<Notification>().ToTable("notifications");
         modelBuilder.Entity<Organization>().ToTable("organizations");
-        modelBuilder.Entity<PaymentType>().ToTable("payment_types");
+        modelBuilder.Entity<DocPayType>().ToTable("doc_pay_types");
         modelBuilder.Entity<Project>().ToTable("projects");
         modelBuilder.Entity<ProjectToDocuments>().ToTable("projects_to_documents");
         modelBuilder.Entity<RelateDocuments>().ToTable("related_documents");
@@ -72,13 +81,13 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Document>().HasOne(d => d.Type).WithMany()
         .HasForeignKey(x => x.TypeId).OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Document>().HasOne(d => d.PayStatus).WithMany()
-        .HasForeignKey(x => x.PayStatusId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Document>().HasOne(d => d.DocStatus).WithMany()
+        .HasForeignKey(x => x.DocStatusId).OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Document>().HasOne(d => d.PaymentType).WithMany()
         .HasForeignKey(x => x.PaymentTypeId).OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Document>().HasOne(d => d.Employer).WithMany()
+        modelBuilder.Entity<Document>().HasOne(d => d.Employee).WithMany()
         .HasForeignKey(x => x.EmployerId).OnDelete(DeleteBehavior.Restrict);
 
         modelBuilder.Entity<Document>().HasOne(d => d.KontrAgent).WithMany()
@@ -106,8 +115,10 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<ProjectToDocuments>().HasOne(d => d.Document).WithMany()
         .HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.Restrict);
 
-        //DocPaymentDeadlines 
-        modelBuilder.Entity<DocPaymentDeadlines>().HasOne(d => d.Document).WithMany()
+        //ContractPayments 
+        modelBuilder.Entity<ContractPayments>().HasOne(d => d.PaymentStatus).WithMany()
+        .HasForeignKey(x => x.PayStatusId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<ContractPayments>().HasOne(d => d.Document).WithMany()
         .HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.Restrict);
 
         // Identity

@@ -20,32 +20,37 @@ namespace СontractAccountingSystem.Server.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime DeadlineStart { get; set; }
         public DateTime DeadlineEnd { get; set; }
-        public int OrganizationId { get; set; } 
-        public int KontrAgentId { get; set; } 
-        public int EmployerId { get; set; } 
-        public int PaymentTypeId { get; set; } = 1;
-        public int PayStatusId { get; set; } = 1;
-        public int TypeId { get; set; } = 1;
+
         public decimal Price { get; set; }
         public string WorkDescription { get; set; } = "null";
         public string Comment { get; set; } = "null";
         public string Path { get; set; } = "null";
 
+        public int TypeId { get; set; } = 1;
+        public int DocStatusId { get; set; } = 1;
+        public int PaymentTypeId { get; set; } = 1;
+        public int OrganizationId { get; set; }
+        public int KontrAgentId { get; set; }
+        public int EmployerId { get; set; }
+
         // Другие свойства
+        [NotMapped]
+        public DocType Type { get; set; }
+        [NotMapped]
+        public DocStatus DocStatus { get; set; }
+        [NotMapped]
+        public DocPayType PaymentType { get; set; }
         [NotMapped]
         public Organization Organization { get; set; }
         [NotMapped]
         public KontrAgent KontrAgent { get; set; } 
         [NotMapped]
-        public User Employer { get; set; } 
-        [NotMapped]
-        public PaymentType PaymentType { get; set; }
-        [NotMapped]
-        public DocPayStatus PayStatus { get; set; } 
+        public Employee Employee { get; set; } 
+
+
 
         //[NotMapped]
         //public List<Document> ListDocuments { get; set; } = new();
-        public DocType Type { get; set; }
 
         public Document()
         {
