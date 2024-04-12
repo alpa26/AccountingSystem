@@ -3,7 +3,7 @@ using СontractAccountingSystem.Server.Entities.Interfaces;
 
 namespace СontractAccountingSystem.Server.Entities
 {
-    public class Employee : IEntity
+    public class Worker : IEntity
     {
         [Key]
         public int Id { get; set; }
@@ -14,7 +14,7 @@ namespace СontractAccountingSystem.Server.Entities
 
         public string Position { get; set; }
 
-        public Employee()
+        public Worker()
         {
         }
 

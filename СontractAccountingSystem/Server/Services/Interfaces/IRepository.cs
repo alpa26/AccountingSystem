@@ -21,9 +21,9 @@ namespace СontractAccountingSystem.Server.Services.Interfaces
         //    throw new NotImplementedException();
         //}
 
-        public Task<T?> FindByIdAsync<T>(int id) where T : class, IEntity;
+        public Task<T?> FindByIdAsync<T>(int? id) where T : class, IEntity;
 
-        public Task<int> RemoveAsync<T>(int id) where T : class, IEntity;
+        public Task<int> RemoveAsync<T>(int? id) where T : class, IEntity;
 
         public Task SaveChangesAsync();
 

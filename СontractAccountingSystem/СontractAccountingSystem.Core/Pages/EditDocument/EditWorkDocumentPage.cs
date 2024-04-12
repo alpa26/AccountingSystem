@@ -8,32 +8,14 @@ using СontractAccountingSystem.Core.Pages.Autocomplete;
 
 namespace СontractAccountingSystem.Core.Pages.EditDocument
 {
-    public class EditDocumentPage : EditFormPage<ArchiveDocumentModel>
+    public class EditWorkDocumentPage : EditFormPage<ArchiveDocumentModel>
     {
         [Required]
         public TextInput DocumentNumber { get; } = new TextInput("Номер Договора") { MaxLength = 9, MaxDisplayLength = 12, Placeholder = "00-000000", DisplayTextDelegate = x => $"№ {x}" };
         
 
         [Required]
-        public TextInput EssenceOfAgreement { get; } = new TextInput("Наименование работ") { Placeholder = "Наименование работ", Multiline = true };
-
-        //[Required]
-        public DateInput CreateDate { get; } = new DateTimeInput("Дата согласования");
-
-        [Required]
         public DatePeriodInput Deadline { get; } = new DatePeriodInput("Срок исполнения") { Placeholder = "Введите значение" };
-
-        [Required]
-        public ComboBox<PaymentTypeEnum?> PaymentType { get; } = new ComboBox<PaymentTypeEnum?>("Тип оплаты");
-
-        [Required]
-        public EmployeeAutocomplete EmployerName { get; } = new EmployeeAutocomplete("Сотрудник");
-
-        [Required]
-        public KontrAgentAutocomplete KontrAgentName { get; } = new KontrAgentAutocomplete("КонтрАгент");
-
-        [Required]
-        public OrganizationAutocomplete OrganizationName { get; } = new OrganizationAutocomplete("Название организации");
 
         [Required]
         public ValueInput<decimal> FullPrice { get; } = new ValueInput<decimal>("Общая Сумма", x =>
@@ -44,14 +26,24 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
             return 0;
         });
 
+        [Required]
+        public ComboBox<PaymentTypeEnum?> PaymentType { get; } = new ComboBox<PaymentTypeEnum?>("Тип оплаты");
+
+        //[Required]
+        //public WorkerAutocomplete EmployerName { get; } = new WorkerAutocomplete("Сотрудник");
+
+        [Required]
+        public KontrAgentAutocomplete KontrAgentName { get; } = new KontrAgentAutocomplete("КонтрАгент");
+
+        [Required]
+        public OrganizationAutocomplete OrganizationName { get; } = new OrganizationAutocomplete("Название организации");
+
+        [Required]
+        public TextInput EssenceOfAgreement { get; } = new TextInput("Наименование работ") { Placeholder = "Наименование работ", Multiline = true };
 
         public TextInput Comment { get; } = new TextInput("Комментарий") { Placeholder = "Комментарий", Multiline = true };
 
-        //public MultiValueAutocomplete<PersonModel> Signers2 { get; } = new MultiValueAutocomplete<PersonModel>("Согласователи2")
-        //{
-        //    BuildAutocompleteDelegate = () => new EmployeeAutocomplete("тест") { Placeholder = "Введите имя сотрудника или должность" },
-        //    ValuesCountLimit = 3
-        //};
+
 
         //public AttachmentsEditor Documents { get; } = new AttachmentsEditor("Документы")
         //{
@@ -61,11 +53,11 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         //};
 
 
-        public EditDocumentPage() : this(null)
+        public EditWorkDocumentPage() : this(null)
         {
 
         }
-        public EditDocumentPage(ArchiveDocumentModel model) : base(model)
+        public EditWorkDocumentPage(ArchiveDocumentModel model) : base(model)
         {
             CreateModelDelegate = CreateModel;
             DeleteButton.Hidden = true;
@@ -74,19 +66,17 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         protected override void Setup()
         {
             if (Model.DocumentNumber == null)
-                Title = "Новый договор";
+                Title = "Новый договор на работы";
             else
-                Title = $"Договор  {Model.DocumentNumber}";
+                Title = $"Договор на работы №{Model.DocumentNumber}";
 
             DocumentNumber.Text = Model.DocumentNumber;
             EssenceOfAgreement.Text = Model.EssenceOfAgreement;
             FullPrice.Value = Model.FullPrice;
             KontrAgentName.Value = Model.KontrAgentName;
             OrganizationName.Value = Model.OrganizationName;
-            EmployerName.Value = Model.EmployerName;
             Comment.Text = Model.Comment;
             PaymentType.Value = Model.PaymentType;
-            CreateDate.Value = Model.CreateDate;
 
             FullPrice.DisplayTextDelegate = x =>
             {

@@ -35,7 +35,7 @@ namespace СontractAccountingSystem.Server.Commands.Documents.ChangeDocument
             doc.Comment = request.Document.Comment;
             doc.WorkDescription = request.Document.EssenceOfAgreement;
             doc.OrganizationId = request.Document.OrganizationName.Id;
-            doc.EmployerId = request.Document.EmployerName.Id;
+            doc.WorkerId = request.Document.WorkerName.Id;
             doc.KontrAgentId = request.Document.KontrAgentName.Id;
             doc.TypeId = doctypes.First(x => x.Name == request.Document.DocumentType).Id;
             doc.PaymentTypeId = paymentTypes.First(x => x.Name == request.Document.PaymentType.ToString()).Id;

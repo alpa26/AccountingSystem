@@ -11,6 +11,10 @@ namespace СontractAccountingSystem.Core.Models
         public int Id { get; set; }
         public string Name { get; set; }
 
+        public OrganizationModel()
+        {
+            Name = string.Empty;
+        }
         public override bool Equals(object obj)
         {
             var other = obj as OrganizationModel;

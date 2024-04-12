@@ -33,7 +33,12 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages.Controllers
 
         private void ShowEditPage()
         {
-            Element.Navigation.ShowPageOver(new EditDocumentPage(Element.Model));
+            if (Element.Model.DocumentType == "Договор на работы")
+                Element.Navigation.ShowPageOver(new EditWorkDocumentPage(Element.Model));
+            else if (Element.Model.DocumentType == "Договор на фактические услуги")
+                Element.Navigation.ShowPageOver(new EditLaborDocumentPage(Element.Model));
+            else /*if (Element.Model.DocumentType == "Лицензионный договор")*/
+                Element.Navigation.ShowPageOver(new EditLicenseDocumentPage(Element.Model));
         }
     }
 }

@@ -24,7 +24,7 @@ public class AppDbContext : DbContext
     public DbSet<ContractPayments> ContractPayments { get; set; }
     public DbSet<ContrPayStatus> ContrPayStatus { get; set; }
 
-    public DbSet<Employee> Employees { get; set; }
+    public DbSet<Worker> Workers { get; set; }
     public DbSet<KontrAgent> KontrAgents { get; set; }
     public DbSet<KontrAgentType> KontrAgentTypes { get; set; }
 
@@ -42,7 +42,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Employee>().ToTable("employees");
+        modelBuilder.Entity<Worker>().ToTable("workers");
         modelBuilder.Entity<DocStatus>().ToTable("doc_statuses");
         modelBuilder.Entity<DocType>().ToTable("document_types");
         modelBuilder.Entity<Document>().ToTable("documents");
@@ -76,7 +76,7 @@ public class AppDbContext : DbContext
 
         //Document
         modelBuilder.Entity<Document>().HasOne(d => d.Organization).WithMany()
-        .HasForeignKey(x => x.OrganizationId).OnDelete(DeleteBehavior.Restrict);
+        .HasForeignKey(x => x.OrganizationId).OnDelete(DeleteBehavior.Restrict).IsRequired(false);
 
         modelBuilder.Entity<Document>().HasOne(d => d.Type).WithMany()
         .HasForeignKey(x => x.TypeId).OnDelete(DeleteBehavior.Restrict);
@@ -87,8 +87,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Document>().HasOne(d => d.PaymentType).WithMany()
         .HasForeignKey(x => x.PaymentTypeId).OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Document>().HasOne(d => d.Employee).WithMany()
-        .HasForeignKey(x => x.EmployerId).OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Document>().HasOne(d => d.Worker).WithMany()
+        .HasForeignKey(x => x.WorkerId).OnDelete(DeleteBehavior.Restrict).IsRequired(false);
 
         modelBuilder.Entity<Document>().HasOne(d => d.KontrAgent).WithMany()
         .HasForeignKey(x => x.KontrAgentId).OnDelete(DeleteBehavior.Restrict);

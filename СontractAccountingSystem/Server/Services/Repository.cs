@@ -62,12 +62,12 @@ namespace СontractAccountingSystem.Server.Services
         //    throw new NotImplementedException();
         //}
 
-        public async Task<T?> FindByIdAsync<T>(int id) where T : class, IEntity
+        public async Task<T?> FindByIdAsync<T>(int? id) where T : class, IEntity
         {
             return await GetCollection<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<int> RemoveAsync<T>(int id) where T : class, IEntity
+        public async Task<int> RemoveAsync<T>(int? id) where T : class, IEntity
         {
             var docType = await GetCollection<T>().FindAsync(id);
             if (docType == null)

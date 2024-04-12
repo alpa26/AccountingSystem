@@ -9,7 +9,7 @@ namespace СontractAccountingSystem.Core.Services.Interfaces
 {
     internal interface IOrgStructureService
     {
-        Task<IList<PersonModel>> LoadEmployee();
+        Task<IList<PersonModel>> LoadWorkers();
         Task<IList<KontrAgentModel>> LoadKontrAgents();
         Task<IList<OrganizationModel>> LoadOrganizations();
 

@@ -15,7 +15,7 @@ namespace СontractAccountingSystem.Core.Models
         public string DocumentType { get; set; }
         public string EssenceOfAgreement { get; set; }
         public KontrAgentModel KontrAgentName { get; set; }
-        public PersonModel EmployerName { get; set; }
+        public PersonModel WorkerName { get; set; }
         public OrganizationModel OrganizationName { get; set; }
         public decimal FullPrice { get; set; }
         public string Comment { get; set; }

@@ -10,14 +10,15 @@ using СontractAccountingSystem.Core.Services.Interfaces;
 using СontractAccountingSystem.Core.Services;
 using System.Xml.Linq;
 using Salazki.Presentation.Elements;
+using System.Net.Http.Json;
 
 namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
 {
-    public class SaveController : Controller<EditDocumentPage>
+    public class SaveWorkController : Controller<EditWorkDocumentPage>
     {
         protected override void Start()
         {
-            Console.WriteLine("Флаг3");
+            Console.WriteLine("Флаг 1");
 
             Element.UpdateModelDelegate = UpdateModel;
             Element.SaveDelegate = Save;
@@ -25,20 +26,21 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
 
         private ArchiveDocumentModel UpdateModel()
         {
-            var date = Element.CreateDate.Value ?? DateTime.Now;
+            var date = DateTime.Now;
             Element.Model.DocumentType = "Договор на работы";
-            Console.WriteLine(date);
+            Console.WriteLine("Флаг 2");
+
             return new ArchiveDocumentModel
             {
                 Id = Element.Model.Id,
-                Name = $"{Element.Model.DocumentType} от {date.ToString("dd.MM.yyyy")}",
+                Name = $"{Element.Model.DocumentType} от {Element.Deadline.Value.From.Value.ToString("dd.MM.yyyy")}",
                 DocumentType= Element.Model.DocumentType,
                 DocumentNumber = Element.DocumentNumber.Text,
-                EssenceOfAgreement = Element.EssenceOfAgreement.Text,
+                EssenceOfAgreement = Element.EssenceOfAgreement.Text.IsNullOrEmpty() ? "Не указано" : Element.EssenceOfAgreement.Text,
                 KontrAgentName = Element.KontrAgentName.Value,
                 FullPrice = Element.FullPrice.Value,
-                EmployerName = Element.EmployerName.Value,
-                Comment = Element.Comment.Text ?? "Нет комментариев",
+                WorkerName = new PersonModel(),
+                Comment = Element.Comment.Text.IsNullOrEmpty()? "Нет комментариев" : Element.Comment.Text,
                 PaymentType = Element.PaymentType.Value.Value,
                 OrganizationName = Element.OrganizationName.Value,
                 CreateDate = date,
@@ -54,7 +56,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                     JsonSerializer.Serialize(model),
                     Encoding.UTF8,
                     "application/json");
-            Console.WriteLine("Флаг2");
+            Console.WriteLine(model.ToString());
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
             if(model.Id == 0)
                 await httpClient.PostAsync("api/documents/create", jsonContent);

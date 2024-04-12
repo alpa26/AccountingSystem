@@ -26,7 +26,7 @@ namespace СontractAccountingSystem.Core.Services
         public async void Setup()
         {
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-            var response = await httpClient.GetAsync("api/users/employeelist");
+            var response = await httpClient.GetAsync("api/users/workerlist");
             if (response.IsSuccessStatusCode)
             {
                 var res = await response.Content.ReadAsAsync<IEnumerable<PersonModel>>();
@@ -58,7 +58,7 @@ namespace СontractAccountingSystem.Core.Services
             return Organizations.ToList();
         }
 
-        public async Task<IList<PersonModel>> LoadEmployee()
+        public async Task<IList<PersonModel>> LoadWorkers()
         {
             await Task.Delay(500);
             return Persons.ToList();

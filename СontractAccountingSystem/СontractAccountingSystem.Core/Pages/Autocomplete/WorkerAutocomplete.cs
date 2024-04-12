@@ -9,11 +9,11 @@ using СontractAccountingSystem.Core.Services.Interfaces;
 
 namespace СontractAccountingSystem.Core.Pages.Autocomplete
 {
-    public class EmployeeAutocomplete : Autocomplete<PersonModel>
+    public class WorkerAutocomplete : Autocomplete<PersonModel>
     {
-        public EmployeeAutocomplete(string caption = null) : base(caption)
+        public WorkerAutocomplete(string caption = null) : base(caption)
         {
-            RegisterBuildItemDelegate(x => new EmployeeAutocompleteItem(x));
+            RegisterBuildItemDelegate(x => new WorkerAutocompleteItem(x));
             AsyncLoadDelegate = Search;
             CanSelectValueDelegate = CanSelectValue;
         }
@@ -31,7 +31,7 @@ namespace СontractAccountingSystem.Core.Pages.Autocomplete
 
         private async Task<List<PersonModel>> Search(DataRequest request)
         {
-            var persons = await Service<IOrgStructureService>.GetInstance().LoadEmployee();
+            var persons = await Service<IOrgStructureService>.GetInstance().LoadWorkers();
             var pattern = request.SearchPattern?.ToLower();
             if (pattern.IsNullOrEmpty())
                 return null;

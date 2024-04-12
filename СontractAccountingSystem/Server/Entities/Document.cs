@@ -29,9 +29,10 @@ namespace СontractAccountingSystem.Server.Entities
         public int TypeId { get; set; } = 1;
         public int DocStatusId { get; set; } = 1;
         public int PaymentTypeId { get; set; } = 1;
-        public int OrganizationId { get; set; }
         public int KontrAgentId { get; set; }
-        public int EmployerId { get; set; }
+        public int? OrganizationId { get; set; }
+        public int? WorkerId { get; set; }
+
 
         // Другие свойства
         [NotMapped]
@@ -45,7 +46,7 @@ namespace СontractAccountingSystem.Server.Entities
         [NotMapped]
         public KontrAgent KontrAgent { get; set; } 
         [NotMapped]
-        public Employee Employee { get; set; } 
+        public Worker Worker { get; set; }
 
 
 

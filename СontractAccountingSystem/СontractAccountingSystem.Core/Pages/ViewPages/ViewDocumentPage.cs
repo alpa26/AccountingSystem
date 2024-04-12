@@ -5,10 +5,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Pages.Autocomplete;
+using СontractAccountingSystem.Core.Pages.EditDocument;
 
 namespace СontractAccountingSystem.Core.Pages.ViewPages
 {
@@ -20,7 +22,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
         public TextField FullPrice { get; } = new TextField("Общая сумма");
 
         public TextField EssenceOfAgreement { get; } = new TextField("Наименование работ");
-        public TextField<DateTime> CreateDate { get; } = new TextField<DateTime>("Дата согласования");
+        public TextField<DateTime> CreateDate { get; } = new TextField<DateTime>("Дата добавления");
         public TextField<DateTime> DeadlineStart { get; } = new TextField<DateTime>("Начало срока исполнения");
         public TextField<DateTime> DeadlineEnd { get; } = new TextField<DateTime>("Конец срока исполнения");
 
@@ -40,25 +42,55 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
         {
             DocumentId = Id ;
             HeaderActionPanel.Buttons.AddRange(EditButton);
-
-            Content.AddRange(
-                DocumentName,
-                CreateDate,
-                DeadlineStart,
-                DeadlineEnd,
-                EssenceOfAgreement,
-                PaymentType,
-                KontrAgentName,
-                OrganizationName,
-                EmployerName,
-                Comment
-                );
         }
 
 
         protected override void Setup()
         {
-            Title = $"Документ {Model.DocumentNumber}";
+            Content.Clear();
+            if (Model.DocumentType == "Договор на работы")
+            {
+                Title = $"Договор на работы №{Model.DocumentNumber}";
+                Subtitle = $"Дата добавления {Model.CreateDate.ToString("dd.MM.yyyy")}";
+                Content.AddRange(
+                DocumentName,
+                DeadlineStart, DeadlineEnd,
+                FullPrice, PaymentType,
+                KontrAgentName, OrganizationName,
+                EssenceOfAgreement,
+                Comment
+                );
+            }
+            else if (Model.DocumentType == "Договор на фактические услуги")
+            {
+                Title = $"Договор на фактические услуги № {Model.DocumentNumber}";
+                Subtitle = $"Дата добавления {Model.CreateDate.ToString("dd.MM.yyyy")}";
+                Content.AddRange(
+                DocumentName,
+                DeadlineStart, DeadlineEnd,
+                EmployerName,
+                FullPrice, PaymentType,
+                KontrAgentName,
+                EssenceOfAgreement,
+                Comment
+                );
+            }
+            else /*if (Element.Model.DocumentType == "Лицензионный договор")*/
+            {
+                Title = $"Лицензионный договор № {Model.DocumentNumber}";
+                Subtitle = $"Дата добавления {Model.CreateDate.ToString("dd.MM.yyyy")}";
+                Content.AddRange(
+                DocumentName,
+                DeadlineStart, DeadlineEnd,
+                OrganizationName,
+                FullPrice, PaymentType,
+                KontrAgentName, 
+                EssenceOfAgreement,
+                Comment
+                );
+            }
+
+
             DocumentName.Text = Model.Name;
             CreateDate.Value = Model.CreateDate;
             DeadlineStart.Value = Model.DeadlineStart;
@@ -68,10 +100,10 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                                 .GetField(Model.PaymentType.ToString())
                                 .GetCustomAttribute<DescriptionAttribute>()
                                 ?.Description;
-
+            FullPrice.Text = $"{Model.FullPrice} рублей";
             KontrAgentName.Value = Model.KontrAgentName;
             OrganizationName.Value = Model.OrganizationName;
-            EmployerName.Value = Model.EmployerName;
+            EmployerName.Value = Model.WorkerName;
             Comment.Text = Model.Comment;
         }
     }

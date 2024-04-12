@@ -14,6 +14,11 @@ namespace СontractAccountingSystem.Core.Models
 
         //public string StaffPosition { get; set; }
 
+        public PersonModel() {
+            FullName = string.Empty;
+            Role = string.Empty;
+        }
+
         public override bool Equals(object obj)
         {
             var other = obj as PersonModel;

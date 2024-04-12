@@ -23,7 +23,8 @@ namespace СontractAccountingSystem.Server.Features.DocumentCreate
         {
             var paymentTypes = await _repository.FindAsync<DocPayType>();
             var doctypes = await _repository.FindAsync<DocType>();
-            var doc = new Document()
+            Document doc = null;
+            doc = new Document()
             {
                 Number = request.Document.DocumentNumber,
                 Name = request.Document.Name,
@@ -34,11 +35,12 @@ namespace СontractAccountingSystem.Server.Features.DocumentCreate
                 Comment = request.Document.Comment,
                 WorkDescription = request.Document.EssenceOfAgreement,
                 OrganizationId = request.Document.OrganizationName.Id,
-                EmployerId = request.Document.EmployerName.Id,
+                WorkerId = request.Document.WorkerName.Id,
                 KontrAgentId = request.Document.KontrAgentName.Id,
                 TypeId = doctypes.First(x => x.Name == request.Document.DocumentType).Id,
                 PaymentTypeId = paymentTypes.First(x => x.Name == request.Document.PaymentType.ToString()).Id
             };
+
             var res = await _repository.CreateAsync(doc);
             if (res != null)
             {

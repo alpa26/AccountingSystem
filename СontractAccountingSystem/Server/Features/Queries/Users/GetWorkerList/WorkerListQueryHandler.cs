@@ -5,20 +5,20 @@ using СontractAccountingSystem.Server.Queries.Roles.GetRoleList;
 using СontractAccountingSystem.Server.Queries.Users.GetUsersList;
 using СontractAccountingSystem.Server.Services;
 
-namespace СontractAccountingSystem.Server.Features.Queries.Users.GetEmployeeList
+namespace СontractAccountingSystem.Server.Features.Queries.Users.GetWorkerList
 {
-    public class EmployeeListQueryHandler : IRequestHandler<EmployeeListQuery, List<PersonModel>>
+    public class WorkerListQueryHandler : IRequestHandler<WorkerListQuery, List<PersonModel>>
     {
         private readonly Repository _repository;
 
-        public EmployeeListQueryHandler(Repository repository)
+        public WorkerListQueryHandler(Repository repository)
         {
             _repository = repository;
         }
 
-        public async Task<List<PersonModel>> Handle(EmployeeListQuery request, CancellationToken cancellationToken)
+        public async Task<List<PersonModel>> Handle(WorkerListQuery request, CancellationToken cancellationToken)
         {
-            var employeelist = await _repository.FindAsync<Employee>();
+            var employeelist = await _repository.FindAsync<Worker>();
             var res = new List<PersonModel>();
             foreach (var item in employeelist)
             {

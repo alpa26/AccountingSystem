@@ -8,12 +8,12 @@ using СontractAccountingSystem.Core.Models;
 
 namespace СontractAccountingSystem.Core.Pages.Autocomplete
 {
-    public class EmployeeAutocompleteItem : Item<PersonModel>
+    public class WorkerAutocompleteItem : Item<PersonModel>
     {
         public Label FullName { get; } = new Label();
         public Label Role { get; } = new Label { Style = TextStyle.LightDescription };
 
-        public EmployeeAutocompleteItem(PersonModel model) : base(model)
+        public WorkerAutocompleteItem(PersonModel model) : base(model)
         {
             Layout = new VerticalStack(FullName, Role);
         }

@@ -55,6 +55,7 @@ namespace СontractAccountingSystem.Core
 
         protected override async Task<bool> TryAuthorize()
         {
+
             var cookieService = Service<ICookieService>.GetInstance();
             var sid = await cookieService.GetValue(".AspNetCore.Cookies");
             try
