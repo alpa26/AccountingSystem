@@ -3,51 +3,50 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Services.Interfaces;
 using СontractAccountingSystem.Core.Services;
-using System.Xml.Linq;
-using Salazki.Presentation.Elements;
-using System.Net.Http.Json;
+using System.Text.Json;
 
 namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
 {
-    public class SaveWorkController : Controller<EditWorkDocumentPage>
+    public class SaveController : Controller<EditDocumentPage>
     {
         protected override void Start()
         {
-            Console.WriteLine("Флаг 1");
-
             Element.UpdateModelDelegate = UpdateModel;
             Element.SaveDelegate = Save;
         }
 
         private ArchiveDocumentModel UpdateModel()
         {
-            var date = DateTime.Now;
-            Element.Model.DocumentType = "Договор на работы";
-            Console.WriteLine("Флаг 2");
-
-            return new ArchiveDocumentModel
+            var res = new ArchiveDocumentModel
             {
                 Id = Element.Model.Id,
-                Name = $"{Element.Model.DocumentType} от {Element.Deadline.Value.From.Value.ToString("dd.MM.yyyy")}",
-                DocumentType= Element.Model.DocumentType,
+                Name = $"{Element.Type} от {Element.Deadline.Value.From.Value.ToString("dd.MM.yyyy")}",
+                DocumentType = Element.Type,
                 DocumentNumber = Element.DocumentNumber.Text,
-                EssenceOfAgreement = Element.EssenceOfAgreement.Text.IsNullOrEmpty() ? "Не указано" : Element.EssenceOfAgreement.Text,
+                EssenceOfAgreement = Element.EssenceOfAgreement.Text.IsNullOrEmpty() ? "Наименование работ не указано" : Element.EssenceOfAgreement.Text,
                 KontrAgentName = Element.KontrAgentName.Value,
                 FullPrice = Element.FullPrice.Value,
-                WorkerName = new PersonModel(),
-                Comment = Element.Comment.Text.IsNullOrEmpty()? "Нет комментариев" : Element.Comment.Text,
+                Comment = Element.Comment.Text.IsNullOrEmpty() ? "Нет комментариев" : Element.Comment.Text,
                 PaymentType = Element.PaymentType.Value.Value,
-                OrganizationName = Element.OrganizationName.Value,
-                CreateDate = date,
+                CreateDate = DateTime.Now,
                 DeadlineStart = Element.Deadline.Value.From.Value,
                 DeadlineEnd = Element.Deadline.Value.To.Value,
                 RelatedDocuments = new RelateDocumentModel[] { null },
             };
+            if (Element.Type == "Договор на фактические услуги") {
+                res.WorkerName = Element.WorkerName.Value;
+                res.OrganizationName = new OrganizationModel();
+            }
+            else{
+                res.WorkerName = new PersonModel();
+                res.OrganizationName = Element.OrganizationName.Value;
+            }
+
+            return res;
         }
 
         private async Task Save(ArchiveDocumentModel model)
@@ -56,9 +55,8 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                     JsonSerializer.Serialize(model),
                     Encoding.UTF8,
                     "application/json");
-            Console.WriteLine(model.ToString());
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-            if(model.Id == 0)
+            if (model.Id == 0)
                 await httpClient.PostAsync("api/documents/create", jsonContent);
             else
                 await httpClient.PostAsync("api/documents/edit", jsonContent);

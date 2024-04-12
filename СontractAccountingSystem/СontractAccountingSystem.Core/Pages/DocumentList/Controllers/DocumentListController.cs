@@ -24,19 +24,24 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
 
         private async Task<List<DocumentListItemModel>> LoadDocuments(DataRequest request)
         {
-            var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-            var response = await httpClient.GetAsync("api/documents/editlist");
-            if (response.IsSuccessStatusCode)
+            if (Element.DataSource.Models.Count == 0)
             {
-                //var res = await response.Content.ReadAsStringAsync();
-                //Console.WriteLine(res);
-                var res = await response.Content.ReadAsAsync<IEnumerable<DocumentListItemModel>>();
-                return res.ToList();
-            }
-            else
-            {
+                var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
+                var response = await httpClient.GetAsync("api/documents/editlist");
+                if (response.IsSuccessStatusCode)
+                {
+                    //var res = await response.Content.ReadAsStringAsync();
+                    //Console.WriteLine(res);
+                    var res = await response.Content.ReadAsAsync<IEnumerable<DocumentListItemModel>>();
+                    return res.ToList();
+                }
+                else
+                {
+                    return null;
+                }
+            }else
                 return null;
-            }
+
         }
     }
 }

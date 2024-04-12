@@ -19,15 +19,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentTypesList
 
         private Page CreateEditPage(string selectedItem)
         {
-            if (selectedItem == "Договор на работы")
-                return new EditDocument.EditWorkDocumentPage();
-            if (selectedItem == "Договор на фактические услуги")
-                return new EditDocument.EditLaborDocumentPage();
-            if (selectedItem == "Лицензионный договор")
-                return new EditDocument.EditLicenseDocumentPage();
-            //if (selectedItem == "Дополнительно соглашение")
-            //    return new EditDocument.EditWorkDocumentPage();
-            throw new NotSupportedException();
+            return new EditDocument.EditDocumentPage(selectedItem);
         }
     }
 }
