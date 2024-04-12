@@ -17,6 +17,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages.Controllers
         {
             Element.LoadModelDelegate = LoadTechnology;
             Element.EditButton.ActionDelegate = ShowEditPage;
+            Element.DeleteButton.CreateActionFormDelegate = () => new DeleteDocumentActionForm(Element.Model);
         }
 
         private async Task<ArchiveDocumentModel> LoadTechnology()

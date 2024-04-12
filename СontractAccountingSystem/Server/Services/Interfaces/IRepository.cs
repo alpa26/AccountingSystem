@@ -23,7 +23,7 @@ namespace СontractAccountingSystem.Server.Services.Interfaces
 
         public Task<T?> FindByIdAsync<T>(int? id) where T : class, IEntity;
 
-        public Task<int> RemoveAsync<T>(int? id) where T : class, IEntity;
+        public Task<bool> RemoveAsync<T>(int? id) where T : class, IEntity;
 
         public Task SaveChangesAsync();
 

@@ -27,11 +27,9 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
             if (Element.DataSource.Models.Count == 0)
             {
                 var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-                var response = await httpClient.GetAsync("api/documents/editlist");
+                var response = await httpClient.GetAsync("api/documents/geteditlist");
                 if (response.IsSuccessStatusCode)
                 {
-                    //var res = await response.Content.ReadAsStringAsync();
-                    //Console.WriteLine(res);
                     var res = await response.Content.ReadAsAsync<IEnumerable<DocumentListItemModel>>();
                     return res.ToList();
                 }
@@ -39,7 +37,8 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
                 {
                     return null;
                 }
-            }else
+            }
+            else
                 return null;
 
         }

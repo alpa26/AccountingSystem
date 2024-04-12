@@ -107,7 +107,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
             Comment.Text = Model.Comment;
             PaymentType.Value = Model.PaymentType;
             WorkerName.Value = Model.WorkerName;
-
+            Deadline.Value = new Salazki.Presentation.Period(Model.DeadlineStart,Model.DeadlineEnd);
 
             FullPrice.DisplayTextDelegate = x =>
             {

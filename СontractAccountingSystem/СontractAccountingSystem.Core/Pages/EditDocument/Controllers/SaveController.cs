@@ -59,7 +59,12 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
             if (model.Id == 0)
                 await httpClient.PostAsync("api/documents/create", jsonContent);
             else
+            {
                 await httpClient.PostAsync("api/documents/edit", jsonContent);
+                ModelManager.PublishModelUpdated(model);
+
+            }
+
         }
     }
 }

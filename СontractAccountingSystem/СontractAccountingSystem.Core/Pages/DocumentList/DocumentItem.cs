@@ -39,6 +39,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
             Name.Text = Model.Name;
 
             DocumentType.Text = Model.DocumentType;
+            Badges.Items.Clear();
             Badges.Items.AddRange(new Badge
             {
                 Text = "Проверен",

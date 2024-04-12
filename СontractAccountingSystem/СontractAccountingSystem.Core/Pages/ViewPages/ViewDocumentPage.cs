@@ -37,11 +37,13 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
         public TextField Comment { get; } = new TextField("Комментарий");
 
         public Button EditButton { get; } = new Button { Icon = IconType.Pencil, Hint = "Редактировать" };
+        public ShowActionFormButton DeleteButton { get; } = new ShowActionFormButton { Text = "Удалить", Style = ButtonStyle.Danger };
+
 
         public ViewDocumentPage(int Id)
         {
             DocumentId = Id ;
-            HeaderActionPanel.Buttons.AddRange(EditButton);
+            HeaderActionPanel.Buttons.AddRange(EditButton,DeleteButton);
         }
 
 

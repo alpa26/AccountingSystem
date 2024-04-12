@@ -67,17 +67,24 @@ namespace СontractAccountingSystem.Server.Services
             return await GetCollection<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<int> RemoveAsync<T>(int? id) where T : class, IEntity
+
+        public async Task<bool> RemoveAsync<T>(int? id) where T : class, IEntity
         {
-            var docType = await GetCollection<T>().FindAsync(id);
-            if (docType == null)
-                return (int)EntityState.Detached;
+            var entity = await GetCollection<T>().FindAsync(id);
+            if (entity == null)
+                return false;
 
-            var result = GetCollection<T>().Remove(docType);
-            if (result.State != EntityState.Deleted)
-                return (int)EntityState.Unchanged;
+            GetCollection<T>().Remove(entity);
+            try
+            {
+                await SaveChangesAsync();
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
 
-            return (int)EntityState.Deleted;
+            return true;
         }
 
         public async Task SaveChangesAsync()

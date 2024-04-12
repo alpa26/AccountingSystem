@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using СontractAccountingSystem.Core.Services;
 using СontractAccountingSystem.Core.Services.Interfaces;
 using DK.WebClient.Core.Services;
+using СontractAccountingSystem.Core.Models;
 
 namespace СontractAccountingSystem.Core
 {
@@ -27,6 +28,12 @@ namespace СontractAccountingSystem.Core
             services.AddSingleton<ICookieService>(x => new CookieService());
             
 
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            ModelManager.RegisterModelConverter<ArchiveDocumentModel, DocumentListItemModel>(x => x.ConvertToListItem());
         }
     }
 }

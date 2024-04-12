@@ -20,7 +20,21 @@ namespace СontractAccountingSystem.Core.Models
         {
             return DocumentNumber;
         }
+        public DocumentListItemModel()
+        {
 
+        }
+
+        public DocumentListItemModel(ArchiveDocumentModel parent)
+        {
+            Id = parent.Id;
+            DocumentNumber = parent.DocumentNumber;
+            DocumentType = parent.DocumentType;
+            Name = parent.Name;
+            EssenceOfAgreement = parent.EssenceOfAgreement;
+            KontrAgentName = parent.KontrAgentName;
+            CreateDate = parent.CreateDate;
+        }
         public override bool Equals(object obj)
         {
             var other = obj as DocumentListItemModel;
