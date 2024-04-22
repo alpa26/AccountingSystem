@@ -16,7 +16,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
             Title = "Договоры";
             Subtitle = "Существующие договоры";
             ListEmptyText = "Нет договоров";
-
+            
             RegisterBuildItemDelegate(x => new DocumentItem(x));
 
             CreateItemPageDelegate = x => new ViewDocumentPage(x.Id);

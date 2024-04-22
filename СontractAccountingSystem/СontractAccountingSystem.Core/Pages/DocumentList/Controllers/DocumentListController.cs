@@ -31,7 +31,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
                 if (response.IsSuccessStatusCode)
                 {
                     var res = await response.Content.ReadAsAsync<IEnumerable<DocumentListItemModel>>();
-                    return res.ToList();
+                    return res.OrderByDescending(x => x.CreateDate).ToList();
                 }
                 else
                 {

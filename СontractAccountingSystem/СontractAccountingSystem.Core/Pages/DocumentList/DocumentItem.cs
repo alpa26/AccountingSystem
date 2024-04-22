@@ -38,12 +38,18 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
             EssenceOfAgreement.Text = Model.EssenceOfAgreement;
             Name.Text = Model.Name;
 
-            DocumentType.Text = Model.DocumentType;
+            if (Model.DocumentType == "Договор на фактические услуги")
+                DocumentType.Text = "Договор на усл.";
+            else if(Model.DocumentType == "Лицензионный договор")
+                DocumentType.Text = "Договор на лиц.";
+            else 
+                DocumentType.Text = "Договор на раб.";
             Badges.Items.Clear();
-            Badges.Items.AddRange(new Badge
+            Badges.Items.AddRange(
+                new Badge
             {
-                Text = "Проверен",
-                Color = BadgeColor.Success
+                Text = Model.Id  == 2 ? "На согласовании" : "Активен",
+                Color = Model.Id == 2 ? BadgeColor.Primary : BadgeColor.Success
             });
         }
 

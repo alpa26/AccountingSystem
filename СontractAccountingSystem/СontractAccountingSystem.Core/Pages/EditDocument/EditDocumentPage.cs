@@ -14,7 +14,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         internal string Type { get; set; }
 
         [Required]
-        public TextInput DocumentNumber { get; } = new TextInput("Номер Договора") { MaxLength = 9, MaxDisplayLength = 12, Placeholder = "00-000000", DisplayTextDelegate = x => $"№ {x}" };
+        public TextInput DocumentNumber { get; } = new TextInput("Номер Договора") { MaxLength = 7, MaxDisplayLength = 12, Placeholder = "0000-00", DisplayTextDelegate = x => $"№ {x}" };
 
         [Required]
         public DatePeriodInput Deadline { get; } = new DatePeriodInput("Срок исполнения") { Placeholder = "Введите значение" };
@@ -107,7 +107,9 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
             Comment.Text = Model.Comment;
             PaymentType.Value = Model.PaymentType;
             WorkerName.Value = Model.WorkerName;
-            Deadline.Value = new Salazki.Presentation.Period(Model.DeadlineStart,Model.DeadlineEnd);
+            if (Model.DocumentNumber != null)
+                Deadline.Value = new Salazki.Presentation.Period(Model.DeadlineStart, Model.DeadlineEnd);
+
 
             FullPrice.DisplayTextDelegate = x =>
             {

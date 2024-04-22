@@ -14,49 +14,35 @@ namespace СontractAccountingSystem.Core.Pages.Main
     {
         public NavigationButton AddButton { get; private set; }
         public NavigationButton NotificationsMenuItem { get; private set; }
-        public NavigationButton ArchiveMenuItem { get; private set; }
-        public NavigationButton FeedbackItem { get; private set; }
-        public NavigationButton EmployersItem { get; private set; }
         public NavigationButton DocsItem { get; private set; }
-        public NavigationButton Settings { get; private set; }
 
-        public NavigationButton KontrAgentIcon { get; private set; }
-        public NavigationButton Calendar { get; private set; }
 
+        // Settings buttons
+        public NavigationButton KontgAgentButton { get; private set; }
+        public NavigationButton EmployeeButton { get; private set; }
+        public NavigationButton WorkersButton { get; private set; }
+        public NavigationButton OrganizationButton { get; private set; }
 
         public MainPage()
         {
            
-
             NotificationsMenuItem = new NavigationButton
             {
                 Text = "Уведомления",
                 Icon = PanelIconType.Bell,
-                IndicatorCounter = 5,
-                IndicatorLevel = IndicatorLevel.High,
-                //CreatePageDelegate = () => new NotificationsPage()
-            };
-
-            Calendar = new NavigationButton
-            {
-                Text = "Финансовый план",
-                Icon = PanelIconType.Timer,
-                IndicatorCounter = 25,
-                IndicatorLevel = IndicatorLevel.Low,
-                //CreatePageDelegate = () => new ArchivePage()
-            };
-
-            EmployersItem = new NavigationButton
-            {
-                Text = "Сотрудники",
-                Icon = PanelIconType.Person,
-                //CreatePageDelegate = () => new StylesPage()
+                CreatePageDelegate = () => new EmptyPage
+                {
+                    Title = "Уведомления",
+                    Text = "РАЗДЕЛ УВЕДОМЛЕНИЙ В РАЗРАБОТКЕ"
+                }
             };
 
             DocsItem = new NavigationButton
             {
                 Text = "Договоры",
                 Icon = PanelIconType.Pile,
+                IndicatorCounter = 1,
+                IndicatorLevel = IndicatorLevel.None,
                 CreatePageDelegate = () => new DocumentListPage()
             };
 
@@ -66,31 +52,61 @@ namespace СontractAccountingSystem.Core.Pages.Main
                 Icon = PanelIconType.Plus,
                 CreatePageDelegate = () => new DocumentTypesListPage()
             };
-            Settings = new NavigationButton
-            {
-                Text = "Настройки",
-                Icon = PanelIconType.HorizontalPlates,
-                //CreatePageDelegate = () => new StylesPage()
-            };
-            //OrgStructure = new NavigationButton
-            //{
-            //    Text = "Оргструкутра",
-            //    Icon = PanelIconType.Set,
-            //    CreatePageDelegate = () => new OrgStructureTree.OrgStructurePage()
-            //};
 
-            KontrAgentIcon = new NavigationButton
+
+            // Settings
+
+            KontgAgentButton = new NavigationButton
             {
                 Text = "Контрагенты",
                 Icon = PanelIconType.Book,
-                //CreatePageDelegate = () => new Calendar.CalendarSamplesListPage()
+                IndicatorCounter = 5,
+                IndicatorLevel = IndicatorLevel.High,
+                CreatePageDelegate = () => new EmptyPage
+                {
+                    Title = "Контрагенты",
+                    Text = "РАЗДЕЛ КОНТРАГЕНТОВ В РАЗРАБОТКЕ"
+                }
+            };
+
+            EmployeeButton = new NavigationButton
+            {
+                Text = "Пользователи",
+                Icon = PanelIconType.Person,
+                IndicatorCounter = 25,
+                IndicatorLevel = IndicatorLevel.Low,
+                CreatePageDelegate = () => new EmptyPage
+                {
+                    Title = "Пользователи системы",
+                    Text = "РАЗДЕЛ ПОЛЬЗОВАТЕЛЕЙ В РАЗРАБОТКЕ"
+                }
+            };
+
+            WorkersButton = new NavigationButton
+            {
+                Text = "Работники",
+                Icon = PanelIconType.Drawer,
+                CreatePageDelegate = () => new EmptyPage
+                {
+                    Title = "Работники",
+                    Text = "РАЗДЕЛ РАБОТНИКОВ В РАЗРАБОТКЕ"
+                }
+            };
+
+            OrganizationButton = new NavigationButton
+            {
+                Text = "Организации",
+                Icon = PanelIconType.DocumentBoxes,
+                CreatePageDelegate = () => new EmptyPage
+                {
+                    Title = "Организации",
+                    Text = "РАЗДЕЛ ОРГАНИЗАЦИЙ В РАЗРАБОТКЕ"
+                }
             };
 
 
-            FeedbackItem = new NavigationButton("Техподдержка");
-
             NavigationPanel.NavigationButtons
-                .AddRange(AddButton, DocsItem, NotificationsMenuItem, Calendar, KontrAgentIcon, EmployersItem, Settings);
+                .AddRange(AddButton, DocsItem, NotificationsMenuItem);
 
             //FeedbackItem.Selected = true;
             DocsItem.Selected = true;
@@ -100,24 +116,11 @@ namespace СontractAccountingSystem.Core.Pages.Main
 
         private void AddToolbar()
         {
-            /*
-            var profileButton = new BarComboButton<PersonModel>(PanelIconType.User)
-            {
-                Items = OrgStructureService.Persons.ToArray()
-            };
-            profileButton.RegisterBuildItemDelegate(x => new ToolbarProfileItem(x));
-            profileButton.SelectedModel = profileButton.Items[0];
-            profileButton.IndicatorLevel = IndicatorLevel.High;
-            */
-            var supportButton = new BarButton(PanelIconType.Message)
-            {
-                Hint = "Техподдержка",
-                CreatePageDelegate = () => new EmptyPage
-                {
-                    Title = "Техподдержка",
-                    Text = "РАЗДЕЛ ТЕХПОДДЕРЖКА В РАЗРАБОТКЕ"
-                }
-            };
+            BarButton supportButton = new BarButton(PanelIconType.Gear);
+            BarButton docButton = new BarButton(PanelIconType.DocumentBox);
+           
+            
+
             var infoButton = new BarButton(PanelIconType.Help)
             {
                 Hint = "Справка",
@@ -127,7 +130,7 @@ namespace СontractAccountingSystem.Core.Pages.Main
                     Text = "РАЗДЕЛ СПРАВКА В РАЗРАБОТКЕ"
                 }
             };
-            var logoutButton = new BarButton(PanelIconType.None)
+            var logoutButton = new BarButton(PanelIconType.ArrowBack)
             {
                 Hint = "Выход",
                 ActionDelegate = async () => {
@@ -135,9 +138,41 @@ namespace СontractAccountingSystem.Core.Pages.Main
                     var response = await httpClient.PostAsync("api/auth/logout", null);
                     Application.Current.Logoff();
                 },
-        };
+            };
+
+            supportButton = new BarButton(PanelIconType.Gear)
+            {
+                Hint = "Настройки",
+                ActionDelegate = () =>
+                {
+                    NavigationPanel.NavigationButtons.Clear();
+                    NavigationPanel.NavigationButtons
+                                   .AddRange(KontgAgentButton, EmployeeButton, WorkersButton, OrganizationButton);
+                    KontgAgentButton.Selected = true;
+
+                    Application.Current.Bar.Buttons.Clear();
+                    Application.Current.Bar.Buttons.AddRange(docButton, infoButton, logoutButton);
+                }
+            };
+
+            docButton = new BarButton(PanelIconType.DocumentBox)
+            {
+                Hint = "Настройки",
+                ActionDelegate = () =>
+                {
+                    NavigationPanel.NavigationButtons.Clear();
+                    NavigationPanel.NavigationButtons
+                                   .AddRange(AddButton, DocsItem, NotificationsMenuItem);
+                    DocsItem.Selected = true;
+
+                    Application.Current.Bar.Buttons.Clear();
+                    Application.Current.Bar.Buttons.AddRange(supportButton, infoButton, logoutButton);
+                }
+            };
+
 
             //Application.Current.Bar.Buttons.Add(profileButton);
+            Application.Current.Bar.Buttons.Clear();
             Application.Current.Bar.Buttons.AddRange(supportButton, infoButton,logoutButton);
         }
     }
