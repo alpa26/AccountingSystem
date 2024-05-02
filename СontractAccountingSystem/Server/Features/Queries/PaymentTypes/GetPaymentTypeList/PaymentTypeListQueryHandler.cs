@@ -14,7 +14,7 @@ namespace СontractAccountingSystem.Server.Queries.PaymentTypes.GetPaymentTypeLi
 
         public async Task<List<DocPayType>> Handle(PaymentTypeListQuery request, CancellationToken cancellationToken)
         {
-            var items = await _repository.FindAsync<DocPayType>();
+            var items = await _repository.FindListAsync<DocPayType>();
             return items;
         }
     }

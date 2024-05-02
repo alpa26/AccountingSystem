@@ -47,10 +47,10 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
             Badges.Items.Clear();
             Badges.Items.AddRange(
                 new Badge
-            {
-                Text = Model.Id  == 2 ? "На согласовании" : "Активен",
-                Color = Model.Id == 2 ? BadgeColor.Primary : BadgeColor.Success
-            });
+                {
+                    Text = "На согласовании",
+                    Color =  BadgeColor.Primary
+                });
         }
 
         private Layout BuildLayout()

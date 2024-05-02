@@ -14,16 +14,17 @@ namespace СontractAccountingSystem.Server.Services.Interfaces
 
         public Task<bool> ChangeAsync<T>(T item) where T : class, IEntity;
 
-        public Task<List<T>> FindAsync<T>() where T : class, IEntity;
+        public Task<List<T>> FindListAsync<T>() where T : class, IEntity;
 
         //public Task<List<T>> FindAsync<T>(Expression<Func<T, bool>> predicate) where T : class, IEntity
         //{
         //    throw new NotImplementedException();
         //}
 
-        public Task<T?> FindByIdAsync<T>(int? id) where T : class, IEntity;
+        public Task<T?> FindByIdAsync<T>(Guid? id) where T : class, IEntity;
 
-        public Task<bool> RemoveAsync<T>(int? id) where T : class, IEntity;
+
+        public Task<bool> RemoveAsync<T>(Guid? id) where T : class, IEntity;
 
         public Task SaveChangesAsync();
 

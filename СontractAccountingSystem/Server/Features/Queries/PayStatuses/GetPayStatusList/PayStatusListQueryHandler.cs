@@ -14,7 +14,7 @@ namespace СontractAccountingSystem.Server.Queries.PayStatuses.GetPayStatusList
 
         public async Task<List<DocStatus>> Handle(PayStatusListQuery request, CancellationToken cancellationToken)
         {
-            var items = await _repository.FindAsync<DocStatus>();
+            var items = await _repository.FindListAsync<DocStatus>();
             return items;
         }
     }

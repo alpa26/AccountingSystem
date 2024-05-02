@@ -13,7 +13,7 @@ namespace СontractAccountingSystem.Server.Entities
     public class Document : IEntity
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Number { get; set; } = "null";
         public string Name { get; set; } = "null";
 
@@ -26,12 +26,12 @@ namespace СontractAccountingSystem.Server.Entities
         public string Comment { get; set; } = "null";
         public string Path { get; set; } = "null";
 
-        public int TypeId { get; set; } = 1;
-        public int DocStatusId { get; set; } = 1;
-        public int PaymentTypeId { get; set; } = 1;
-        public int KontrAgentId { get; set; }
-        public int? OrganizationId { get; set; }
-        public int? WorkerId { get; set; }
+        public Guid TypeId { get; set; } 
+        public Guid DocStatusId { get; set; }
+        public Guid PaymentTypeId { get; set; }
+        public Guid KontrAgentId { get; set; }
+        public Guid? OrganizationId { get; set; }
+        public Guid? EmployeeId { get; set; }
 
 
         // Другие свойства
@@ -46,7 +46,7 @@ namespace СontractAccountingSystem.Server.Entities
         [NotMapped]
         public KontrAgent KontrAgent { get; set; } 
         [NotMapped]
-        public Worker Worker { get; set; }
+        public User Employee { get; set; }
 
 
 

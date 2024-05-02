@@ -22,17 +22,17 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
         {
             var reslist = new List<ArchiveDocumentModel>();
 
-            var docList = await _repository.FindAsync<Document>();
-            var paytypeList = await _repository.FindAsync<DocPayType>();
-            var orgList = await _repository.FindAsync<Organization>();
-            var workerList = await _repository.FindAsync<Worker>();
-            var docTypeList = await _repository.FindAsync<DocType>();
-            var kontrAgentList = await _repository.FindAsync<KontrAgent>();
+            var docList = await _repository.FindListAsync<Document>();
+            var paytypeList = await _repository.FindListAsync<DocPayType>();
+            var orgList = await _repository.FindListAsync<Organization>();
+            var workerList = await _repository.FindListAsync<Worker>();
+            var docTypeList = await _repository.FindListAsync<DocType>();
+            var kontrAgentList = await _repository.FindListAsync<KontrAgent>();
 
             foreach (var item in docList)
             {
                 var ka = kontrAgentList.FirstOrDefault(x => x.Id == item.KontrAgentId);
-                var workers = workerList.FirstOrDefault(x => x.Id == item.WorkerId);
+                //var workers = workerList.FirstOrDefault(x => x.Id == item.WorkerId);
                 var org = orgList.FirstOrDefault(x => x.Id == item.OrganizationId);
                 reslist.Add(new ArchiveDocumentModel()
                 {
@@ -43,12 +43,12 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
                     EssenceOfAgreement = item.WorkDescription,
                     KontrAgentName = new KontrAgentModel() { Id = ka.Id, FullName = ka.FullName, INN = ka.INN },
                     FullPrice = item.Price,
-                    WorkerName = workers == null? null: new PersonModel()
-                    {
-                        Id = workers.Id,
-                        FullName = workers.GetFullName(),
-                        Role = workers.Position
-                    },
+                    //WorkerName = workers == null? null: new PersonModel()
+                    //{
+                    //    Id = workers.Id,
+                    //    FullName = workers.GetFullName(),
+                    //    Role = workers.Position
+                    //},
                     Comment = item.Comment,
                     PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), paytypeList.FirstOrDefault(x => x.Id == item.PaymentTypeId).Name),
                     OrganizationName = org == null ? null : new OrganizationModel() { Id = org.Id, Name = org.Name },

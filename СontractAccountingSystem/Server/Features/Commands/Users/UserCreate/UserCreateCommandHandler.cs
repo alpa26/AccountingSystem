@@ -4,7 +4,7 @@ using СontractAccountingSystem.Server.Entities;
 
 namespace СontractAccountingSystem.Server.Commands.Users.UserCreate
 {
-    public class UserCreateCommandHandler : IRequestHandler<UserCreateCommand, int>
+    public class UserCreateCommandHandler : IRequestHandler<UserCreateCommand, Guid>
     {
         private readonly IMediator _mediator;
         private readonly UserManager<User> _userManager;
@@ -15,7 +15,7 @@ namespace СontractAccountingSystem.Server.Commands.Users.UserCreate
             _userManager = userManager;
         }
 
-        public async Task<int> Handle(UserCreateCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(UserCreateCommand request, CancellationToken cancellationToken)
         {
             var user = request.User;
 

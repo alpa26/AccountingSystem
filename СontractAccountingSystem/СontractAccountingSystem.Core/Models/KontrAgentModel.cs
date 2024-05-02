@@ -8,7 +8,7 @@ namespace СontractAccountingSystem.Core.Models
 {
     public class KontrAgentModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string FullName { get; set; }
         public string INN { get; set; }
 

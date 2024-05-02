@@ -11,12 +11,12 @@ namespace СontractAccountingSystem.Server.Entities
     public class Notification : IEntity
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string Title { get; set; }
-        public int ProjectId { get; set; }
+        public Guid ProjectId { get; set; }
         public Project Project { get; set; }
 
-        public int DocumentId { get; set; }
+        public Guid DocumentId { get; set; }
         public Document Document { get; set; }
         public DateTime Date { get; set; }
         public Notification()

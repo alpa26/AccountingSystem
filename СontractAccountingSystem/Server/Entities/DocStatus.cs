@@ -11,10 +11,10 @@ namespace СontractAccountingSystem.Server.Entities;
 public class DocStatus : IEntity
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string Name { get; set; }
     public DocStatus() { }
-    public DocStatus(int id, string name)
+    public DocStatus(Guid id, string name)
     {
         Id = id;
         Name = name;

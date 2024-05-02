@@ -9,28 +9,27 @@ using СontractAccountingSystem.Server.Entities.Interfaces;
 
 namespace СontractAccountingSystem.Server.Entities
 {
-    public class ContractPayments : IEntity
+    public class Payment : IEntity
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
         [NotMapped]
         public Document Document { get; set; }
-        public int DocumentId { get; set; }
+        public Guid DocumentId { get; set; }
 
 
         public DateTime DeadlineStart { get; set; }
         public DateTime DeadlineEnd { get; set; }
 
         [NotMapped]
-        public ContrPayStatus PaymentStatus { get; set; }
-        public int PayStatusId { get; set; }
+        public PaymentStatus PaymentStatus { get; set; }
+        public Guid PaymentStatusId { get; set; }
 
-        public bool IsPaidOut { get; set; }
-        public decimal Price { get; set; }
+        public decimal Amount { get; set; }
 
 
-        public ContractPayments()
+        public Payment()
         {
 
         }

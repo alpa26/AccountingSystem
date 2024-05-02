@@ -5,8 +5,8 @@ namespace СontractAccountingSystem.Server.Queries.Users.GetUserById
 {
     public class UserByIdQuery : IRequest<User>
     {
-        public int Id { get; set; }
-        public UserByIdQuery(int id)
+        public Guid Id { get; set; }
+        public UserByIdQuery(Guid id)
         {
             Id = id;
         }

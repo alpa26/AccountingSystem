@@ -16,7 +16,7 @@ namespace СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentList
             (KontrAgentListQuery request,
             CancellationToken cancellationToken)
         {
-            var items = await _repository.FindAsync<KontrAgent>();
+            var items = await _repository.FindListAsync<KontrAgent>();
             return items;
         }
     }

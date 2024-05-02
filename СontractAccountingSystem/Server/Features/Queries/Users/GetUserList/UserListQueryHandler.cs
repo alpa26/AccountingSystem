@@ -16,7 +16,7 @@ namespace СontractAccountingSystem.Server.Queries.Users.GetUsersList
 
         public async Task<User[]> Handle(UserListQuery request, CancellationToken cancellationToken)
         {
-            var items = await _repository.FindAsync<User>();
+            var items = await _repository.FindListAsync<User>();
             return items.ToArray();
         }
     }

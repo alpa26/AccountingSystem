@@ -18,7 +18,7 @@ namespace СontractAccountingSystem.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<int> CreateRole(RoleCreateCommand cmd)
+        public async Task<Guid> CreateRole(RoleCreateCommand cmd)
         {
             return await _mediator.Send(cmd);
         }

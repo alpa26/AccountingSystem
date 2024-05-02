@@ -25,7 +25,7 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
             doc.KontrAgent = await _repository.FindByIdAsync<KontrAgent>(doc.KontrAgentId);
             doc.Organization = await _repository.FindByIdAsync<Organization>(doc.OrganizationId);
 
-            var workers = await _repository.FindByIdAsync<Worker>(doc.WorkerId);
+            //var workers = await _repository.FindByIdAsync<Worker>(doc.WorkerId);
 
             var model = new ArchiveDocumentModel()
             {
@@ -36,12 +36,12 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
                 EssenceOfAgreement = doc.WorkDescription,
                 KontrAgentName = new KontrAgentModel() { Id = doc.KontrAgent.Id, FullName = doc.KontrAgent.FullName, INN = doc.KontrAgent.INN },
                 FullPrice = doc.Price,
-                WorkerName = workers == null ? null : new PersonModel()
-                {
-                    Id = workers.Id,
-                    FullName = workers.GetFullName(),
-                    Role = workers.Position
-                },
+                //WorkerName = workers == null ? null : new PersonModel()
+                //{
+                //    Id = workers.Id,
+                //    FullName = workers.GetFullName(),
+                //    Role = workers.Position
+                //},
                 Comment = doc.Comment,
                 PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), doc.PaymentType.Name),
                 OrganizationName = doc.Organization == null? null :  new OrganizationModel() { Id = doc.Organization.Id, Name = doc.Organization.Name },

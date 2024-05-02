@@ -16,7 +16,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 {
     public class ViewDocumentPage : ViewFormPage<ArchiveDocumentModel>
     {
-        internal int DocumentId { get; private set; }
+        internal Guid DocumentId { get; private set; }
 
         public TextField DocumentName { get; } = new TextField("Договор");
         public TextField FullPrice { get; } = new TextField("Общая сумма");
@@ -40,9 +40,9 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
         public ShowActionFormButton DeleteButton { get; } = new ShowActionFormButton { Text = "Удалить", Style = ButtonStyle.Danger };
 
 
-        public ViewDocumentPage(int Id)
+        public ViewDocumentPage(Guid Id)
         {
-            DocumentId = Id ;
+            DocumentId = Id;
             HeaderActionPanel.Buttons.AddRange(EditButton,DeleteButton);
         }
 

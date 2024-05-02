@@ -52,7 +52,7 @@ namespace СontractAccountingSystem.Server.Services
         }
 
 
-        public async Task<List<T>> FindAsync<T>() where T : class, IEntity
+        public async Task<List<T>> FindListAsync<T>() where T : class, IEntity
         {
             return await GetCollection<T>().ToListAsync();
         }
@@ -62,13 +62,13 @@ namespace СontractAccountingSystem.Server.Services
         //    throw new NotImplementedException();
         //}
 
-        public async Task<T?> FindByIdAsync<T>(int? id) where T : class, IEntity
+        public async Task<T?> FindByIdAsync<T>(Guid? id) where T : class, IEntity
         {
             return await GetCollection<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
 
-        public async Task<bool> RemoveAsync<T>(int? id) where T : class, IEntity
+        public async Task<bool> RemoveAsync<T>(Guid? id) where T : class, IEntity
         {
             var entity = await GetCollection<T>().FindAsync(id);
             if (entity == null)

@@ -74,7 +74,7 @@ namespace СontractAccountingSystem.Server.Controllers
                 LastName = fullname[2],
                 Email = request.Mail,
                 Role = null,
-                RoleId = 0
+                RoleId = new Guid("00000000-0000-0000-0000-000000000000")
             };
             try {
                 var res = await _userManager.CreateAsync(user, request.Password);

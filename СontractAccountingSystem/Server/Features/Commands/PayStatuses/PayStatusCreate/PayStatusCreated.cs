@@ -4,8 +4,8 @@ namespace СontractAccountingSystem.Server.Commands.PayStatuses.PayStatusCreate
 {
     public class PayStatusCreated : INotification
     {
-        public int Id { get; set; }
-        public PayStatusCreated(int id)
+        public Guid Id { get; set; }
+        public PayStatusCreated(Guid id)
         {
             Id = id;
         }

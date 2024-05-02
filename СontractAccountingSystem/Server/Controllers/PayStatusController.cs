@@ -23,7 +23,7 @@ namespace СontractAccountingSystem.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<int> CreatePayStatus(PayStatusCreateCommand cmd)
+        public async Task<Guid> CreatePayStatus(PayStatusCreateCommand cmd)
         {
             return await _mediator.Send(cmd);
         }

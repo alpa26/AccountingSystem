@@ -18,7 +18,7 @@ namespace СontractAccountingSystem.Server.Features.Queries.Users.GetWorkerList
 
         public async Task<List<PersonModel>> Handle(WorkerListQuery request, CancellationToken cancellationToken)
         {
-            var employeelist = await _repository.FindAsync<Worker>();
+            var employeelist = await _repository.FindListAsync<Worker>();
             var res = new List<PersonModel>();
             foreach (var item in employeelist)
             {

@@ -11,10 +11,10 @@ namespace СontractAccountingSystem.Server.Entities;
 public class KontrAgent : IEntity
 {
     [Key]
-    public int Id { get; set; }
+    public Guid Id { get; set; }
     public string FullName { get; set; }
     public KontrAgentType Type { get; set; }
-    public int TypeId { get; set; }
+    public Guid TypeId { get; set; }
     public string INN { get; set; }
     public string KPP { get; set; }
     public string ContactPerson { get; set; }

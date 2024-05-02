@@ -3,15 +3,18 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Channels;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Pages.Autocomplete;
+using СontractAccountingSystem.Core.Pages.EditPaymentTerm;
 
 namespace СontractAccountingSystem.Core.Pages.EditDocument
 {
     public class EditDocumentPage : EditFormPage<ArchiveDocumentModel>
     {
         internal string Type { get; set; }
+        internal bool IsNew { get; set; } = false;
 
         [Required]
         public TextInput DocumentNumber { get; } = new TextInput("Номер Договора") { MaxLength = 7, MaxDisplayLength = 12, Placeholder = "0000-00", DisplayTextDelegate = x => $"№ {x}" };
@@ -50,6 +53,9 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         //    //OpenMode = AttachmentOpenMode.DocumentModifier
         //};
 
+        public CollectionEditor<PaymentTermModel> PaymentTerms { get; } = new CollectionEditor<PaymentTermModel>("Сроки оплаты");
+
+
         public EditDocumentPage(string type) : this(null, type)
         {
 
@@ -59,6 +65,12 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
             CreateModelDelegate = CreateModel;
             DeleteButton.Hidden = true;
             Type = type;
+
+
+
+            PaymentTerms.AddNewItemButton.Text = "Добавить дату оплаты";
+            PaymentTerms.RegisterBuildItemDelegate(x => new PaymentTermItem(x));
+            PaymentTerms.CreateItemEditPageDelegate = x => new EditPaymentTermPage(x, DocumentNumber.Value);
         }
 
         protected override void Setup()
@@ -69,17 +81,17 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 Content.AddRange(
                 DocumentNumber,
                 Deadline,
-                FullPrice, PaymentType,
+                FullPrice, PaymentType, PaymentTerms,
                 KontrAgentName, OrganizationName,
-                EssenceOfAgreement,Comment
+                EssenceOfAgreement, Comment
                 );
             }
             if (Type == "Договор на фактические услуги")
             {
                 Content.AddRange(
                 DocumentNumber,
-                Deadline, WorkerName,
-                FullPrice, PaymentType,
+                Deadline, /*WorkerName*/
+                FullPrice, PaymentType, PaymentTerms,
                 KontrAgentName,
                 EssenceOfAgreement, Comment
                 );
@@ -89,7 +101,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 Content.AddRange(
                 DocumentNumber, EssenceOfAgreement,
                 Deadline,
-                FullPrice, PaymentType,
+                FullPrice, PaymentType, PaymentTerms,
                 KontrAgentName, OrganizationName,
                 Comment
                 );
@@ -117,13 +129,16 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                     return null;
                 return $"{x} рублей";
             };
-
+            PaymentTerms.Items.Clear();
+            PaymentTerms.Items.AddRange(Model.PaymentTerms);
         }
 
-        private static ArchiveDocumentModel CreateModel()
+        private ArchiveDocumentModel CreateModel()
         {
+            IsNew = true;
             return new ArchiveDocumentModel()
             {
+                Id = new Guid()
             };
         }
     }

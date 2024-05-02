@@ -5,7 +5,7 @@ using СontractAccountingSystem.Server.Entities;
 
 namespace СontractAccountingSystem.Server.Commands.Roles.RoleCreate
 {
-        public class RoleCreateCommandHandler : IRequestHandler<RoleCreateCommand, int>
+        public class RoleCreateCommandHandler : IRequestHandler<RoleCreateCommand, Guid>
         {
             private readonly IMediator _mediator;
             private readonly RoleManager<Role> _roleManager;
@@ -15,7 +15,7 @@ namespace СontractAccountingSystem.Server.Commands.Roles.RoleCreate
                 _mediator = mediator;
                 _roleManager = roleManager;
             }
-            public async Task<int> Handle(RoleCreateCommand request, CancellationToken cancellationToken)
+            public async Task<Guid> Handle(RoleCreateCommand request, CancellationToken cancellationToken)
             {
                 var role = request.Role;
                 await _roleManager.CreateAsync(role);

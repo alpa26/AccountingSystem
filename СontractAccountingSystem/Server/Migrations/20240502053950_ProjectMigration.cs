@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
@@ -16,8 +15,7 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "contract_pay_statuses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -29,8 +27,7 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "doc_pay_types",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -42,8 +39,7 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "doc_statuses",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -55,8 +51,7 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "document_types",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -108,8 +103,7 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "kontr_agent_types",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -121,8 +115,7 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "organizations",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
@@ -131,24 +124,22 @@ namespace СontractAccountingSystem.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "projects",
+                name: "Project",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_projects", x => x.Id);
+                    table.PrimaryKey("PK_Project", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
                 name: "user_roles",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
                     NormalizedName = table.Column<string>(type: "text", nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "text", nullable: true)
@@ -162,8 +153,7 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "workers",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FullName = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     SecondName = table.Column<string>(type: "text", nullable: false),
@@ -179,10 +169,9 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "kontr_agents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     FullName = table.Column<string>(type: "text", nullable: false),
-                    TypeId = table.Column<int>(type: "integer", nullable: false),
+                    TypeId = table.Column<Guid>(type: "uuid", nullable: false),
                     INN = table.Column<string>(type: "text", nullable: false),
                     KPP = table.Column<string>(type: "text", nullable: false),
                     ContactPerson = table.Column<string>(type: "text", nullable: false),
@@ -205,15 +194,14 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "users",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     UserName = table.Column<string>(type: "text", nullable: false),
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     SecondName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
                     PhoneNumber = table.Column<string>(type: "text", nullable: false),
                     Email = table.Column<string>(type: "text", nullable: false),
-                    RoleId = table.Column<int>(type: "integer", nullable: false),
+                    RoleId = table.Column<Guid>(type: "uuid", nullable: false),
                     NormalizedUserName = table.Column<string>(type: "text", nullable: true),
                     NormalizedEmail = table.Column<string>(type: "text", nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
@@ -241,23 +229,22 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "documents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Number = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 4, 11, 0, 0, 0, 0, DateTimeKind.Utc)),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 2, 0, 0, 0, 0, DateTimeKind.Utc)),
                     DeadlineStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeadlineEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
                     WorkDescription = table.Column<string>(type: "text", nullable: false),
                     Comment = table.Column<string>(type: "text", nullable: false),
                     Path = table.Column<string>(type: "text", nullable: false),
-                    TypeId = table.Column<int>(type: "integer", nullable: false),
-                    DocStatusId = table.Column<int>(type: "integer", nullable: false),
-                    PaymentTypeId = table.Column<int>(type: "integer", nullable: false),
-                    KontrAgentId = table.Column<int>(type: "integer", nullable: false),
-                    OrganizationId = table.Column<int>(type: "integer", nullable: true),
-                    WorkerId = table.Column<int>(type: "integer", nullable: true)
+                    TypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DocStatusId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymentTypeId = table.Column<Guid>(type: "uuid", nullable: false),
+                    KontrAgentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    OrganizationId = table.Column<Guid>(type: "uuid", nullable: true),
+                    EmployeeId = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -293,9 +280,9 @@ namespace СontractAccountingSystem.Server.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_documents_workers_WorkerId",
-                        column: x => x.WorkerId,
-                        principalTable: "workers",
+                        name: "FK_documents_users_EmployeeId",
+                        column: x => x.EmployeeId,
+                        principalTable: "users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -304,21 +291,19 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "contract_payments",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    DocumentId = table.Column<int>(type: "integer", nullable: false),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DocumentId = table.Column<Guid>(type: "uuid", nullable: false),
                     DeadlineStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeadlineEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    PayStatusId = table.Column<int>(type: "integer", nullable: false),
-                    IsPaidOut = table.Column<bool>(type: "boolean", nullable: false),
-                    Price = table.Column<decimal>(type: "numeric", nullable: false)
+                    PaymentStatusId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_contract_payments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_contract_payments_contract_pay_statuses_PayStatusId",
-                        column: x => x.PayStatusId,
+                        name: "FK_contract_payments_contract_pay_statuses_PaymentStatusId",
+                        column: x => x.PaymentStatusId,
                         principalTable: "contract_pay_statuses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -327,6 +312,32 @@ namespace СontractAccountingSystem.Server.Migrations
                         column: x => x.DocumentId,
                         principalTable: "documents",
                         principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "LaborCost",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    DocumentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    WorkerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Cost = table.Column<decimal>(type: "numeric", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_LaborCost", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_LaborCost_documents_DocumentId",
+                        column: x => x.DocumentId,
+                        principalTable: "documents",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_LaborCost_workers_WorkerId",
+                        column: x => x.WorkerId,
+                        principalTable: "workers",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -334,52 +345,25 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "notifications",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Title = table.Column<string>(type: "text", nullable: false),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
-                    DocumentId = table.Column<int>(type: "integer", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 4, 11, 0, 0, 0, 0, DateTimeKind.Utc))
+                    ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
+                    DocumentId = table.Column<Guid>(type: "uuid", nullable: false),
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 2, 0, 0, 0, 0, DateTimeKind.Utc))
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_notifications", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_notifications_Project_ProjectId",
+                        column: x => x.ProjectId,
+                        principalTable: "Project",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
                         name: "FK_notifications_documents_DocumentId",
                         column: x => x.DocumentId,
                         principalTable: "documents",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_notifications_projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "projects",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "projects_to_documents",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ProjectId = table.Column<int>(type: "integer", nullable: false),
-                    DocumentId = table.Column<int>(type: "integer", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_projects_to_documents", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_projects_to_documents_documents_DocumentId",
-                        column: x => x.DocumentId,
-                        principalTable: "documents",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_projects_to_documents_projects_ProjectId",
-                        column: x => x.ProjectId,
-                        principalTable: "projects",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -388,10 +372,9 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "related_documents",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "integer", nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Document1Id = table.Column<int>(type: "integer", nullable: false),
-                    Document2Id = table.Column<int>(type: "integer", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Document1Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Document2Id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -416,14 +399,19 @@ namespace СontractAccountingSystem.Server.Migrations
                 column: "DocumentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_contract_payments_PayStatusId",
+                name: "IX_contract_payments_PaymentStatusId",
                 table: "contract_payments",
-                column: "PayStatusId");
+                column: "PaymentStatusId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_documents_DocStatusId",
                 table: "documents",
                 column: "DocStatusId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_documents_EmployeeId",
+                table: "documents",
+                column: "EmployeeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_documents_KontrAgentId",
@@ -446,14 +434,19 @@ namespace СontractAccountingSystem.Server.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_documents_WorkerId",
-                table: "documents",
-                column: "WorkerId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_kontr_agents_TypeId",
                 table: "kontr_agents",
                 column: "TypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LaborCost_DocumentId",
+                table: "LaborCost",
+                column: "DocumentId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_LaborCost_WorkerId",
+                table: "LaborCost",
+                column: "WorkerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_notifications_DocumentId",
@@ -463,16 +456,6 @@ namespace СontractAccountingSystem.Server.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_notifications_ProjectId",
                 table: "notifications",
-                column: "ProjectId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_projects_to_documents_DocumentId",
-                table: "projects_to_documents",
-                column: "DocumentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_projects_to_documents_ProjectId",
-                table: "projects_to_documents",
                 column: "ProjectId");
 
             migrationBuilder.CreateIndex(
@@ -507,28 +490,25 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "IdentityUserToken<string>");
 
             migrationBuilder.DropTable(
-                name: "notifications");
+                name: "LaborCost");
 
             migrationBuilder.DropTable(
-                name: "projects_to_documents");
+                name: "notifications");
 
             migrationBuilder.DropTable(
                 name: "related_documents");
 
             migrationBuilder.DropTable(
-                name: "users");
-
-            migrationBuilder.DropTable(
                 name: "contract_pay_statuses");
 
             migrationBuilder.DropTable(
-                name: "projects");
+                name: "workers");
+
+            migrationBuilder.DropTable(
+                name: "Project");
 
             migrationBuilder.DropTable(
                 name: "documents");
-
-            migrationBuilder.DropTable(
-                name: "user_roles");
 
             migrationBuilder.DropTable(
                 name: "doc_pay_types");
@@ -546,10 +526,13 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "organizations");
 
             migrationBuilder.DropTable(
-                name: "workers");
+                name: "users");
 
             migrationBuilder.DropTable(
                 name: "kontr_agent_types");
+
+            migrationBuilder.DropTable(
+                name: "user_roles");
         }
     }
 }

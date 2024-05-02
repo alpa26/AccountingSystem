@@ -3,7 +3,7 @@ using СontractAccountingSystem.Server.Services;
 
 namespace СontractAccountingSystem.Server.Commands.PayStatuses.PayStatusCreate
 {
-    public class CommandHandler : IRequestHandler<PayStatusCreateCommand, int>
+    public class CommandHandler : IRequestHandler<PayStatusCreateCommand, Guid>
     {
         private readonly IMediator _mediator;
         private readonly Repository _repository;
@@ -13,7 +13,7 @@ namespace СontractAccountingSystem.Server.Commands.PayStatuses.PayStatusCreate
             _repository = repository;
         }
 
-        public async Task<int> Handle(PayStatusCreateCommand request, CancellationToken cancellationToken)
+        public async Task<Guid> Handle(PayStatusCreateCommand request, CancellationToken cancellationToken)
         {
             var payStatus = request.DocPayStatus;
 

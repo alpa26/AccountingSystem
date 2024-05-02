@@ -14,7 +14,7 @@ namespace СontractAccountingSystem.Server.Queries.DocTypes.GetDocTypeList
 
         public async Task<List<DocType>> Handle(DocTypeListQuery request, CancellationToken cancellationToken)
         {
-            var items = await _repository.FindAsync<DocType>();
+            var items = await _repository.FindListAsync<DocType>();
             return items;
         }
     }

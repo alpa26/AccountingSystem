@@ -11,10 +11,10 @@ namespace СontractAccountingSystem.Server.Entities;
 public class RelateDocuments : IEntity
 {
     [Key]
-    public int Id { get; set; }
-    public int Document1Id { get; set; }
+    public Guid Id { get; set; }
+    public Guid Document1Id { get; set; }
     public Document Document1 { get; set; } = new();
-    public int Document2Id { get; set; }
+    public Guid Document2Id { get; set; }
     public Document Document2 { get; set; } = new();
     public RelateDocuments()
     {

@@ -14,6 +14,7 @@ namespace СontractAccountingSystem.Server
             services.AddValidatorsFromAssembly(assembly1);
 
             services.AddTransient<Repository>();
+            services.AddTransient<DocumentRepository>();
         }
     }
 }

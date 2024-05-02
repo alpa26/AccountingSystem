@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Commands.Documents.ChangeDocument;
 using СontractAccountingSystem.Server.Features.Commands.Documents.DeleteDocument;
-using СontractAccountingSystem.Server.Features.DocumentCreate;
+using СontractAccountingSystem.Server.Features.CreateDocument;
+using СontractAccountingSystem.Server.Features.CreatePayment;
 using СontractAccountingSystem.Server.Queries.Documents.GetDocumentById;
 using СontractAccountingSystem.Server.Queries.Documents.GetDocumentList;
 
@@ -24,8 +25,11 @@ namespace СontractAccountingSystem.Server.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateDocument([FromBody] ArchiveDocumentModel request)
         {
-            var res = await _mediator.Send(new DocumentCreateCommand(request));
-            if (res == -1)
+            var res = await _mediator.Send(new CreateDocumentCommand(request));
+            if (res == Guid.Empty)
+                return BadRequest();
+            var PaymentIsCreated = await _mediator.Send(new CreatePaymentCommand(request.PaymentTerms.ToList()));
+            if (!PaymentIsCreated)
                 return BadRequest();
             else
                 return Ok();
@@ -43,14 +47,14 @@ namespace СontractAccountingSystem.Server.Controllers
 
 
         [HttpGet("getbyid")]
-        public async Task<ArchiveDocumentModel> GetDocumentById(int id)
+        public async Task<ArchiveDocumentModel> GetDocumentById(Guid id)
         {
             var res = await _mediator.Send(new DocumentByIdQuery(id));
             return res;
         }
 
         [HttpGet("getmodelbyid")]
-        public async Task<ArchiveDocumentModel> GetDocumentModelById(int id)
+        public async Task<ArchiveDocumentModel> GetDocumentModelById(Guid id)
         {            
             return await _mediator.Send(new DocumentByIdQuery(id));
         }
@@ -68,7 +72,7 @@ namespace СontractAccountingSystem.Server.Controllers
         }
 
         [HttpDelete("delete")]
-        public async Task<IActionResult> DeleteDocument(int id)
+        public async Task<IActionResult> DeleteDocument(Guid id)
         {
             var res = await _mediator.Send(new DeleteDocumentCommand(id));
             if (res)

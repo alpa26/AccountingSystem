@@ -14,7 +14,7 @@ namespace СontractAccountingSystem.Server.Queries.Roles.GetRoleList
 
         public async Task<List<Role>> Handle(RoleListQuery request, CancellationToken cancellationToken)
         {
-            var items = await _repository.FindAsync<Role>();
+            var items = await _repository.FindListAsync<Role>();
             return items.ToList();
         }
     }

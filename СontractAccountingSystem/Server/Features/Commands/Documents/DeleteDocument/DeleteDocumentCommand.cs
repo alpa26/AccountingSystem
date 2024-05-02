@@ -5,8 +5,8 @@ namespace СontractAccountingSystem.Server.Features.Commands.Documents.DeleteDoc
 {
     public class DeleteDocumentCommand : IRequest<bool>
     {
-        public int Id { get; set; }
-        public DeleteDocumentCommand(int id)
+        public Guid Id { get; set; }
+        public DeleteDocumentCommand(Guid id)
         {
             Id = id;
         }

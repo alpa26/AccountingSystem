@@ -8,6 +8,6 @@ namespace СontractAccountingSystem.Server.Entities.Interfaces
 {
     public interface IEntity
     {
-        int Id { get; }
+        Guid Id { get; }
     }
 }

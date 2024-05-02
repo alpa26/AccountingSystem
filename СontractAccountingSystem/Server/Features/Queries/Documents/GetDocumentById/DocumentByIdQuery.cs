@@ -6,8 +6,8 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
 {
     public class DocumentByIdQuery : IRequest<ArchiveDocumentModel>
     {
-        public int Id { get; set; }
-        public DocumentByIdQuery(int id)
+        public Guid Id { get; set; }
+        public DocumentByIdQuery(Guid id)
         {
             Id = id;
         }

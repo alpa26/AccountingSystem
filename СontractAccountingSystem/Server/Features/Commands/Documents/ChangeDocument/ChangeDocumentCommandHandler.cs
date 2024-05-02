@@ -22,8 +22,8 @@ namespace СontractAccountingSystem.Server.Commands.Documents.ChangeDocument
         public async Task<bool> Handle(ChangeDocumentCommand request, CancellationToken cancellationToken)
         {
 
-            var paymentTypes = await _repository.FindAsync<DocPayType>();
-            var doctypes = await _repository.FindAsync<DocType>();
+            var paymentTypes = await _repository.FindListAsync<DocPayType>();
+            var doctypes = await _repository.FindListAsync<DocType>();
             var doc = await _repository.FindByIdAsync<Document>(request.Document.Id);
 
             doc.Number = request.Document.DocumentNumber;
@@ -35,10 +35,11 @@ namespace СontractAccountingSystem.Server.Commands.Documents.ChangeDocument
             doc.Comment = request.Document.Comment;
             doc.WorkDescription = request.Document.EssenceOfAgreement;
             doc.OrganizationId = request.Document.OrganizationName.Id;
-            doc.WorkerId = request.Document.WorkerName.Id;
             doc.KontrAgentId = request.Document.KontrAgentName.Id;
             doc.TypeId = doctypes.First(x => x.Name == request.Document.DocumentType).Id;
             doc.PaymentTypeId = paymentTypes.First(x => x.Name == request.Document.PaymentType.ToString()).Id;
+
+            
 
             var res = await _repository.ChangeAsync(doc);
 

@@ -14,7 +14,7 @@ namespace СontractAccountingSystem.Server.Queries.Organizations.GetOrganization
 
         public async Task<List<Organization>> Handle(OrganizationListQuery request, CancellationToken cancellationToken)
         {
-            var items = await _repository.FindAsync<Organization>();
+            var items = await _repository.FindListAsync<Organization>();
             return items;
         }
 

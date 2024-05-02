@@ -5,8 +5,8 @@ namespace СontractAccountingSystem.Server.Queries.Organizations.GetOrganization
 {
     public class OrganizationByIdQuery : IRequest<Organization>
     {
-        public int Id { get; set; }
-        public OrganizationByIdQuery(int id)
+        public Guid Id { get; set; }
+        public OrganizationByIdQuery(Guid id)
         {
             Id = id;
         }

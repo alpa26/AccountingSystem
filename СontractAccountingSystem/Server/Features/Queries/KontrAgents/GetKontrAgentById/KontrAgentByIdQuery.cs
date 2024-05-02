@@ -5,8 +5,8 @@ namespace СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentById
 {
     public class KontrAgentByIdQuery : IRequest<KontrAgent>
     {
-        public int Id { get; set; }
-        public KontrAgentByIdQuery(int id)
+        public Guid Id { get; set; }
+        public KontrAgentByIdQuery(Guid id)
         {
             Id = id;
         }

@@ -8,6 +8,7 @@ using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Services.Interfaces;
 using СontractAccountingSystem.Core.Services;
 using System.Text.Json;
+using Salazki.Presentation.Elements;
 
 namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
 {
@@ -36,16 +37,16 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                 DeadlineStart = Element.Deadline.Value.From.Value,
                 DeadlineEnd = Element.Deadline.Value.To.Value,
                 RelatedDocuments = new RelateDocumentModel[] { null },
+                PaymentTerms = Element.PaymentTerms.Items.ToArray(),
             };
             if (Element.Type == "Договор на фактические услуги") {
-                res.WorkerName = Element.WorkerName.Value;
+                res.WorkerName = new PersonModel();
                 res.OrganizationName = new OrganizationModel();
             }
             else{
                 res.WorkerName = new PersonModel();
                 res.OrganizationName = Element.OrganizationName.Value;
             }
-
             return res;
         }
 
@@ -56,7 +57,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                     Encoding.UTF8,
                     "application/json");
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-            if (model.Id == 0)
+            if (Element.IsNew)
                 await httpClient.PostAsync("api/documents/create", jsonContent);
             else
             {

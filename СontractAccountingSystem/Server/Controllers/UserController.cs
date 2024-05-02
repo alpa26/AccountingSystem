@@ -22,7 +22,7 @@ namespace СontractAccountingSystem.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<int> CreateUser(UserCreateCommand cmd)
+        public async Task<Guid> CreateUser(UserCreateCommand cmd)
         {
             return await _mediator.Send(cmd);
         }

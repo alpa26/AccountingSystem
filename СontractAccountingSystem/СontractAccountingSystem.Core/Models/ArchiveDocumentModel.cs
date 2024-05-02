@@ -8,9 +8,8 @@ namespace СontractAccountingSystem.Core.Models
 {
     public class ArchiveDocumentModel
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         public string DocumentNumber { get; set; }
-
         public string Name { get; set; }
         public string DocumentType { get; set; }
         public string EssenceOfAgreement { get; set; }
@@ -27,6 +26,8 @@ namespace СontractAccountingSystem.Core.Models
         public DateTime DeadlineStart { get; set; }
         public DateTime DeadlineEnd { get; set; }
         public RelateDocumentModel[] RelatedDocuments { get; set; }
+        public PaymentTermModel[] PaymentTerms { get; set; }
+
 
 
         public override bool Equals(object obj)
