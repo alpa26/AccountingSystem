@@ -35,6 +35,7 @@ namespace СontractAccountingSystem.Server.Features.CreatePayment
                     DeadlineStart = paymentitem.DeadlineStart,
                     DeadlineEnd = paymentitem.DeadlineEnd,
                     PaymentStatusId = paystatuslist.First(x => x.Name == paymentitem.Status.ToString()).Id,
+                    Comment = paymentitem.Comment,
                     Amount = paymentitem.Amount
                 };
                 var res = await _repository.CreateAsync(payment);

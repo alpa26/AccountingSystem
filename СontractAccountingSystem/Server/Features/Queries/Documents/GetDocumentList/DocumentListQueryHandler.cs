@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Entities;
 using СontractAccountingSystem.Server.Queries.DocTypes.GetDocTypeList;
@@ -13,9 +14,12 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
     public class DocumentListQueryHandler : IRequestHandler<DocumentListQuery, List<ArchiveDocumentModel>>
     {
         private readonly Repository _repository;
-        public DocumentListQueryHandler(Repository repository)
+        private readonly IMapper _mapper;
+
+        public DocumentListQueryHandler(Repository repository, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         async Task<List<ArchiveDocumentModel>> IRequestHandler<DocumentListQuery, List<ArchiveDocumentModel>>.Handle(DocumentListQuery request, CancellationToken cancellationToken)
@@ -29,33 +33,44 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
             var docTypeList = await _repository.FindListAsync<DocType>();
             var kontrAgentList = await _repository.FindListAsync<KontrAgent>();
 
-            foreach (var item in docList)
+            foreach (var doc in docList)
             {
-                var ka = kontrAgentList.FirstOrDefault(x => x.Id == item.KontrAgentId);
+                var ka = kontrAgentList.FirstOrDefault(x => x.Id == doc.KontrAgentId);
                 //var workers = workerList.FirstOrDefault(x => x.Id == item.WorkerId);
-                var org = orgList.FirstOrDefault(x => x.Id == item.OrganizationId);
+                var org = orgList.FirstOrDefault(x => x.Id == doc.OrganizationId);
+
+                var paymentModelList = new List<PaymentTermModel>();
+                var payments = await _repository.FindListByFilterAsync<Payment, Guid>("DocumentId", doc.Id);
+                foreach (var item in payments)
+                {
+                    var newitem = _mapper.Map<PaymentTermModel>(item);
+                    newitem.DocumentNumber = doc.Number;
+                    paymentModelList.Add(newitem);
+                }
+
                 reslist.Add(new ArchiveDocumentModel()
                 {
-                    Id = item.Id,
-                    DocumentNumber = item.Number,
-                    Name = item.Name,
-                    DocumentType = docTypeList.FirstOrDefault(x => x.Id == item.TypeId).Name,
-                    EssenceOfAgreement = item.WorkDescription,
+                    Id = doc.Id,
+                    DocumentNumber = doc.Number,
+                    Name = doc.Name,
+                    DocumentType = docTypeList.FirstOrDefault(x => x.Id == doc.TypeId).Name,
+                    EssenceOfAgreement = doc.WorkDescription,
                     KontrAgentName = new KontrAgentModel() { Id = ka.Id, FullName = ka.FullName, INN = ka.INN },
-                    FullPrice = item.Price,
+                    FullPrice = doc.Price,
                     //WorkerName = workers == null? null: new PersonModel()
                     //{
                     //    Id = workers.Id,
                     //    FullName = workers.GetFullName(),
                     //    Role = workers.Position
                     //},
-                    Comment = item.Comment,
-                    PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), paytypeList.FirstOrDefault(x => x.Id == item.PaymentTypeId).Name),
+                    Comment = doc.Comment,
+                    PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), paytypeList.FirstOrDefault(x => x.Id == doc.PaymentTypeId).Name),
                     OrganizationName = org == null ? null : new OrganizationModel() { Id = org.Id, Name = org.Name },
-                    CreateDate = item.CreatedDate,
-                    DeadlineStart = item.DeadlineStart,
-                    DeadlineEnd = item.DeadlineEnd,
-                    RelatedDocuments = new RelateDocumentModel[] { null }
+                    CreateDate = doc.CreatedDate,
+                    DeadlineStart = doc.DeadlineStart,
+                    DeadlineEnd = doc.DeadlineEnd,
+                    RelatedDocuments = new RelateDocumentModel[] { null },
+                    PaymentTerms = paymentModelList.ToArray()
                 });
             }
 

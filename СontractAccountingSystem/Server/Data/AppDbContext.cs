@@ -69,6 +69,11 @@ public class AppDbContext : DbContext
                 .HasDefaultValue(DateTime.UtcNow.Date)
         );
 
+        modelBuilder.Entity<Document>(user =>
+        {
+            user.HasIndex(x => x.Number).IsUnique(true);
+        });
+
 
         //KontrAgent
         modelBuilder.Entity<KontrAgent>().HasOne(d => d.Type).WithMany()

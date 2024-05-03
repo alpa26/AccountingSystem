@@ -15,6 +15,10 @@ namespace СontractAccountingSystem.Server
 
             services.AddTransient<Repository>();
             services.AddTransient<DocumentRepository>();
+
+
+            services.AddAutoMapper(typeof(AppMappingProfile));
+
         }
     }
 }

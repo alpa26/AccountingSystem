@@ -3,6 +3,9 @@
 using СontractAccountingSystem.Server.Data;
 using СontractAccountingSystem.Server.Services.Interfaces;
 using СontractAccountingSystem.Server.Entities.Interfaces;
+using System.Reflection;
+using Salazki.Presentation.Elements;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace СontractAccountingSystem.Server.Services
 {
@@ -36,12 +39,12 @@ namespace СontractAccountingSystem.Server.Services
 
         public async Task<bool> ChangeAsync<T>(T item) where T : class, IEntity
         {
-            var result = await GetCollection<T>().FindAsync(item.Id);
-            if(result==null)
+            var existingItem = await GetCollection<T>().FindAsync(item.Id);
+            if(existingItem == null)
                 return false;
-            GetCollection<T>().Update(item);
             try
             {
+                GetCollection<T>().Update(item);
                 await SaveChangesAsync();
             }
             catch (Exception e)
@@ -67,6 +70,17 @@ namespace СontractAccountingSystem.Server.Services
             return await GetCollection<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<List<T>> FindListByFilterAsync<T,T2>(string? stringProperty, T2 value) where T : class, IEntity
+        {
+            try
+            {
+                var list = await GetCollection<T>().ToListAsync();
+                return list
+                    .Where(x => x.GetType().GetProperty(stringProperty).GetValue(x).Equals(value))
+                    .ToList();
+            } catch(Exception e) { }
+            return null;
+        }
 
         public async Task<bool> RemoveAsync<T>(Guid? id) where T : class, IEntity
         {

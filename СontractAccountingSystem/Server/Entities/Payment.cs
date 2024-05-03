@@ -15,7 +15,7 @@ namespace СontractAccountingSystem.Server.Entities
         public Guid Id { get; set; }
 
         [NotMapped]
-        public Document Document { get; set; }
+        public Document Document { get; set; } = null;
         public Guid DocumentId { get; set; }
 
 
@@ -27,6 +27,7 @@ namespace СontractAccountingSystem.Server.Entities
         public Guid PaymentStatusId { get; set; }
 
         public decimal Amount { get; set; }
+        public string Comment { get; set; }
 
 
         public Payment()

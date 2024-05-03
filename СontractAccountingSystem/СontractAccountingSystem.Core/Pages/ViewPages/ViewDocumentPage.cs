@@ -1,16 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using Salazki.Presentation.Elements;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
+
 using СontractAccountingSystem.Core.Models;
-using СontractAccountingSystem.Core.Pages.Autocomplete;
-using СontractAccountingSystem.Core.Pages.EditDocument;
 
 namespace СontractAccountingSystem.Core.Pages.ViewPages
 {
@@ -19,7 +13,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
         internal Guid DocumentId { get; private set; }
 
         public TextField DocumentName { get; } = new TextField("Договор");
-        public TextField FullPrice { get; } = new TextField("Общая сумма");
+        public TextField Amount { get; } = new TextField("Общая сумма");
 
         public TextField EssenceOfAgreement { get; } = new TextField("Наименование работ");
         public TextField<DateTime> CreateDate { get; } = new TextField<DateTime>("Дата добавления");
@@ -33,6 +27,8 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
         public TextField<KontrAgentModel> KontrAgentName { get; } = new TextField<KontrAgentModel>("КонтрАгент");
 
         public TextField<OrganizationModel> OrganizationName { get; } = new TextField<OrganizationModel>("Название организации");
+
+        public CollectionViewer<PaymentTermModel> PaymentTerms { get; } = new CollectionViewer<PaymentTermModel>("Сроки оплаты");
 
         public TextField Comment { get; } = new TextField("Комментарий");
 
@@ -57,7 +53,8 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Content.AddRange(
                 DocumentName,
                 DeadlineStart, DeadlineEnd,
-                FullPrice, PaymentType,
+                Amount, PaymentType,
+                PaymentTerms,
                 KontrAgentName, OrganizationName,
                 EssenceOfAgreement,
                 Comment
@@ -71,7 +68,8 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 DocumentName,
                 DeadlineStart, DeadlineEnd,
                 EmployerName,
-                FullPrice, PaymentType,
+                Amount, PaymentType,
+                PaymentTerms,
                 KontrAgentName,
                 EssenceOfAgreement,
                 Comment
@@ -85,7 +83,8 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 DocumentName,
                 DeadlineStart, DeadlineEnd,
                 OrganizationName,
-                FullPrice, PaymentType,
+                Amount, PaymentType,
+                PaymentTerms,
                 KontrAgentName, 
                 EssenceOfAgreement,
                 Comment
@@ -102,11 +101,18 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                                 .GetField(Model.PaymentType.ToString())
                                 .GetCustomAttribute<DescriptionAttribute>()
                                 ?.Description;
-            FullPrice.Text = $"{Model.FullPrice} рублей";
+            Amount.Text = $"{Model.FullPrice} рублей";
             KontrAgentName.Value = Model.KontrAgentName;
             OrganizationName.Value = Model.OrganizationName;
             EmployerName.Value = Model.WorkerName;
             Comment.Text = Model.Comment;
+
+
+            PaymentTerms.Items.Clear();
+            PaymentTerms.Items.AddRange(Model.PaymentTerms);
+            PaymentTerms.RegisterBuildItemDelegate(x => new PaymentTermItem(x));
+            PaymentTerms.EmptyText = "Нет сроков";
+            PaymentTerms.CreateItemViewPageDelegate = x => new ViewPaymentTermPage(x);
         }
     }
 }

@@ -1,5 +1,7 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Salazki.Presentation.Elements;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Entities;
 using СontractAccountingSystem.Server.Queries.Users.GetUserById;
@@ -11,10 +13,12 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
     public class DocumentByIdQueryHandler : IRequestHandler<DocumentByIdQuery, ArchiveDocumentModel>
     {
         private readonly Repository _repository;
+        private readonly IMapper _mapper;
 
-        public DocumentByIdQueryHandler(Repository repository, UserManager<User> userManager)
+        public DocumentByIdQueryHandler(Repository repository, UserManager<User> userManager, IMapper mapper)
         {
             _repository = repository;
+            _mapper = mapper;
         }
 
         public async Task<ArchiveDocumentModel> Handle(DocumentByIdQuery request, CancellationToken cancellationToken)
@@ -26,6 +30,14 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
             doc.Organization = await _repository.FindByIdAsync<Organization>(doc.OrganizationId);
 
             //var workers = await _repository.FindByIdAsync<Worker>(doc.WorkerId);
+            var paymentModelList = new List<PaymentTermModel>();
+            var payments = await _repository.FindListByFilterAsync<Payment,Guid>("DocumentId", doc.Id);
+            foreach(var item in payments){
+                var newitem = _mapper.Map<PaymentTermModel>(item);
+                newitem.DocumentNumber = doc.Number;
+                paymentModelList.Add(newitem);
+            }
+
 
             var model = new ArchiveDocumentModel()
             {
@@ -48,7 +60,8 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
                 CreateDate = doc.CreatedDate,
                 DeadlineStart = doc.DeadlineStart,
                 DeadlineEnd = doc.DeadlineEnd,
-                RelatedDocuments = new RelateDocumentModel[] { null }
+                RelatedDocuments = new RelateDocumentModel[] { null },
+                PaymentTerms = paymentModelList.ToArray()
             };
 
             return model;
