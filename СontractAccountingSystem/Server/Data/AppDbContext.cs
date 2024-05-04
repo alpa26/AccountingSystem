@@ -35,6 +35,9 @@ public class AppDbContext : DbContext
     public DbSet<RelateDocuments> RelateDocuments { get; set; }
     public DbSet<Notification> Notifications { get; set; }
 
+    public DbSet<LaborHoursCost> LaborHourCost { get; set; }
+    public DbSet<WorkedLaborHours> WorkedLaborHours { get; set; }
+
 
     public DbSet<Role> UserRoles { get; set; }
     public DbSet<User> Users { get; set; }
@@ -53,6 +56,8 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Notification>().ToTable("notifications");
         modelBuilder.Entity<Organization>().ToTable("organizations");
         modelBuilder.Entity<DocPayType>().ToTable("doc_pay_types");
+        modelBuilder.Entity<LaborHoursCost>().ToTable("labor_hour_cost");
+        modelBuilder.Entity<WorkedLaborHours>().ToTable("worked_labor_hour");
         //modelBuilder.Entity<Project>().ToTable("projects");
         //modelBuilder.Entity<ProjectToDocuments>().ToTable("projects_to_documents");
         modelBuilder.Entity<RelateDocuments>().ToTable("related_documents");
@@ -118,13 +123,19 @@ public class AppDbContext : DbContext
         //modelBuilder.Entity<ProjectToDocuments>().HasOne(d => d.Project).WithMany()
         //.HasForeignKey(x => x.ProjectId).OnDelete(DeleteBehavior.Restrict);
         //modelBuilder.Entity<ProjectToDocuments>().HasOne(d => d.Document).WithMany()
-        //.HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.Restrict);
+        //.HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.Restrict); 
 
-        //LaborCost 
-        modelBuilder.Entity<LaborCost>().HasOne(d => d.Worker).WithMany()
-        .HasForeignKey(x => x.WorkerId).OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<LaborCost>().HasOne(d => d.Document).WithMany()
-        .HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.Restrict);
+        //LaborHourCost 
+        modelBuilder.Entity<LaborHoursCost>().HasOne(d => d.Worker).WithMany()
+        .HasForeignKey(x => x.WorkerId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<LaborHoursCost>().HasOne(d => d.Document).WithMany()
+        .HasForeignKey(x => x.DocumentId).OnDelete(DeleteBehavior.Cascade);
+
+        //LaborHourWorked 
+        modelBuilder.Entity<WorkedLaborHours>().HasOne(d => d.Worker).WithMany()
+        .HasForeignKey(x => x.WorkerId).OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<WorkedLaborHours>().HasOne(d => d.Payment).WithMany()
+        .HasForeignKey(x => x.PaymenttId).OnDelete(DeleteBehavior.Cascade);
 
         //ContractPayments 
         modelBuilder.Entity<Payment>().HasOne(d => d.PaymentStatus).WithMany()

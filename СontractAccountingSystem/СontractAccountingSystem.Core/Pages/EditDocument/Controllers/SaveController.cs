@@ -37,7 +37,13 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                 DeadlineStart = Element.Deadline.Value.From.Value,
                 DeadlineEnd = Element.Deadline.Value.To.Value,
                 RelatedDocuments = new RelateDocumentModel[] { null },
-                PaymentTerms = Element.PaymentTerms.Items.ToArray(),
+                PaymentTerms = Element.PaymentTerms.Items
+                .Select(x=> { x.DocumentNumber = Element.DocumentNumber.Text; return x; })
+                .ToArray(),
+
+                LaborHours = Element.LaborHours.Items
+                .Select(x => { x.DocumentNumber = Element.DocumentNumber.Text; return x; })
+                .ToArray(),
             };
             if (Element.Type == "Договор на фактические услуги") {
                 res.WorkerName = new PersonModel();

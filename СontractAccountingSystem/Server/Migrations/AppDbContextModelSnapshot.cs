@@ -131,7 +131,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 5, 2, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<DateTime>("DeadlineEnd")
                         .HasColumnType("timestamp with time zone");
@@ -255,17 +255,17 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("kontr_agent_types", (string)null);
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.LaborCost", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.LaborHoursCost", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<decimal>("Cost")
-                        .HasColumnType("numeric");
-
                     b.Property<Guid>("DocumentId")
                         .HasColumnType("uuid");
+
+                    b.Property<decimal>("HourlyRate")
+                        .HasColumnType("numeric");
 
                     b.Property<Guid>("WorkerId")
                         .HasColumnType("uuid");
@@ -276,7 +276,7 @@ namespace СontractAccountingSystem.Server.Migrations
 
                     b.HasIndex("WorkerId");
 
-                    b.ToTable("LaborCost");
+                    b.ToTable("labor_hour_cost", (string)null);
                 });
 
             modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Notification", b =>
@@ -288,7 +288,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 5, 2, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<Guid>("DocumentId")
                         .HasColumnType("uuid");
@@ -503,6 +503,33 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.ToTable("users", (string)null);
                 });
 
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.WorkedLaborHours", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("HourlyRate")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("PaymenttId")
+                        .HasColumnType("uuid");
+
+                    b.Property<decimal>("WorkedHours")
+                        .HasColumnType("numeric");
+
+                    b.Property<Guid>("WorkerId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PaymenttId");
+
+                    b.HasIndex("WorkerId");
+
+                    b.ToTable("worked_labor_hour", (string)null);
+                });
+
             modelBuilder.Entity("СontractAccountingSystem.Server.Entities.Worker", b =>
                 {
                     b.Property<Guid>("Id")
@@ -521,11 +548,11 @@ namespace СontractAccountingSystem.Server.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("Position")
+                    b.Property<string>("SecondName")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<string>("SecondName")
+                    b.Property<string>("StaffPosition")
                         .IsRequired()
                         .HasColumnType("text");
 
@@ -594,18 +621,18 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Navigation("Type");
                 });
 
-            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.LaborCost", b =>
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.LaborHoursCost", b =>
                 {
                     b.HasOne("СontractAccountingSystem.Server.Entities.Document", "Document")
                         .WithMany()
                         .HasForeignKey("DocumentId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("СontractAccountingSystem.Server.Entities.Worker", "Worker")
                         .WithMany()
                         .HasForeignKey("WorkerId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Document");
@@ -679,6 +706,25 @@ namespace СontractAccountingSystem.Server.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
+                });
+
+            modelBuilder.Entity("СontractAccountingSystem.Server.Entities.WorkedLaborHours", b =>
+                {
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Payment", "Payment")
+                        .WithMany()
+                        .HasForeignKey("PaymenttId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("СontractAccountingSystem.Server.Entities.Worker", "Worker")
+                        .WithMany()
+                        .HasForeignKey("WorkerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Payment");
+
+                    b.Navigation("Worker");
                 });
 #pragma warning restore 612, 618
         }

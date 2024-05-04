@@ -5,6 +5,9 @@ using System.ComponentModel;
 using System.Reflection;
 
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Core.Pages.EditPaymentTerm;
+using СontractAccountingSystem.Core.Pages.LaborHours;
+using СontractAccountingSystem.Core.Pages.LaborHours1;
 
 namespace СontractAccountingSystem.Core.Pages.ViewPages
 {
@@ -22,13 +25,16 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 
         public TextField PaymentType { get; } = new TextField("Тип оплаты");
 
-        public TextField<PersonModel> EmployerName { get; } = new TextField<PersonModel>("Сотрудник");
+        public TextField<PersonModel> WorkerName { get; } = new TextField<PersonModel>("Сотрудник");
 
         public TextField<KontrAgentModel> KontrAgentName { get; } = new TextField<KontrAgentModel>("КонтрАгент");
 
         public TextField<OrganizationModel> OrganizationName { get; } = new TextField<OrganizationModel>("Название организации");
 
         public CollectionViewer<PaymentTermModel> PaymentTerms { get; } = new CollectionViewer<PaymentTermModel>("Сроки оплаты");
+
+        public CollectionViewer<LaborHoursModel> LaborHours { get; } = new CollectionViewer<LaborHoursModel>("Стоимость трудозатрат");
+
 
         public TextField Comment { get; } = new TextField("Комментарий");
 
@@ -67,7 +73,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Content.AddRange(
                 DocumentName,
                 DeadlineStart, DeadlineEnd,
-                EmployerName,
+                LaborHours,
                 Amount, PaymentType,
                 PaymentTerms,
                 KontrAgentName,
@@ -104,8 +110,14 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
             Amount.Text = $"{Model.FullPrice} рублей";
             KontrAgentName.Value = Model.KontrAgentName;
             OrganizationName.Value = Model.OrganizationName;
-            EmployerName.Value = Model.WorkerName;
+            WorkerName.Value = Model.WorkerName;
             Comment.Text = Model.Comment;
+
+            LaborHours.Items.Clear();
+            LaborHours.Items.AddRange(Model.LaborHours);
+            LaborHours.RegisterBuildItemDelegate(x => new LaborHoursItem(x));
+            LaborHours.EmptyText = "Не указано";
+            LaborHours.CreateItemViewPageDelegate = x => new ViewLaborHoursPage(x);
 
 
             PaymentTerms.Items.Clear();

@@ -12,7 +12,7 @@ namespace СontractAccountingSystem.Server.Entities
         public string SecondName { get; set; }
         public string LastName { get; set; }
 
-        public string Position { get; set; }
+        public string StaffPosition { get; set; }
 
         public Worker()
         {

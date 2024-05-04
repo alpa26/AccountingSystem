@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Commands.Documents.ChangeDocument;
 using СontractAccountingSystem.Server.Features.Commands.Documents.DeleteDocument;
+using СontractAccountingSystem.Server.Features.Commands.LaborHoursCosts.CreateLaborHoursCost;
 using СontractAccountingSystem.Server.Features.CreateDocument;
 using СontractAccountingSystem.Server.Features.CreatePayment;
 using СontractAccountingSystem.Server.Queries.Documents.GetDocumentById;
@@ -31,8 +32,13 @@ namespace СontractAccountingSystem.Server.Controllers
             var PaymentIsCreated = await _mediator.Send(new CreatePaymentCommand(request.PaymentTerms.ToList()));
             if (!PaymentIsCreated)
                 return BadRequest();
-            else
-                return Ok();
+            if(request.LaborHours.Length!=0)
+            {
+                var LaborHoursCostIsCreated = await _mediator.Send(new CreateLaborHoursCostCommand(request.LaborHours.ToList()));
+                if (!LaborHoursCostIsCreated)
+                    return BadRequest();
+            }
+            return Ok();
         }
 
         [HttpPost("edit")]

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
 using System.Data;
 
-namespace СontractAccountingSystem.Core.Pages
+namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm
 {
     public class PaymentTermItem : Item<PaymentTermModel>
     {
@@ -18,19 +18,19 @@ namespace СontractAccountingSystem.Core.Pages
             AdoptionDate.Style = TextStyle.LightDescription;
             Badges.Items.Clear();
             var badge = new Badge();
-            if(model.Amount ==0)
-            Badges.Items.AddRange(badge,
-                new Badge
-                {
-                    Text = "Ожидает оплаты",
-                    Color = BadgeColor.Warning
-                });
+            if (model.Amount == 0)
+                Badges.Items.AddRange(badge,
+                    new Badge
+                    {
+                        Text = "Ожидает оплаты",
+                        Color = BadgeColor.Warning
+                    });
             Layout = BuildLayout();
         }
 
         protected override void Setup()
         {
-            Price.Text = "Сумма {0}".FormatWith(Model.Amount == 0 ? "-": Model.Amount);
+            Price.Text = "Сумма {0}".FormatWith(Model.Amount == 0 ? "-" : Model.Amount);
             AdoptionDate.Text = $"с {Model.DeadlineStart.ToString("dd MMMM yyyy")} до {Model.DeadlineEnd.ToString("dd MMMM yyyy")}";
 
         }

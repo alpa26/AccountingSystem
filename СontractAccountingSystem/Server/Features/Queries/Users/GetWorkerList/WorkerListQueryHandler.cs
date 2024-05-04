@@ -26,7 +26,7 @@ namespace СontractAccountingSystem.Server.Features.Queries.Users.GetWorkerList
                 {
                     Id = item.Id,
                     FullName = item.GetFullName(),
-                    Role = item.Position
+                    Role = item.StaffPosition
                 });
             }
             return res.ToList();

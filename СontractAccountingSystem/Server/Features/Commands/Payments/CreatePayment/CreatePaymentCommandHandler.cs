@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Hosting;
+using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Entities;
 using СontractAccountingSystem.Server.Queries.DocTypes.GetDocTypeList;
 using СontractAccountingSystem.Server.Queries.PaymentTypes.GetPaymentTypeList;
@@ -18,7 +20,6 @@ namespace СontractAccountingSystem.Server.Features.CreatePayment
         {
             _mediator = mediator;
             _repository = repository;
-
         }
 
         public async Task<bool> Handle(CreatePaymentCommand request, CancellationToken cancellationToken)
@@ -38,13 +39,39 @@ namespace СontractAccountingSystem.Server.Features.CreatePayment
                     Comment = paymentitem.Comment,
                     Amount = paymentitem.Amount
                 };
-                var res = await _repository.CreateAsync(payment);
-                if (res == null)
-                {
+                var createdPayment = await _repository.CreateAsync(payment);
+                if (createdPayment == null)
                     return false;
-                }
+                var WorkedHoursIsCreated = await CreateWorkedHours(paymentitem.LaborHoursWorked, payment.Id);
+                if (!WorkedHoursIsCreated)
+                    return false;
             }
             await _mediator.Publish(new PaymentCreated(true));
+            return true;
+        }
+
+        public async Task<bool> CreateWorkedHours(LaborHoursModel[] workedHours,Guid paymentId)
+        {
+            var workers = await _repository.FindListAsync<Worker>();
+
+            if (workedHours == null)
+                return false;
+            foreach (var hours in workedHours)
+            {
+                var newWorkedHours = new WorkedLaborHours()
+                {
+                    Id = hours.Id,
+                    Payment = null,
+                    Worker = null,
+                    WorkerId = workers.First(x => x.Id == hours.WorkerName.Id).Id,
+                    PaymenttId= paymentId,
+                    HourlyRate= hours.HourlyRate,
+                    WorkedHours = hours.Hours
+                };
+                var res = await _repository.CreateAsync(newWorkedHours);
+                if (res == null)
+                    return false;
+            }
             return true;
         }
     }

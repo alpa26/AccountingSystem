@@ -13,8 +13,6 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm.Controllers
         {
             Element.UpdateModelDelegate = UpdateModel;
             Element.SaveDelegate = Save;
-
-          
         }
 
         private PaymentTermModel UpdateModel()
@@ -26,6 +24,9 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm.Controllers
             model.Comment = Element.Comment.Text ?? "";
             model.Amount = Element.Amount.Value;
             model.Status = Element.Status.Value.Value;
+            model.LaborHoursWorked = Element.LaborHours.Items
+                .Select(x => { x.DocumentNumber = Element.DocumentNumber.Text; return x; })
+                .ToArray();
             return model;
         }
 

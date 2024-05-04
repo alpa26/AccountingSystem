@@ -12,8 +12,6 @@ namespace СontractAccountingSystem.Core.Models
         public string FullName { get; set; }
         public string Role { get; set; }
 
-        //public string StaffPosition { get; set; }
-
         public PersonModel() {
             FullName = string.Empty;
             Role = string.Empty;

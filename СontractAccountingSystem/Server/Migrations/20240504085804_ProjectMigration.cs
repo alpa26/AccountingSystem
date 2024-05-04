@@ -158,7 +158,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     FirstName = table.Column<string>(type: "text", nullable: false),
                     SecondName = table.Column<string>(type: "text", nullable: false),
                     LastName = table.Column<string>(type: "text", nullable: false),
-                    Position = table.Column<string>(type: "text", nullable: false)
+                    StaffPosition = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -232,7 +232,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Number = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 2, 0, 0, 0, 0, DateTimeKind.Utc)),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc)),
                     DeadlineStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeadlineEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
@@ -296,7 +296,8 @@ namespace СontractAccountingSystem.Server.Migrations
                     DeadlineStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeadlineEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     PaymentStatusId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false)
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Comment = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -316,29 +317,29 @@ namespace СontractAccountingSystem.Server.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "LaborCost",
+                name: "labor_hour_cost",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     DocumentId = table.Column<Guid>(type: "uuid", nullable: false),
                     WorkerId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Cost = table.Column<decimal>(type: "numeric", nullable: false)
+                    HourlyRate = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_LaborCost", x => x.Id);
+                    table.PrimaryKey("PK_labor_hour_cost", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LaborCost_documents_DocumentId",
+                        name: "FK_labor_hour_cost_documents_DocumentId",
                         column: x => x.DocumentId,
                         principalTable: "documents",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_LaborCost_workers_WorkerId",
+                        name: "FK_labor_hour_cost_workers_WorkerId",
                         column: x => x.WorkerId,
                         principalTable: "workers",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -349,7 +350,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     DocumentId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 2, 0, 0, 0, 0, DateTimeKind.Utc))
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc))
                 },
                 constraints: table =>
                 {
@@ -393,6 +394,33 @@ namespace СontractAccountingSystem.Server.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "worked_labor_hour",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymenttId = table.Column<Guid>(type: "uuid", nullable: false),
+                    WorkerId = table.Column<Guid>(type: "uuid", nullable: false),
+                    HourlyRate = table.Column<decimal>(type: "numeric", nullable: false),
+                    WorkedHours = table.Column<decimal>(type: "numeric", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_worked_labor_hour", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_worked_labor_hour_contract_payments_PaymenttId",
+                        column: x => x.PaymenttId,
+                        principalTable: "contract_payments",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_worked_labor_hour_workers_WorkerId",
+                        column: x => x.WorkerId,
+                        principalTable: "workers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_contract_payments_DocumentId",
                 table: "contract_payments",
@@ -419,6 +447,12 @@ namespace СontractAccountingSystem.Server.Migrations
                 column: "KontrAgentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_documents_Number",
+                table: "documents",
+                column: "Number",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_documents_OrganizationId",
                 table: "documents",
                 column: "OrganizationId");
@@ -439,13 +473,13 @@ namespace СontractAccountingSystem.Server.Migrations
                 column: "TypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LaborCost_DocumentId",
-                table: "LaborCost",
+                name: "IX_labor_hour_cost_DocumentId",
+                table: "labor_hour_cost",
                 column: "DocumentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_LaborCost_WorkerId",
-                table: "LaborCost",
+                name: "IX_labor_hour_cost_WorkerId",
+                table: "labor_hour_cost",
                 column: "WorkerId");
 
             migrationBuilder.CreateIndex(
@@ -472,14 +506,21 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "IX_users_RoleId",
                 table: "users",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_worked_labor_hour_PaymenttId",
+                table: "worked_labor_hour",
+                column: "PaymenttId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_worked_labor_hour_WorkerId",
+                table: "worked_labor_hour",
+                column: "WorkerId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "contract_payments");
-
             migrationBuilder.DropTable(
                 name: "IdentityUserLogin<string>");
 
@@ -490,7 +531,7 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "IdentityUserToken<string>");
 
             migrationBuilder.DropTable(
-                name: "LaborCost");
+                name: "labor_hour_cost");
 
             migrationBuilder.DropTable(
                 name: "notifications");
@@ -499,13 +540,19 @@ namespace СontractAccountingSystem.Server.Migrations
                 name: "related_documents");
 
             migrationBuilder.DropTable(
-                name: "contract_pay_statuses");
+                name: "worked_labor_hour");
+
+            migrationBuilder.DropTable(
+                name: "Project");
+
+            migrationBuilder.DropTable(
+                name: "contract_payments");
 
             migrationBuilder.DropTable(
                 name: "workers");
 
             migrationBuilder.DropTable(
-                name: "Project");
+                name: "contract_pay_statuses");
 
             migrationBuilder.DropTable(
                 name: "documents");

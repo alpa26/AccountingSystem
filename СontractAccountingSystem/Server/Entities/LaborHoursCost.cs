@@ -4,7 +4,7 @@ using СontractAccountingSystem.Server.Entities.Interfaces;
 
 namespace СontractAccountingSystem.Server.Entities;
 
-public class LaborCost : IEntity
+public class LaborHoursCost : IEntity
 {
     [Key]
     public Guid Id { get; set; }
@@ -16,9 +16,9 @@ public class LaborCost : IEntity
     public Worker Worker { get; set; } = new();
     public Guid WorkerId { get; set; }
 
-    public decimal Cost { get; set; }
+    public decimal HourlyRate { get; set; }
 
-    public LaborCost()
+    public LaborHoursCost()
     {
 
     }

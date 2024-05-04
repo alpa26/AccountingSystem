@@ -1,13 +1,10 @@
 ﻿using Salazki.Presentation.Elements;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Channels;
-using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Pages.Autocomplete;
 using СontractAccountingSystem.Core.Pages.EditPaymentTerm;
+using СontractAccountingSystem.Core.Pages.LaborHours;
+using СontractAccountingSystem.Core.Pages.LaborHours1;
 
 namespace СontractAccountingSystem.Core.Pages.EditDocument
 {
@@ -56,6 +53,9 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         public CollectionEditor<PaymentTermModel> PaymentTerms { get; } = new CollectionEditor<PaymentTermModel>("Сроки оплаты");
 
 
+
+        public CollectionEditor<LaborHoursModel> LaborHours { get; } = new CollectionEditor<LaborHoursModel>("Сроки оплаты");
+
         public EditDocumentPage(string type) : this(null, type)
         {
 
@@ -67,10 +67,14 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
             Type = type;
 
 
+            LaborHours.AddNewItemButton.Text = "Добавить сотрудника";
+            LaborHours.RegisterBuildItemDelegate(x => new LaborHoursItem(x));
+            LaborHours.CreateItemEditPageDelegate = x => new EditLaborHoursPage(x, false);
+
 
             PaymentTerms.AddNewItemButton.Text = "Добавить дату оплаты";
             PaymentTerms.RegisterBuildItemDelegate(x => new PaymentTermItem(x));
-            PaymentTerms.CreateItemEditPageDelegate = x => new EditPaymentTermPage(x, DocumentNumber.Value);
+            PaymentTerms.CreateItemEditPageDelegate = x => new EditPaymentTermPage(x, DocumentNumber.Value, LaborHours.Items.ToArray());
         }
 
         protected override void Setup()
@@ -90,7 +94,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
             {
                 Content.AddRange(
                 DocumentNumber,
-                Deadline, /*WorkerName*/
+                Deadline, LaborHours,
                 FullPrice, PaymentType, PaymentTerms,
                 KontrAgentName,
                 EssenceOfAgreement, Comment
@@ -129,6 +133,9 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                     return null;
                 return $"{x} рублей";
             };
+            LaborHours.Items.Clear();
+            LaborHours.Items.AddRange(Model.LaborHours);
+
             PaymentTerms.Items.Clear();
             PaymentTerms.Items.AddRange(Model.PaymentTerms);
         }

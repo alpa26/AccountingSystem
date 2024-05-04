@@ -28,6 +28,7 @@ namespace СontractAccountingSystem.Core.Models
         public RelateDocumentModel[] RelatedDocuments { get; set; }
         public PaymentTermModel[] PaymentTerms { get; set; }
 
+        public LaborHoursModel[] LaborHours { get; set; }
 
 
         public override bool Equals(object obj)
