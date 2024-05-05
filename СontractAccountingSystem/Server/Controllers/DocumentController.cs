@@ -32,9 +32,9 @@ namespace СontractAccountingSystem.Server.Controllers
             var PaymentIsCreated = await _mediator.Send(new CreatePaymentCommand(request.PaymentTerms.ToList()));
             if (!PaymentIsCreated)
                 return BadRequest();
-            if(request.LaborHours.Length!=0)
+            if(request.LaborHoursCost.Length!=0)
             {
-                var LaborHoursCostIsCreated = await _mediator.Send(new CreateLaborHoursCostCommand(request.LaborHours.ToList()));
+                var LaborHoursCostIsCreated = await _mediator.Send(new CreateLaborHoursCostCommand(request.LaborHoursCost.ToList()));
                 if (!LaborHoursCostIsCreated)
                     return BadRequest();
             }

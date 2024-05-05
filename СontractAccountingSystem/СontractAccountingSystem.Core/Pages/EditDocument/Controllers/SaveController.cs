@@ -22,6 +22,22 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
 
         private ArchiveDocumentModel UpdateModel()
         {
+            var LaborHoursCosts = new List<LaborHoursModel>();
+
+            var crutch = new List<Guid>();
+            for (int i = 0; i < Element.LaborHours.Items.Count; i++){
+                Element.LaborHours.Items[i].DocumentNumber = Element.DocumentNumber.Text;
+                LaborHoursCosts.Add((LaborHoursModel)Element.LaborHours.Items[i].Clone());
+                crutch.Add(Element.LaborHours.Items[i].Id);
+            }
+            var pt = Element.PaymentTerms.Items;
+            for (int i = 0; i < pt.Count; i++)
+                for (int j = 0; j < pt[i].LaborHoursWorked.Length; j++){
+                    var workedhours = pt[i].LaborHoursWorked[j];
+                    if (crutch.Contains(workedhours.Id))
+                        workedhours.Id = Guid.NewGuid();
+                }
+
             var res = new ArchiveDocumentModel
             {
                 Id = Element.Model.Id,
@@ -41,10 +57,18 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                 .Select(x=> { x.DocumentNumber = Element.DocumentNumber.Text; return x; })
                 .ToArray(),
 
-                LaborHours = Element.LaborHours.Items
-                .Select(x => { x.DocumentNumber = Element.DocumentNumber.Text; return x; })
-                .ToArray(),
+                
+
+                LaborHoursCost = LaborHoursCosts.ToArray(),
             };
+
+            //for (int i = 0; i < Element.PaymentTerms.Items.Count; i++)
+            //    for (int j = 0; j < Element.PaymentTerms.Items[i].LaborHoursWorked.Length; j++)
+            //    {
+            //        var workedhours = Element.PaymentTerms.Items[i].LaborHoursWorked[j];
+            //        Console.WriteLine(workedhours.Id);
+            //    }
+
             if (Element.Type == "Договор на фактические услуги") {
                 res.WorkerName = new PersonModel();
                 res.OrganizationName = new OrganizationModel();

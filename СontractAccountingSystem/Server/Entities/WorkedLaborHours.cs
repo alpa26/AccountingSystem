@@ -4,13 +4,13 @@ using СontractAccountingSystem.Server.Entities.Interfaces;
 
 namespace СontractAccountingSystem.Server.Entities;
 
-public class WorkedLaborHours : IEntity
+public class WorkedLaborHours : IEntity, IWorker
 {
     [Key]
     public Guid Id { get; set; }
     [NotMapped]
     public Payment Payment { get; set; } = new();
-    public Guid PaymenttId { get; set; }
+    public Guid PaymentId { get; set; }
 
     [NotMapped]
     public Worker Worker { get; set; } = new();
@@ -18,7 +18,8 @@ public class WorkedLaborHours : IEntity
 
     public decimal HourlyRate { get; set; }
 
-    public decimal WorkedHours { get; set; }
+    public int Hours { get; set; }
+    public decimal FullAmount { get; set; }
 
     public WorkedLaborHours()
     {

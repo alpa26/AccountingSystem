@@ -135,7 +135,7 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<WorkedLaborHours>().HasOne(d => d.Worker).WithMany()
         .HasForeignKey(x => x.WorkerId).OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<WorkedLaborHours>().HasOne(d => d.Payment).WithMany()
-        .HasForeignKey(x => x.PaymenttId).OnDelete(DeleteBehavior.Cascade);
+        .HasForeignKey(x => x.PaymentId).OnDelete(DeleteBehavior.Cascade);
 
         //ContractPayments 
         modelBuilder.Entity<Payment>().HasOne(d => d.PaymentStatus).WithMany()

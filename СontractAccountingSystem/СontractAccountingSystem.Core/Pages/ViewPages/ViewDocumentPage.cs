@@ -51,6 +51,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 
         protected override void Setup()
         {
+
             Content.Clear();
             if (Model.DocumentType == "Договор на работы")
             {
@@ -114,11 +115,10 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
             Comment.Text = Model.Comment;
 
             LaborHours.Items.Clear();
-            LaborHours.Items.AddRange(Model.LaborHours);
+            LaborHours.Items.AddRange(Model.LaborHoursCost);
             LaborHours.RegisterBuildItemDelegate(x => new LaborHoursItem(x));
             LaborHours.EmptyText = "Не указано";
-            LaborHours.CreateItemViewPageDelegate = x => new ViewLaborHoursPage(x);
-
+            LaborHours.CreateItemViewPageDelegate = x => new ViewLaborHoursPage(x, false);
 
             PaymentTerms.Items.Clear();
             PaymentTerms.Items.AddRange(Model.PaymentTerms);

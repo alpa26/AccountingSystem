@@ -22,8 +22,7 @@ namespace СontractAccountingSystem.Server.Services.Interfaces
         //}
 
         public Task<T?> FindByIdAsync<T>(Guid? id) where T : class, IEntity;
-
-
+        public Task<List<T>> FindListByFilterAsync<T, TValue>(string? stringProperty, TValue value) where T : class, IEntity;
         public Task<bool> RemoveAsync<T>(Guid? id) where T : class, IEntity;
 
         public Task SaveChangesAsync();

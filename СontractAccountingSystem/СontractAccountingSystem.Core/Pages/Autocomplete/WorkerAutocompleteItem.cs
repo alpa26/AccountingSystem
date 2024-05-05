@@ -11,17 +11,17 @@ namespace СontractAccountingSystem.Core.Pages.Autocomplete
     public class WorkerAutocompleteItem : Item<PersonModel>
     {
         public Label FullName { get; } = new Label();
-        public Label Role { get; } = new Label { Style = TextStyle.LightDescription };
+        public Label StaffPosition { get; } = new Label { Style = TextStyle.LightDescription };
 
         public WorkerAutocompleteItem(PersonModel model) : base(model)
         {
-            Layout = new VerticalStack(FullName, Role);
+            Layout = new VerticalStack(FullName, StaffPosition);
         }
 
         protected override void Setup()
         {
             FullName.Text = Model.FullName;
-            Role.Text = Model.Role;
+            StaffPosition.Text = Model.StaffPosition;
         }
     }
 }

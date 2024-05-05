@@ -36,7 +36,7 @@ namespace СontractAccountingSystem.Core.Pages.Autocomplete
             if (pattern.IsNullOrEmpty())
                 return null;
             var result = persons
-                .Where(x => x.FullName.ToLower().Contains(pattern) || x.Role.ToLower().Contains(pattern))
+                .Where(x => x.FullName.ToLower().Contains(pattern) || x.StaffPosition.ToLower().Contains(pattern))
                 .ToList();
             return result;
         }

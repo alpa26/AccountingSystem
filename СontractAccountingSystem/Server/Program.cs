@@ -53,13 +53,13 @@ builder.Services.AddRazorPages();
 
 var app = builder.Build();
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
+//using (var scope = app.Services.CreateScope())
+//{
+//    var services = scope.ServiceProvider;
 
-    var context = services.GetRequiredService<AppDbContext>();
-    context.Database.Migrate();
-}
+//    var context = services.GetRequiredService<AppDbContext>();
+//    context.Database.Migrate();
+//}
 // Configure the HTTP request pipeline.
 // Add Swagger
 app.UseSwagger();

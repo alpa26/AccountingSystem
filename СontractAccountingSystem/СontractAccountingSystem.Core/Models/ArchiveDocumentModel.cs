@@ -27,8 +27,7 @@ namespace СontractAccountingSystem.Core.Models
         public DateTime DeadlineEnd { get; set; }
         public RelateDocumentModel[] RelatedDocuments { get; set; }
         public PaymentTermModel[] PaymentTerms { get; set; }
-
-        public LaborHoursModel[] LaborHours { get; set; }
+        public LaborHoursModel[] LaborHoursCost { get; set; }
 
 
         public override bool Equals(object obj)

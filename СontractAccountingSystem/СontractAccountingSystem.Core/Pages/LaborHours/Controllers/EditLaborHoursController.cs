@@ -16,9 +16,10 @@ namespace СontractAccountingSystem.Core.Pages.LaborHours.Controllers
 
         private LaborHoursModel UpdateModel()
         {                
-            var model = new LaborHoursModel { Id = Element.Model.Id };
+            var model = new LaborHoursModel { Id =  Element.Model.Id };
             model.HourlyRate = Element.HourlyRate.Value;
             model.Hours = Element.Hours.Value;
+            model.FullAmount = Element.FullAmount.Value;
             model.WorkerName = Element.WorkerName.Value;
             return model;
         }

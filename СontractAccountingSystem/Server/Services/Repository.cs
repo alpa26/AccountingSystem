@@ -20,21 +20,20 @@ namespace СontractAccountingSystem.Server.Services
 
         public async Task<T?> CreateAsync<T>(T item) where T : class, IEntity
         {
-            var result = await GetCollection<T>().AddAsync(item);
-
-            if (result.State != EntityState.Added)
-                return null;
-
             try
             {
+                var result = await GetCollection<T>().AddAsync(item);
+
+                if (result.State != EntityState.Added)
+                    return null;
                 await SaveChangesAsync();
+                return result.Entity;
             }
             catch (Exception e)
             {
                 return null;
             }
 
-            return result.Entity;
         }
 
         public async Task<bool> ChangeAsync<T>(T item) where T : class, IEntity
@@ -65,12 +64,13 @@ namespace СontractAccountingSystem.Server.Services
         //    throw new NotImplementedException();
         //}
 
+
         public async Task<T?> FindByIdAsync<T>(Guid? id) where T : class, IEntity
         {
             return await GetCollection<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List<T>> FindListByFilterAsync<T,T2>(string? stringProperty, T2 value) where T : class, IEntity
+        public async Task<List<T>> FindListByFilterAsync<T, TValue>(string? stringProperty, TValue value) where T : class, IEntity
         {
             try
             {
@@ -112,8 +112,6 @@ namespace СontractAccountingSystem.Server.Services
                 throw e;
             }
         }
-
-        
 
         private DbSet<T?> GetCollection<T>() where T : class, IEntity
         {

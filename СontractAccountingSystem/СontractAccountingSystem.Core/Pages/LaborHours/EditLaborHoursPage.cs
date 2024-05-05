@@ -7,7 +7,6 @@ namespace СontractAccountingSystem.Core.Pages.LaborHours
 {
     public class EditLaborHoursPage : EditFormPage<LaborHoursModel>
     {
-        public bool IsPaymentView { get; set; }
         [Required]
         public WorkerAutocomplete WorkerName { get; } = new WorkerAutocomplete("Рабочий");
 
@@ -37,11 +36,11 @@ namespace СontractAccountingSystem.Core.Pages.LaborHours
             return 0;
         });
 
-        public EditLaborHoursPage(LaborHoursModel model, bool IsPaymentView) : base(model ?? CreateModel())
+        public EditLaborHoursPage(LaborHoursModel model, bool IsPaymentPage, bool isNew=false) : base(model ?? CreateModel())
         {
             Content.Clear();
             Content.AddRange(WorkerName, HourlyRate);
-            if (IsPaymentView)
+            if (IsPaymentPage)
             {
                 WorkerName.Readonly = true;
                 HourlyRate.Readonly = true;
@@ -56,7 +55,7 @@ namespace СontractAccountingSystem.Core.Pages.LaborHours
             WorkerName.Value = Model.WorkerName;
             HourlyRate.Value = Model.HourlyRate;
             Hours.Value = Model.Hours;
-            FullAmount.Value = Model.FullAmount == 0 ? HourlyRate.Value * Hours.Value : Model.FullAmount;
+            FullAmount.Value = Model.FullAmount;
 
             Hours.DisplayTextDelegate = x =>
             {

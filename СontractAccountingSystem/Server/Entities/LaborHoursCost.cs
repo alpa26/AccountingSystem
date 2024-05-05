@@ -4,7 +4,7 @@ using СontractAccountingSystem.Server.Entities.Interfaces;
 
 namespace СontractAccountingSystem.Server.Entities;
 
-public class LaborHoursCost : IEntity
+public class LaborHoursCost : IEntity, IWorker
 {
     [Key]
     public Guid Id { get; set; }

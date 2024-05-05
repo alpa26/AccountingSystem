@@ -76,5 +76,6 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
 
             return reslist;
         }
+        
     }
 }

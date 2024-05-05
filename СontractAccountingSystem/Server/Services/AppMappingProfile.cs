@@ -9,7 +9,9 @@ namespace СontractAccountingSystem.Server.Services
         public AppMappingProfile()
         {
             CreateMap<Payment, PaymentTermModel>().ReverseMap();
-            CreateMap<Payment, Payment>();
+            CreateMap<LaborHoursModel, LaborHoursCost>().ReverseMap();
+            CreateMap<LaborHoursModel, WorkedLaborHours>().ReverseMap();
+            CreateMap<PersonModel, Worker>().ReverseMap();
 
             CreateMap<Document, ArchiveDocumentModel>().ReverseMap();
 

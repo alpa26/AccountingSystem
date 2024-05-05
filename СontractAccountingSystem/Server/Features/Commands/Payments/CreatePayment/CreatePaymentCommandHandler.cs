@@ -53,7 +53,6 @@ namespace СontractAccountingSystem.Server.Features.CreatePayment
         public async Task<bool> CreateWorkedHours(LaborHoursModel[] workedHours,Guid paymentId)
         {
             var workers = await _repository.FindListAsync<Worker>();
-
             if (workedHours == null)
                 return false;
             foreach (var hours in workedHours)
@@ -64,9 +63,10 @@ namespace СontractAccountingSystem.Server.Features.CreatePayment
                     Payment = null,
                     Worker = null,
                     WorkerId = workers.First(x => x.Id == hours.WorkerName.Id).Id,
-                    PaymenttId= paymentId,
+                    PaymentId= paymentId,
                     HourlyRate= hours.HourlyRate,
-                    WorkedHours = hours.Hours
+                    FullAmount= hours.FullAmount,
+                    Hours = hours.Hours
                 };
                 var res = await _repository.CreateAsync(newWorkedHours);
                 if (res == null)

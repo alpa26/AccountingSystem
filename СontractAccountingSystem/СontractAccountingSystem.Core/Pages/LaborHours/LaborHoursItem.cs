@@ -22,7 +22,7 @@ namespace СontractAccountingSystem.Core.Pages.LaborHours1
         {
             WorkerName.Text = Model.WorkerName is null ? "" : Model.WorkerName.FullName;
             HourlyRate.Text = Model.HourlyRate.ToString();
-            StaffPosition.Text = Model.WorkerName is null ? "" : Model.WorkerName.Role;
+            StaffPosition.Text = Model.WorkerName is null ? "" : Model.WorkerName.StaffPosition;
         }
         private Layout BuildLayout()
         {

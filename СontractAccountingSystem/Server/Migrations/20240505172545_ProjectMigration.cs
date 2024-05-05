@@ -232,7 +232,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Number = table.Column<string>(type: "text", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc)),
+                    CreatedDate = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 5, 0, 0, 0, 0, DateTimeKind.Utc)),
                     DeadlineStart = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     DeadlineEnd = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     Price = table.Column<decimal>(type: "numeric", nullable: false),
@@ -350,7 +350,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     Title = table.Column<string>(type: "text", nullable: false),
                     ProjectId = table.Column<Guid>(type: "uuid", nullable: false),
                     DocumentId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc))
+                    Date = table.Column<DateTime>(type: "timestamp with time zone", nullable: false, defaultValue: new DateTime(2024, 5, 5, 0, 0, 0, 0, DateTimeKind.Utc))
                 },
                 constraints: table =>
                 {
@@ -399,17 +399,18 @@ namespace СontractAccountingSystem.Server.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    PaymenttId = table.Column<Guid>(type: "uuid", nullable: false),
+                    PaymentId = table.Column<Guid>(type: "uuid", nullable: false),
                     WorkerId = table.Column<Guid>(type: "uuid", nullable: false),
                     HourlyRate = table.Column<decimal>(type: "numeric", nullable: false),
-                    WorkedHours = table.Column<decimal>(type: "numeric", nullable: false)
+                    Hours = table.Column<int>(type: "integer", nullable: false),
+                    FullAmount = table.Column<decimal>(type: "numeric", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_worked_labor_hour", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_worked_labor_hour_contract_payments_PaymenttId",
-                        column: x => x.PaymenttId,
+                        name: "FK_worked_labor_hour_contract_payments_PaymentId",
+                        column: x => x.PaymentId,
                         principalTable: "contract_payments",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -508,9 +509,9 @@ namespace СontractAccountingSystem.Server.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_worked_labor_hour_PaymenttId",
+                name: "IX_worked_labor_hour_PaymentId",
                 table: "worked_labor_hour",
-                column: "PaymenttId");
+                column: "PaymentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_worked_labor_hour_WorkerId",

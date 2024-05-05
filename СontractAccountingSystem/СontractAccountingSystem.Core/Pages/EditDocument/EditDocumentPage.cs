@@ -52,8 +52,6 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
 
         public CollectionEditor<PaymentTermModel> PaymentTerms { get; } = new CollectionEditor<PaymentTermModel>("Сроки оплаты");
 
-
-
         public CollectionEditor<LaborHoursModel> LaborHours { get; } = new CollectionEditor<LaborHoursModel>("Сроки оплаты");
 
         public EditDocumentPage(string type) : this(null, type)
@@ -74,7 +72,10 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
 
             PaymentTerms.AddNewItemButton.Text = "Добавить дату оплаты";
             PaymentTerms.RegisterBuildItemDelegate(x => new PaymentTermItem(x));
-            PaymentTerms.CreateItemEditPageDelegate = x => new EditPaymentTermPage(x, DocumentNumber.Value, LaborHours.Items.ToArray());
+            PaymentTerms.CreateItemEditPageDelegate = x =>
+                 new EditPaymentTermPage(x, DocumentNumber.Value, LaborHours.Items.ToArray());
+            //PaymentTerms.CreateItemEditPageDelegate = x => 
+            //     new EditPaymentTermPage(x, DocumentNumber.Value, LaborHours.Items.Select(x=> {x.Hours=0; x.FullAmount = 0; return x; }).ToArray());
         }
 
         protected override void Setup()
@@ -134,7 +135,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 return $"{x} рублей";
             };
             LaborHours.Items.Clear();
-            LaborHours.Items.AddRange(Model.LaborHours);
+            LaborHours.Items.AddRange(Model.LaborHoursCost);
 
             PaymentTerms.Items.Clear();
             PaymentTerms.Items.AddRange(Model.PaymentTerms);

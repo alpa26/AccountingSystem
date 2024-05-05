@@ -131,7 +131,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 5, 5, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<DateTime>("DeadlineEnd")
                         .HasColumnType("timestamp with time zone");
@@ -288,7 +288,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 5, 4, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 5, 5, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<Guid>("DocumentId")
                         .HasColumnType("uuid");
@@ -509,21 +509,24 @@ namespace СontractAccountingSystem.Server.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
+                    b.Property<decimal>("FullAmount")
+                        .HasColumnType("numeric");
+
                     b.Property<decimal>("HourlyRate")
                         .HasColumnType("numeric");
 
-                    b.Property<Guid>("PaymenttId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("Hours")
+                        .HasColumnType("integer");
 
-                    b.Property<decimal>("WorkedHours")
-                        .HasColumnType("numeric");
+                    b.Property<Guid>("PaymentId")
+                        .HasColumnType("uuid");
 
                     b.Property<Guid>("WorkerId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PaymenttId");
+                    b.HasIndex("PaymentId");
 
                     b.HasIndex("WorkerId");
 
@@ -712,7 +715,7 @@ namespace СontractAccountingSystem.Server.Migrations
                 {
                     b.HasOne("СontractAccountingSystem.Server.Entities.Payment", "Payment")
                         .WithMany()
-                        .HasForeignKey("PaymenttId")
+                        .HasForeignKey("PaymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
