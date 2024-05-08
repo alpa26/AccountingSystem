@@ -38,6 +38,8 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                         workedhours.Id = Guid.NewGuid();
                 }
 
+
+            
             var res = new ArchiveDocumentModel
             {
                 Id = Element.Model.Id,
@@ -52,11 +54,10 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                 CreateDate = DateTime.Now,
                 DeadlineStart = Element.Deadline.Value.From.Value,
                 DeadlineEnd = Element.Deadline.Value.To.Value,
-                RelatedDocuments = new RelateDocumentModel[] { null },
+                RelatedDocuments = Element.RelatedDocument.Value?? new RelateDocumentModel[] {},
                 PaymentTerms = Element.PaymentTerms.Items
                 .Select(x=> { x.DocumentNumber = Element.DocumentNumber.Text; return x; })
                 .ToArray(),
-
                 
 
                 LaborHoursCost = LaborHoursCosts.ToArray(),

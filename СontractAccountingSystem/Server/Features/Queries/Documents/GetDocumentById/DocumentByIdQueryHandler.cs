@@ -19,8 +19,9 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
     {
         private readonly Repository _repository;
         private readonly IMapper _mapper;
+        private readonly DocumentService _documentService;
 
-        public DocumentByIdQueryHandler(Repository repository, UserManager<User> userManager, IMapper mapper)
+        public DocumentByIdQueryHandler(Repository repository, IMapper mapper)
         {
             _repository = repository;
             _mapper = mapper;
@@ -33,16 +34,6 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
             doc.PaymentType = await _repository.FindByIdAsync<DocPayType>(doc.PaymentTypeId);
             doc.KontrAgent = await _repository.FindByIdAsync<KontrAgent>(doc.KontrAgentId);
             doc.Organization = await _repository.FindByIdAsync<Organization>(doc.OrganizationId);
-
-            //var paymentModelList = new List<PaymentTermModel>();
-            //var payments = await _repository.FindListByFilterAsync<Payment,Guid>("DocumentId", doc.Id);
-            //foreach(var item in payments){
-            //    var newitem = _mapper.Map<PaymentTermModel>(item);
-            //    newitem.DocumentNumber = doc.Number;
-            //    var HoursWorkedList = await GetModelByFilterAsync<WorkedLaborHours, Guid, LaborHoursModel>("PaymenttId", newitem.Id);
-            //    newitem.LaborHoursWorked = HoursWorkedList.ToArray();
-            //    paymentModelList.Add(newitem);
-            //}
             
             var paymentModelList = new List<PaymentTermModel>();
             var paymententitiesList = await _repository.FindListByFilterAsync<Payment, Guid>("DocumentId", doc.Id);
@@ -57,7 +48,18 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
                 item.LaborHoursWorked = HoursWorkedList.Select(x => { x.DocumentNumber = doc.Number; return x; }).ToArray();
             }
             var laborHoursCostList = await GetLaborHoursModel<LaborHoursCost, Guid>("DocumentId", doc.Id);
-            
+
+            //
+
+            var relatedDocmodelist = new List<RelateDocumentModel>();
+            var DBrelatedDoclist = await _repository.FindListByFilterAsync<RelateDocuments, Guid>("Document1Id", doc.Id);
+            foreach(var item in DBrelatedDoclist)
+            {
+                var newmodel = _mapper.Map<RelateDocumentModel>(item);
+                newmodel.DocumentNumber = item.Document2Number;
+                newmodel.DocumentName = item.Document2Name;
+                relatedDocmodelist.Add(newmodel);
+            }
 
             var model = new ArchiveDocumentModel()
             {
@@ -80,9 +82,10 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
                 CreateDate = doc.CreatedDate,
                 DeadlineStart = doc.DeadlineStart,
                 DeadlineEnd = doc.DeadlineEnd,
-                RelatedDocuments = new RelateDocumentModel[] { null },
+                RelatedDocuments = relatedDocmodelist.ToArray(),
                 LaborHoursCost = laborHoursCostList.Select(x => { x.DocumentNumber = doc.Number; return x; }).ToArray(),
-                PaymentTerms = paymentModelList.ToArray()
+                PaymentTerms = paymentModelList.ToArray(),
+                
             };
 
             return model;

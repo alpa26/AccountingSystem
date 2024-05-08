@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Reflection;
 
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Core.Pages.Autocomplete;
 using СontractAccountingSystem.Core.Pages.EditPaymentTerm;
 using СontractAccountingSystem.Core.Pages.LaborHours;
 using СontractAccountingSystem.Core.Pages.LaborHours1;
@@ -35,6 +36,8 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 
         public CollectionViewer<LaborHoursModel> LaborHours { get; } = new CollectionViewer<LaborHoursModel>("Стоимость трудозатрат");
 
+        public CollectionViewer<RelateDocumentModel> RelateDocuments { get; } = new CollectionViewer<RelateDocumentModel>("Сопроводительные документы");
+
 
         public TextField Comment { get; } = new TextField("Комментарий");
 
@@ -63,7 +66,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Amount, PaymentType,
                 PaymentTerms,
                 KontrAgentName, OrganizationName,
-                EssenceOfAgreement,
+                EssenceOfAgreement, RelateDocuments,
                 Comment
                 );
             }
@@ -78,7 +81,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Amount, PaymentType,
                 PaymentTerms,
                 KontrAgentName,
-                EssenceOfAgreement,
+                EssenceOfAgreement, RelateDocuments,
                 Comment
                 );
             }
@@ -93,7 +96,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Amount, PaymentType,
                 PaymentTerms,
                 KontrAgentName, 
-                EssenceOfAgreement,
+                EssenceOfAgreement, RelateDocuments,
                 Comment
                 );
             }
@@ -125,6 +128,12 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
             PaymentTerms.RegisterBuildItemDelegate(x => new PaymentTermItem(x));
             PaymentTerms.EmptyText = "Нет сроков";
             PaymentTerms.CreateItemViewPageDelegate = x => new ViewPaymentTermPage(x);
+
+            RelateDocuments.Items.Clear();
+            RelateDocuments.Items.AddRange(Model.RelatedDocuments);
+            RelateDocuments.RegisterBuildItemDelegate(x => new DocumentAutocompleteItem(x));
+            RelateDocuments.EmptyText = "Нет сроков";
+            RelateDocuments.CreateItemViewPageDelegate = x => new ViewDocumentPage(x.RelatedDocumentId);
         }
     }
 }

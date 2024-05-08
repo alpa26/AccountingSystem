@@ -70,6 +70,8 @@ namespace СontractAccountingSystem.Server.Services
             return await GetCollection<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
 
+
+        //FindListByFilterAsync<RelateDocuments,Guid>("Document1Id", id);
         public async Task<List<T>> FindListByFilterAsync<T, TValue>(string? stringProperty, TValue value) where T : class, IEntity
         {
             try

@@ -109,9 +109,9 @@ public class AppDbContext : DbContext
 
         //RelatedDocuments 
         modelBuilder.Entity<RelateDocuments>().HasOne(d => d.Document1).WithMany()
-        .HasForeignKey(x => x.Document1Id).OnDelete(DeleteBehavior.Restrict);
+        .HasForeignKey(x => x.Document1Id).OnDelete(DeleteBehavior.Cascade);
         modelBuilder.Entity<RelateDocuments>().HasOne(d => d.Document2).WithMany()
-        .HasForeignKey(x => x.Document2Id).OnDelete(DeleteBehavior.Restrict);
+        .HasForeignKey(x => x.Document2Id).OnDelete(DeleteBehavior.Cascade);
 
         //Notification 
         modelBuilder.Entity<Notification>().HasOne(d => d.Project).WithMany()

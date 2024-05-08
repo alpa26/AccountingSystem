@@ -131,7 +131,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 5, 5, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 5, 8, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<DateTime>("DeadlineEnd")
                         .HasColumnType("timestamp with time zone");
@@ -288,7 +288,7 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.Property<DateTime>("Date")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValue(new DateTime(2024, 5, 5, 0, 0, 0, 0, DateTimeKind.Utc));
+                        .HasDefaultValue(new DateTime(2024, 5, 8, 0, 0, 0, 0, DateTimeKind.Utc));
 
                     b.Property<Guid>("DocumentId")
                         .HasColumnType("uuid");
@@ -399,6 +399,14 @@ namespace СontractAccountingSystem.Server.Migrations
 
                     b.Property<Guid>("Document2Id")
                         .HasColumnType("uuid");
+
+                    b.Property<string>("Document2Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("Document2Number")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -686,13 +694,13 @@ namespace СontractAccountingSystem.Server.Migrations
                     b.HasOne("СontractAccountingSystem.Server.Entities.Document", "Document1")
                         .WithMany()
                         .HasForeignKey("Document1Id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("СontractAccountingSystem.Server.Entities.Document", "Document2")
                         .WithMany()
                         .HasForeignKey("Document2Id")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Document1");

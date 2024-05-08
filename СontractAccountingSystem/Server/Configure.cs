@@ -14,7 +14,7 @@ namespace СontractAccountingSystem.Server
             services.AddValidatorsFromAssembly(assembly1);
 
             services.AddTransient<Repository>();
-            services.AddTransient<DocumentRepository>();
+            services.AddTransient<DocumentService>();
 
 
             services.AddAutoMapper(typeof(AppMappingProfile));

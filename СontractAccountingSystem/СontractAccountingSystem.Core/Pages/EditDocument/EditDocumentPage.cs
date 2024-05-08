@@ -39,6 +39,10 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         [Required]
         public OrganizationAutocomplete OrganizationName { get; } = new OrganizationAutocomplete("Название организации");
 
+        public MultiValueAutocomplete<RelateDocumentModel> RelatedDocument { get; } = new MultiValueAutocomplete<RelateDocumentModel>("Доп Документы")
+        {
+            ValuesCountLimit = 3
+        };
         public TextInput EssenceOfAgreement { get; } = new TextInput("Наименование работ") { Placeholder = "Наименование работ", Multiline = true };
 
         public TextInput Comment { get; } = new TextInput("Комментарий") { Placeholder = "Комментарий", Multiline = true };
@@ -64,6 +68,8 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
             DeleteButton.Hidden = true;
             Type = type;
 
+            RelatedDocument.BuildAutocompleteDelegate = () => new DocumentAutocomplete(type) { Placeholder = "Введите номер документа или тип" };
+
 
             LaborHours.AddNewItemButton.Text = "Добавить сотрудника";
             LaborHours.RegisterBuildItemDelegate(x => new LaborHoursItem(x));
@@ -87,7 +93,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 DocumentNumber,
                 Deadline,
                 FullPrice, PaymentType, PaymentTerms,
-                KontrAgentName, OrganizationName,
+                KontrAgentName, OrganizationName, RelatedDocument,
                 EssenceOfAgreement, Comment
                 );
             }
@@ -97,7 +103,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 DocumentNumber,
                 Deadline, LaborHours,
                 FullPrice, PaymentType, PaymentTerms,
-                KontrAgentName,
+                KontrAgentName, RelatedDocument,
                 EssenceOfAgreement, Comment
                 );
             }
@@ -107,7 +113,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 DocumentNumber, EssenceOfAgreement,
                 Deadline,
                 FullPrice, PaymentType, PaymentTerms,
-                KontrAgentName, OrganizationName,
+                KontrAgentName, OrganizationName, RelatedDocument,
                 Comment
                 );
             }
@@ -139,6 +145,9 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
 
             PaymentTerms.Items.Clear();
             PaymentTerms.Items.AddRange(Model.PaymentTerms);
+
+            if(Model.RelatedDocuments is not null && Model.RelatedDocuments.Length!=0)
+                RelatedDocument.Value = Model.RelatedDocuments;
         }
 
         private ArchiveDocumentModel CreateModel()

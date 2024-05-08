@@ -5,6 +5,8 @@ using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Commands.Documents.ChangeDocument;
 using СontractAccountingSystem.Server.Features.Commands.Documents.DeleteDocument;
 using СontractAccountingSystem.Server.Features.Commands.LaborHoursCosts.CreateLaborHoursCost;
+using СontractAccountingSystem.Server.Features.Commands.RelatedDocuments.ChangeRelatedDocuments;
+using СontractAccountingSystem.Server.Features.Commands.RelatedDocuments.CreateRelatedDocuments;
 using СontractAccountingSystem.Server.Features.CreateDocument;
 using СontractAccountingSystem.Server.Features.CreatePayment;
 using СontractAccountingSystem.Server.Queries.Documents.GetDocumentById;
@@ -38,6 +40,15 @@ namespace СontractAccountingSystem.Server.Controllers
                 if (!LaborHoursCostIsCreated)
                     return BadRequest();
             }
+            if (request.RelatedDocuments.Length != 0)
+            {
+                var RelateDocIsCreated = await _mediator.Send(
+                    new CreateRelatedDocumentsCommand(
+                        new RelateDocumentModel() { RelatedDocumentId = res, DocumentName = request.Name, DocumentNumber =request.DocumentNumber },
+                    request.RelatedDocuments.ToList())) ;
+                if (!RelateDocIsCreated)
+                    return BadRequest();
+            }
             return Ok();
         }
 
@@ -45,10 +56,17 @@ namespace СontractAccountingSystem.Server.Controllers
         public async Task<IActionResult> ChangeDocument([FromBody] ArchiveDocumentModel request)
         {
             var res = await _mediator.Send(new ChangeDocumentCommand(request));
-            if (res)
-                return Ok();
-            else
+            if (!res)
                 return BadRequest();
+            var RelateDocIsChanged = await _mediator.Send(
+                new ChangeRelatedDocumentsCommand(new RelateDocumentModel() { 
+                    RelatedDocumentId = request.Id,
+                    DocumentName = request.Name,
+                    DocumentNumber = request.DocumentNumber }, 
+                    request.RelatedDocuments.ToList()));
+            if (!RelateDocIsChanged)
+                return BadRequest();
+            return Ok();
         }
 
 

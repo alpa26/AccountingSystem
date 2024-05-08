@@ -2,6 +2,7 @@
 using MediatR;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Entities;
+using СontractAccountingSystem.Server.Entities.Interfaces;
 using СontractAccountingSystem.Server.Queries.DocTypes.GetDocTypeList;
 using СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentList;
 using СontractAccountingSystem.Server.Queries.Organizations.GetOrganizationList;
@@ -40,42 +41,62 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
                 var org = orgList.FirstOrDefault(x => x.Id == doc.OrganizationId);
 
                 var paymentModelList = new List<PaymentTermModel>();
-                var payments = await _repository.FindListByFilterAsync<Payment, Guid>("DocumentId", doc.Id);
-                foreach (var item in payments)
+                var paymententitiesList = await _repository.FindListByFilterAsync<Payment, Guid>("DocumentId", doc.Id);
+                foreach (var entity in paymententitiesList)
+                    paymentModelList.Add(_mapper.Map<PaymentTermModel>(entity));
+
+
+                foreach (var item in paymentModelList)
                 {
-                    var newitem = _mapper.Map<PaymentTermModel>(item);
-                    newitem.DocumentNumber = doc.Number;
-                    paymentModelList.Add(newitem);
+                    item.DocumentNumber = doc.Number;
+                    var HoursWorkedList = await GetLaborHoursModel<WorkedLaborHours, Guid>("PaymentId", item.Id);
+                    item.LaborHoursWorked = HoursWorkedList.Select(x => { x.DocumentNumber = doc.Number; return x; }).ToArray();
                 }
+                var laborHoursCostList = await GetLaborHoursModel<LaborHoursCost, Guid>("DocumentId", doc.Id);
 
                 reslist.Add(new ArchiveDocumentModel()
                 {
                     Id = doc.Id,
                     DocumentNumber = doc.Number,
                     Name = doc.Name,
-                    DocumentType = docTypeList.FirstOrDefault(x => x.Id == doc.TypeId).Name,
+                    DocumentType = doc.Type.Name,
                     EssenceOfAgreement = doc.WorkDescription,
-                    KontrAgentName = new KontrAgentModel() { Id = ka.Id, FullName = ka.FullName, INN = ka.INN },
+                    KontrAgentName = new KontrAgentModel() { Id = doc.KontrAgent.Id, FullName = doc.KontrAgent.FullName, INN = doc.KontrAgent.INN },
                     FullPrice = doc.Price,
-                    //WorkerName = workers == null? null: new PersonModel()
+                    //WorkerName = workers == null ? null : new PersonModel()
                     //{
                     //    Id = workers.Id,
                     //    FullName = workers.GetFullName(),
                     //    Role = workers.Position
                     //},
                     Comment = doc.Comment,
-                    PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), paytypeList.FirstOrDefault(x => x.Id == doc.PaymentTypeId).Name),
-                    OrganizationName = org == null ? null : new OrganizationModel() { Id = org.Id, Name = org.Name },
+                    PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), doc.PaymentType.Name),
+                    OrganizationName = doc.Organization == null ? null : new OrganizationModel() { Id = doc.Organization.Id, Name = doc.Organization.Name },
                     CreateDate = doc.CreatedDate,
                     DeadlineStart = doc.DeadlineStart,
                     DeadlineEnd = doc.DeadlineEnd,
                     RelatedDocuments = new RelateDocumentModel[] { null },
+                    LaborHoursCost = laborHoursCostList.Select(x => { x.DocumentNumber = doc.Number; return x; }).ToArray(),
                     PaymentTerms = paymentModelList.ToArray()
                 });
             }
 
             return reslist;
         }
-        
+
+        public async Task<List<LaborHoursModel>> GetLaborHoursModel<T1, T2>(string property, T2 value) where T1 : class, IEntity, IWorker
+        {
+            var workers = await _repository.FindListAsync<Worker>();
+
+            var modellist = new List<LaborHoursModel>();
+            var entitiesList = await _repository.FindListByFilterAsync<T1, T2>(property, value);
+            foreach (var entity in entitiesList)
+            {
+                var newitem = _mapper.Map<LaborHoursModel>(entity);
+                newitem.WorkerName = _mapper.Map<PersonModel>(workers.FirstOrDefault(x => x.Id == entity.WorkerId));
+                modellist.Add(newitem);
+            }
+            return modellist;
+        }
     }
 }

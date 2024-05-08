@@ -11,6 +11,8 @@ namespace СontractAccountingSystem.Core.Services.Interfaces
     {
         Task<IList<PersonModel>> LoadWorkers();
         Task<IList<KontrAgentModel>> LoadKontrAgents();
+        Task<IList<ArchiveDocumentModel>> LoadDocuments();
+        Task<IList<RelateDocumentModel>> LoadRelatedDocumentsByType(string type);
         Task<IList<OrganizationModel>> LoadOrganizations();
 
     }
