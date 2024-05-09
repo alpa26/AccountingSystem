@@ -61,7 +61,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
                 grid.Add(DocumentType).Row(0).Column(1);
                 //grid.Add(KontrAgentName).Row(0).Column(2);
                 grid.Add(Name).Row(0).Column(2);
-                grid.Add(new HorizontalStack(Badges, CreateDate)).Row(0).Column(3).AlignedToRight();
+                grid.Add(new HorizontalStack(Badges, CreateDate)).Row(0).Columns(from:3,to:4).AlignedToRight();
                 grid.Add(new GridLayout(x =>
                 {
                     x.Add(KontrAgentName).StretchedHorizontally();
@@ -69,7 +69,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
                 grid.Add(new GridLayout(x =>
                 {
                     x.Add(EssenceOfAgreement).StretchedHorizontally();
-                })).Row(1).Columns(from: 2, to: 3).StretchedHorizontally();
+                })).Row(1).Column(2).StretchedHorizontally();
             });
         }
     }

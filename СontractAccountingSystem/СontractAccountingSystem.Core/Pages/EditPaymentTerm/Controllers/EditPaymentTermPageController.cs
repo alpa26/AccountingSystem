@@ -24,6 +24,7 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm.Controllers
             model.Comment = Element.Comment.Text ?? "";
             model.Amount = Element.Amount.Value;
             model.Status = Element.Status.Value.Value;
+            model.DocumentName = Element.Model.DocumentName ?? "";
 
             model.LaborHoursWorked = Element.LaborHours.Items.Select(x => { x.DocumentNumber = Element.DocumentNumber.Text; return x; }).ToArray();
             foreach (var item in model.LaborHoursWorked)

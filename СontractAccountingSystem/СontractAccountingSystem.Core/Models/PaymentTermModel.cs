@@ -13,6 +13,10 @@ namespace СontractAccountingSystem.Core.Models
         public PaymentStatusEnum Status { get; set; }
         public LaborHoursModel[] LaborHoursWorked { get; set; }
 
+
+        public string DocumentName { get; set; }
+
+
         public override bool Equals(object obj)
         {
             var other = obj as PaymentTermModel;

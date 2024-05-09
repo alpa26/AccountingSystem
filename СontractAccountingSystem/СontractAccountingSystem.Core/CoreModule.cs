@@ -23,7 +23,7 @@ namespace СontractAccountingSystem.Core
 
             //services.AddSingleton<Services.INotificationsService, Services.Fakes.NotificationsService>();
             services.AddAssemblyControllers();
-            services.AddTransient<IOrgStructureService>(x => new OrgStructureService());
+            services.AddSingleton<IOrgStructureService>(x => new OrgStructureService());
             services.AddSingleton<IHttpClient>(x => new SingletonHttpClient());
             services.AddSingleton<ICookieService>(x => new CookieService());
             

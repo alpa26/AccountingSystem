@@ -44,6 +44,7 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
             foreach (var item in paymentModelList)
             {
                 item.DocumentNumber = doc.Number;
+                item.DocumentName = doc.Name;
                 var HoursWorkedList = await GetLaborHoursModel<WorkedLaborHours, Guid>("PaymentId", item.Id);
                 item.LaborHoursWorked = HoursWorkedList.Select(x => { x.DocumentNumber = doc.Number; return x; }).ToArray();
             }

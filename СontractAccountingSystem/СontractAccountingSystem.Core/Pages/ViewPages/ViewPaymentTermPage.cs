@@ -17,7 +17,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 
         public TextField<DateTime> DeadlineStart { get; } = new TextField<DateTime>("Начало срока");
         public TextField<DateTime> DeadlineEnd { get; } = new TextField<DateTime>("Конец срока");
-        public CollectionViewer<LaborHoursModel> LaborHours { get; } = new CollectionViewer<LaborHoursModel>("Стоимость трудозатрат");
+        public CollectionViewer<LaborHoursModel> LaborHours { get; } = new CollectionViewer<LaborHoursModel>("Отработанные часы");
 
         public TextField Amount { get; } = new TextField("Общая сумма");
         public TextField Status { get; } = new TextField("Статус");

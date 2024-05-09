@@ -13,13 +13,13 @@ namespace СontractAccountingSystem.Core.Services
 {
     internal class OrgStructureService : IOrgStructureService
     {
-        internal static  List<PersonModel> Persons ;
+        internal static  List<PersonModel> PersonsList ;
 
-        internal static List<ArchiveDocumentModel> Documents;
+        internal static List<ArchiveDocumentModel> DocumentList;
 
-        internal static  List<KontrAgentModel> KontrAgents;
+        internal static  List<KontrAgentModel> KontrAgentList;
 
-        internal static List<OrganizationModel> Organizations;
+        internal static List<OrganizationModel> OrganizationList;
 
         public OrgStructureService()
         {
@@ -28,12 +28,18 @@ namespace СontractAccountingSystem.Core.Services
 
         public async void Setup()
         {
-            var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-            Persons = await LoadModelList<PersonModel>(httpClient, "users/workerlist");
-            KontrAgents = await LoadModelList<KontrAgentModel>(httpClient, "kontragent/list");
-            Organizations = await LoadModelList<OrganizationModel>(httpClient, "organizations/list");
-            Documents = await LoadModelList<ArchiveDocumentModel>(httpClient, "documents/geteditlist");
+            await RefreshData();
         }
+
+        public async Task RefreshData()
+        {
+            var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
+            PersonsList = await LoadModelList<PersonModel>(httpClient, "users/workerlist");
+            KontrAgentList = await LoadModelList<KontrAgentModel>(httpClient, "kontragent/list");
+            OrganizationList = await LoadModelList<OrganizationModel>(httpClient, "organizations/list");
+            DocumentList = await LoadModelList<ArchiveDocumentModel>(httpClient, "documents/geteditlist");
+        }
+
 
         private async Task<List<TModel>> LoadModelList<TModel>(HttpClient httpClient, string path)
         {
@@ -49,34 +55,41 @@ namespace СontractAccountingSystem.Core.Services
         public async Task<IList<KontrAgentModel>> LoadKontrAgents()
         {
             await Task.Delay(500);
-            return KontrAgents.ToList();
+            return KontrAgentList.ToList();
         }
 
         public async Task<IList<ArchiveDocumentModel>> LoadDocuments()
         {
             await Task.Delay(500);
-            return Documents.ToList();
+            return DocumentList.ToList();
         }
 
-        
+        public async Task<IList<PaymentTermModel>> LoadPayments()
+        {
+            var resList = new List<PaymentTermModel>();
+            foreach (var itemDoc in DocumentList)
+                resList.AddRange(itemDoc.PaymentTerms);
+            await Task.Delay(200);
+            return resList;
+        }
 
         public async Task<IList<OrganizationModel>> LoadOrganizations()
         {
             await Task.Delay(500);
-            return Organizations.ToList();
+            return OrganizationList.ToList();
         }
 
         public async Task<IList<PersonModel>> LoadWorkers()
         {
             await Task.Delay(500);
-            return Persons.ToList();
+            return PersonsList.ToList();
         }
 
         public async Task<IList<RelateDocumentModel>> LoadRelatedDocumentsByType(string type)
         {
             await Task.Delay(500);
             var newList = new List<RelateDocumentModel>();
-            foreach (var document in Documents)
+            foreach (var document in DocumentList)
                 if (document.DocumentType == type)
                     newList.Add(new RelateDocumentModel
                     {

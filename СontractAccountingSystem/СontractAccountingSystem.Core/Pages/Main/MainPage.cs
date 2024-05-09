@@ -7,14 +7,16 @@ using СontractAccountingSystem.Core.Services;
 using СontractAccountingSystem.Core.Pages.Logon;
 using СontractAccountingSystem.Core.Pages.DocumentList;
 using СontractAccountingSystem.Core.Pages.DocumentTypesList;
+using СontractAccountingSystem.Core.Pages.PaymentTermList;
 
 namespace СontractAccountingSystem.Core.Pages.Main
 {
     public class MainPage : RootPage
     {
         public NavigationButton AddButton { get; private set; }
-        public NavigationButton NotificationsMenuItem { get; private set; }
-        public NavigationButton DocsItem { get; private set; }
+        public NavigationButton NotificationsMenuButton{ get; private set; }
+        public NavigationButton DocumentsButton { get; private set; }
+        public NavigationButton PaymentsButton{ get; private set; }
 
 
         // Settings buttons
@@ -25,8 +27,8 @@ namespace СontractAccountingSystem.Core.Pages.Main
 
         public MainPage()
         {
-           
-            NotificationsMenuItem = new NavigationButton
+
+            NotificationsMenuButton = new NavigationButton
             {
                 Text = "Уведомления",
                 Icon = PanelIconType.Bell,
@@ -37,13 +39,22 @@ namespace СontractAccountingSystem.Core.Pages.Main
                 }
             };
 
-            DocsItem = new NavigationButton
+            DocumentsButton = new NavigationButton
             {
                 Text = "Договоры",
                 Icon = PanelIconType.Pile,
-                IndicatorCounter = 1,
+                IndicatorCounter = 0,
                 IndicatorLevel = IndicatorLevel.None,
                 CreatePageDelegate = () => new DocumentListPage()
+            };
+
+            PaymentsButton = new NavigationButton
+            {
+                Text = "Оплаты",
+                Icon = PanelIconType.Timer,
+                IndicatorCounter = 0,
+                IndicatorLevel = IndicatorLevel.None,
+                CreatePageDelegate = () => new PaymentTermListPage()
             };
 
             AddButton = new NavigationButton
@@ -106,10 +117,10 @@ namespace СontractAccountingSystem.Core.Pages.Main
 
 
             NavigationPanel.NavigationButtons
-                .AddRange(AddButton, DocsItem, NotificationsMenuItem);
+                .AddRange(AddButton, NotificationsMenuButton, DocumentsButton, PaymentsButton);
 
             //FeedbackItem.Selected = true;
-            DocsItem.Selected = true;
+            DocumentsButton.Selected = true;
 
             AddToolbar();
         }
@@ -157,13 +168,13 @@ namespace СontractAccountingSystem.Core.Pages.Main
 
             docButton = new BarButton(PanelIconType.DocumentBox)
             {
-                Hint = "Настройки",
+                Hint = "Документы",
                 ActionDelegate = () =>
                 {
                     NavigationPanel.NavigationButtons.Clear();
                     NavigationPanel.NavigationButtons
-                                   .AddRange(AddButton, DocsItem, NotificationsMenuItem);
-                    DocsItem.Selected = true;
+                                   .AddRange(AddButton, NotificationsMenuButton, DocumentsButton, PaymentsButton);
+                    DocumentsButton.Selected = true;
 
                     Application.Current.Bar.Buttons.Clear();
                     Application.Current.Bar.Buttons.AddRange(supportButton, infoButton, logoutButton);
