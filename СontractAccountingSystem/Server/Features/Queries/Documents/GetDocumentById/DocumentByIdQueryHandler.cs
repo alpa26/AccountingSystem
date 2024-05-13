@@ -45,6 +45,8 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
             {
                 item.DocumentNumber = doc.Number;
                 item.DocumentName = doc.Name;
+                item.KontrAgentName = new KontrAgentModel() { Id = doc.KontrAgent.Id, FullName = doc.KontrAgent.FullName, INN = doc.KontrAgent.INN };
+                item.OrganizationName = doc.Organization == null ? null : new OrganizationModel() { Id = doc.Organization.Id, Name = doc.Organization.Name };
                 var HoursWorkedList = await GetLaborHoursModel<WorkedLaborHours, Guid>("PaymentId", item.Id);
                 item.LaborHoursWorked = HoursWorkedList.Select(x => { x.DocumentNumber = doc.Number; return x; }).ToArray();
             }

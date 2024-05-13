@@ -13,6 +13,8 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList
 {
     public class PaymentTermListPage : ListPage<PaymentTermModel>
     {
+        public Button ReportButton { get; } = new Button { Icon = IconType.Printer, Hint = "Выгрузить в Excel" };
+
         public PaymentTermListPage()
         {
             Title = "Оплаты";
@@ -23,6 +25,12 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList
 
             //CreateItemPageDelegate = x => new ViewPaymentTermPage(x);
             //AutoSelectFirstItem = false;
+            HeaderActionPanel.Buttons.Add(ReportButton);
+
+            ReportButton.ActionDelegate = () =>
+            {
+                var query = Filtering.FilterModel as Salazki.Search.Query;
+            };
         }
     }
 }

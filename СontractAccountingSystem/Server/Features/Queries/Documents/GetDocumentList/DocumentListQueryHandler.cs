@@ -29,10 +29,10 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
 
             var docList = await _repository.FindListAsync<Document>();
             var paytypeList = await _repository.FindListAsync<DocPayType>();
-            var orgList = await _repository.FindListAsync<Organization>();
             var workerList = await _repository.FindListAsync<Worker>();
             var docTypeList = await _repository.FindListAsync<DocType>();
             var kontrAgentList = await _repository.FindListAsync<KontrAgent>();
+            var orgList = await _repository.FindListAsync<Organization>();
 
             foreach (var doc in docList)
             {
@@ -61,7 +61,7 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
                     Name = doc.Name,
                     DocumentType = doc.Type.Name,
                     EssenceOfAgreement = doc.WorkDescription,
-                    KontrAgentName = new KontrAgentModel() { Id = doc.KontrAgent.Id, FullName = doc.KontrAgent.FullName, INN = doc.KontrAgent.INN },
+                    KontrAgentName = new KontrAgentModel() { Id = ka.Id, FullName = ka.FullName, INN = ka.INN },
                     FullPrice = doc.Price,
                     //WorkerName = workers == null ? null : new PersonModel()
                     //{
@@ -71,7 +71,7 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
                     //},
                     Comment = doc.Comment,
                     PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), doc.PaymentType.Name),
-                    OrganizationName = doc.Organization == null ? null : new OrganizationModel() { Id = doc.Organization.Id, Name = doc.Organization.Name },
+                    OrganizationName = doc.Organization == null ? null : new OrganizationModel() { Id = org.Id, Name = org.Name },
                     CreateDate = doc.CreatedDate,
                     DeadlineStart = doc.DeadlineStart,
                     DeadlineEnd = doc.DeadlineEnd,

@@ -96,7 +96,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                 ModelManager.PublishModelUpdated(model);
 
             }
-
+            await Service<IOrgStructureService>.GetInstance().RefreshData();
         }
     }
 }

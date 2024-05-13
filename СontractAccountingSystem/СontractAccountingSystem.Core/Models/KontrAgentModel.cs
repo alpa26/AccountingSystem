@@ -9,8 +9,8 @@ namespace СontractAccountingSystem.Core.Models
     public class KontrAgentModel
     {
         public Guid Id { get; set; }
-        public string FullName { get; set; }
-        public string INN { get; set; }
+        public string FullName { get; set; } = string.Empty;
+        public string INN { get; set; } = string.Empty;
 
         public override bool Equals(object obj)
         {

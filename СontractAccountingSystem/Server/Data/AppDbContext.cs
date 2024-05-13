@@ -79,6 +79,11 @@ public class AppDbContext : DbContext
             user.HasIndex(x => x.Number).IsUnique(true);
         });
 
+        modelBuilder.Entity<User>(user =>
+        {
+            user.HasIndex(x => x.UserName).IsUnique(true);
+        });
+
 
         //KontrAgent
         modelBuilder.Entity<KontrAgent>().HasOne(d => d.Type).WithMany()

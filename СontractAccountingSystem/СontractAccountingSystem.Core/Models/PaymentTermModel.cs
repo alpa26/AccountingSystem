@@ -13,6 +13,10 @@ namespace СontractAccountingSystem.Core.Models
         public PaymentStatusEnum Status { get; set; }
         public LaborHoursModel[] LaborHoursWorked { get; set; }
 
+        public KontrAgentModel KontrAgentName { get; set; }
+        public OrganizationModel OrganizationName { get; set; }
+
+
 
         public string DocumentName { get; set; }
 
