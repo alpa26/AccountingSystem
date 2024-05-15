@@ -70,7 +70,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
             //        Console.WriteLine(workedhours.Id);
             //    }
 
-            if (Element.Type == "Договор на фактические услуги") {
+            if (Element.Type == "Договор на фактические услуги" || Element.Type == "Дополнительное соглашение к договору на усл.") {
                 res.WorkerName = new PersonModel();
                 res.OrganizationName = new OrganizationModel();
             }
@@ -96,7 +96,6 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                 ModelManager.PublishModelUpdated(model);
 
             }
-            await Service<IOrgStructureService>.GetInstance().RefreshData();
         }
     }
 }

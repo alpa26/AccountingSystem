@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using СontractAccountingSystem.Server.Entities;
+using СontractAccountingSystem.Server.Queries.Organizations.GetOrganizationById;
 using СontractAccountingSystem.Server.Queries.Organizations.GetOrganizationList;
 
 namespace СontractAccountingSystem.Server.Controllers
@@ -31,6 +32,13 @@ namespace СontractAccountingSystem.Server.Controllers
         public async Task<List<Organization>> GetOrganizationList()
         {
             var res = await _mediator.Send(new OrganizationListQuery());
+            return res;
+        }
+
+        [HttpGet("getbyid")]
+        public async Task<Organization> GetOrganizationById(Guid id)
+        {
+            var res = await _mediator.Send(new OrganizationByIdQuery(id));
             return res;
         }
     }

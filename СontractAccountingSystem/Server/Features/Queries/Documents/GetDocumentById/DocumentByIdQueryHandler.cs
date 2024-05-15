@@ -34,12 +34,19 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
             doc.PaymentType = await _repository.FindByIdAsync<DocPayType>(doc.PaymentTypeId);
             doc.KontrAgent = await _repository.FindByIdAsync<KontrAgent>(doc.KontrAgentId);
             doc.Organization = await _repository.FindByIdAsync<Organization>(doc.OrganizationId);
-            
+
+            var statusList = await _repository.FindListAsync<PaymentStatus>();
+
             var paymentModelList = new List<PaymentTermModel>();
             var paymententitiesList = await _repository.FindListByFilterAsync<Payment, Guid>("DocumentId", doc.Id);
-            foreach (var entity in paymententitiesList)
-                paymentModelList.Add(_mapper.Map<PaymentTermModel>(entity));
 
+            foreach (var entity in paymententitiesList)
+            {
+                var newitem = _mapper.Map<PaymentTermModel>(entity);
+                var status = statusList.FirstOrDefault(x => x.Id == entity.PaymentStatusId);
+                newitem.Status = (PaymentStatusEnum)Enum.Parse(typeof(PaymentStatusEnum), status.Name);
+                paymentModelList.Add(newitem);
+            }
 
             foreach (var item in paymentModelList)
             {

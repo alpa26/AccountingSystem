@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Commands.KontrAgents.KontrAgentCreate;
 using СontractAccountingSystem.Server.Entities;
+using СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentById;
 using СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentList;
 
 
@@ -33,6 +34,12 @@ namespace СontractAccountingSystem.Server.Controllers
         public async Task<List<KontrAgent>> GetKontrAgentList()
         {
             return await _mediator.Send(new KontrAgentListQuery());
+        }
+
+        [HttpGet("getbyid")]
+        public async Task<KontrAgent> GetKontrAgentById(Guid id)
+        {
+            return await _mediator.Send(new KontrAgentByIdQuery(id));
         }
     }
 }

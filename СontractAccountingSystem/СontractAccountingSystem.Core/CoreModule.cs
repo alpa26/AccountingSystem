@@ -13,6 +13,8 @@ using СontractAccountingSystem.Core.Services;
 using СontractAccountingSystem.Core.Services.Interfaces;
 using DK.WebClient.Core.Services;
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Core.Pages.PaymentTermList;
+using СontractAccountingSystem.Core.Pages.EditPaymentTerm;
 
 namespace СontractAccountingSystem.Core
 {
@@ -26,7 +28,8 @@ namespace СontractAccountingSystem.Core
             services.AddSingleton<IOrgStructureService>(x => new OrgStructureService());
             services.AddSingleton<IHttpClient>(x => new SingletonHttpClient());
             services.AddSingleton<ICookieService>(x => new CookieService());
-            
+
+            services.AddSingleton<ISecurityService>(x => new SecurityService());
 
         }
 
@@ -34,6 +37,7 @@ namespace СontractAccountingSystem.Core
         {
             base.Start();
             ModelManager.RegisterModelConverter<ArchiveDocumentModel, DocumentListItemModel>(x => x.ConvertToListItem());
+            ModelManager.RegisterModelConverter<PaymentTermModel, PaymentTermItem>(x => x.ConvertToListItem());
         }
     }
 }

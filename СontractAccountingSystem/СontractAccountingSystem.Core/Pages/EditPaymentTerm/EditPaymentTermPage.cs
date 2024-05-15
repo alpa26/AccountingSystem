@@ -31,13 +31,8 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm
         public TextInput Comment { get; } = new TextInput("Комментарий") { Placeholder = "Комментарий", Multiline = true };
 
 
-        //public TextInput ChangeNumber { get; } = new TextInput("Номер извещения");
-        //public DateInput AdoptionDate { get; } = new DateInput("Дата утверждения");
-        //public AttachmentsEditor Documents { get; } = new AttachmentsEditor("Электронная копия")
-        //{
-        //    //MimeTypes = MimeType.Document | MimeType.Image,
-        //    AttachmentsQuantityLimit = 1
-        //};
+        public Button CalculateButton { get; } = new Button($"Рассчитать");
+
 
         public EditPaymentTermPage(PaymentTermModel model, string docNumb, LaborHoursModel[] laborHours = null) : base(model ?? CreateModel())
         {
@@ -54,9 +49,10 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm
         protected override void Setup()
         {
             Content.Clear();
-            Content.AddRange(DocumentNumber, Deadline, Amount, Status, Comment);
+            Content.AddRange(DocumentNumber, Deadline, Status);
             if (_laborHours.Length!=0)
-                Content.Add(LaborHours);
+                Content.AddRange(LaborHours, CalculateButton);
+            Content.AddRange(Amount, Comment);
 
             Title = "Срок оплаты";
             DocumentNumber.Readonly = true;
@@ -75,7 +71,6 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm
             else
                 foreach(var item in Model.LaborHoursWorked)
                 {
-                    Console.WriteLine("!"+item.ToString());
                     LaborHours.Items.Add(item);
                 }
 
@@ -84,6 +79,14 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm
             LaborHours.RegisterBuildItemDelegate(x => new LaborHoursItem(x));
             LaborHours.CreateItemEditPageDelegate = x => {
                 return new EditLaborHoursPage(x, true);
+            };
+
+            CalculateButton.AsyncActionDelegate = async () =>
+            {
+                Amount.Value = 0;
+                if (LaborHours.Items.Count != 0)
+                    foreach (var item in LaborHours.Items)
+                        Amount.Value += item.FullAmount;
             };
         }
 

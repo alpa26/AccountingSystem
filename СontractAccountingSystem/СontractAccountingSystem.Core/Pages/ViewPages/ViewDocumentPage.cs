@@ -21,6 +21,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 
         public TextField EssenceOfAgreement { get; } = new TextField("Наименование работ");
         public TextField<DateTime> CreateDate { get; } = new TextField<DateTime>("Дата добавления");
+        public TextField<string> Deadline { get; } = new TextField<string>("Сроки исполнения");
         public TextField<DateTime> DeadlineStart { get; } = new TextField<DateTime>("Начало срока исполнения");
         public TextField<DateTime> DeadlineEnd { get; } = new TextField<DateTime>("Конец срока исполнения");
 
@@ -30,7 +31,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 
         public TextField<KontrAgentModel> KontrAgentName { get; } = new TextField<KontrAgentModel>("КонтрАгент");
 
-        public TextField<OrganizationModel> OrganizationName { get; } = new TextField<OrganizationModel>("Название организации");
+        public TextField<OrganizationModel> OrganizationName { get; } = new TextField<OrganizationModel>("Исполнитель");
 
         public CollectionViewer<PaymentTermModel> PaymentTerms { get; } = new CollectionViewer<PaymentTermModel>("Сроки оплаты");
 
@@ -62,41 +63,67 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Subtitle = $"Дата добавления {Model.CreateDate.ToString("dd.MM.yyyy")}";
                 Content.AddRange(
                 DocumentName,
-                DeadlineStart, DeadlineEnd,
-                Amount, PaymentType,
-                PaymentTerms,
+                Deadline,
                 KontrAgentName, OrganizationName,
+                RelateDocuments,
+                Comment
+                );
+            }
+            else if (Model.DocumentType == "Дополнительное соглашение к договору на раб.")
+            {
+                if (Model.DocumentType == "Дополнительное соглашение к договору на раб." && Model.RelatedDocuments.Length == 1)
+                    Title = $"Дополнительное соглашение №{Model.DocumentNumber} к договору на раб. № {Model.RelatedDocuments[0].DocumentNumber}";
+                else
+                    Title = $"Дополнительное соглашение №{Model.DocumentNumber}";
+                Subtitle = $"Дата добавления {Model.CreateDate.ToString("dd.MM.yyyy")}";
+                Content.AddRange(
+                DocumentName,
+                Deadline,
+                KontrAgentName, OrganizationName,
+                PaymentType, PaymentTerms, Amount,
                 EssenceOfAgreement, RelateDocuments,
                 Comment
                 );
             }
-            else if (Model.DocumentType == "Договор на фактические услуги")
+            else if (Model.DocumentType == "Договор на фактические услуги" || Model.DocumentType == "Дополнительное соглашение к договору на усл.")
             {
-                Title = $"Договор на фактические услуги № {Model.DocumentNumber}";
+                if(Model.DocumentType == "Дополнительное соглашение к договору на усл." && Model.RelatedDocuments.Length == 1)
+                {
+                    if(Model.RelatedDocuments.Length == 1)
+                        Title = $"Дополнительное соглашение № {Model.DocumentNumber} к договору на усл. № {Model.RelatedDocuments[0].DocumentNumber}";
+                    else
+                        Title = $"Дополнительное соглашение № {Model.DocumentNumber}";
+                }
+                else 
+                    Title = $"{Model.DocumentType} № {Model.DocumentNumber}";
                 Subtitle = $"Дата добавления {Model.CreateDate.ToString("dd.MM.yyyy")}";
                 Content.AddRange(
                 DocumentName,
-                DeadlineStart, DeadlineEnd,
+                Deadline, KontrAgentName,
                 LaborHours,
-                Amount, PaymentType,
-                PaymentTerms,
-                KontrAgentName,
-                EssenceOfAgreement, RelateDocuments,
+                PaymentType, PaymentTerms, Amount,
+                RelateDocuments, EssenceOfAgreement,
                 Comment
                 );
             }
             else /*if (Element.Model.DocumentType == "Лицензионный договор")*/
             {
-                Title = $"Лицензионный договор № {Model.DocumentNumber}";
+                if (Model.DocumentType == "Дополнительное соглашение к договору на лиц." && Model.RelatedDocuments.Length == 1)
+                {
+                    if (Model.RelatedDocuments.Length == 1)
+                        Title = $"Дополнительное соглашение № {Model.DocumentNumber} к договору на лиц. № {Model.RelatedDocuments[0].DocumentNumber}";
+                    else
+                        Title = $"Дополнительное соглашение №{Model.DocumentNumber}";
+                }
+                else
+                    Title = $"{Model.DocumentType} № {Model.DocumentNumber}";
                 Subtitle = $"Дата добавления {Model.CreateDate.ToString("dd.MM.yyyy")}";
                 Content.AddRange(
                 DocumentName,
-                DeadlineStart, DeadlineEnd,
-                OrganizationName,
-                Amount, PaymentType,
-                PaymentTerms,
-                KontrAgentName, 
-                EssenceOfAgreement, RelateDocuments,
+                Deadline,
+                KontrAgentName, OrganizationName,
+                PaymentType, PaymentTerms, Amount,
+                RelateDocuments, EssenceOfAgreement,
                 Comment
                 );
             }
@@ -104,8 +131,10 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
 
             DocumentName.Text = Model.Name;
             CreateDate.Value = Model.CreateDate;
-            DeadlineStart.Value = Model.DeadlineStart;
-            DeadlineEnd.Value = Model.DeadlineEnd;
+            Deadline.Value = $"с {Model.DeadlineStart.ToString("d")} по {Model.DeadlineEnd.ToString("d")}";
+
+            //DeadlineStart.Value = Model.DeadlineStart;
+            //DeadlineEnd.Value = Model.DeadlineEnd;
             EssenceOfAgreement.Text = Model.EssenceOfAgreement;
             PaymentType.Text = typeof(PaymentTypeEnum)
                                 .GetField(Model.PaymentType.ToString())
@@ -132,7 +161,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
             RelateDocuments.Items.Clear();
             RelateDocuments.Items.AddRange(Model.RelatedDocuments);
             RelateDocuments.RegisterBuildItemDelegate(x => new DocumentAutocompleteItem(x));
-            RelateDocuments.EmptyText = "Нет сроков";
+            RelateDocuments.EmptyText = "Нет прикрепленных документов";
             RelateDocuments.CreateItemViewPageDelegate = x => new ViewDocumentPage(x.RelatedDocumentId);
         }
     }

@@ -23,8 +23,8 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList
 
             RegisterBuildItemDelegate(x => new PaymentTermListItem(x));
 
-            //CreateItemPageDelegate = x => new ViewPaymentTermPage(x);
-            //AutoSelectFirstItem = false;
+            CreateItemPageDelegate = x => new ViewPaymentTermPage(x);
+            AutoSelectFirstItem = true;
             HeaderActionPanel.Buttons.Add(ReportButton);
 
             ReportButton.ActionDelegate = () =>

@@ -41,7 +41,12 @@ namespace СontractAccountingSystem.Core.Pages.Logon
                 var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
                 var response = await httpClient.PostAsync("api/auth/login", jsonContent);
                 if (response.IsSuccessStatusCode)
+                {
+                    IEnumerable<string> cookies = response.Headers.SingleOrDefault(header => header.Key == "Set-Cookie").Value;
+
                     Close();
+
+                }
                 else
                 {
                     Password.ValidationRules.Add(x =>

@@ -25,12 +25,35 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList
             DocumentNumber.Style = TextStyle.LightDescription;
             Badges.Items.Clear();
             var badge = new Badge();
-            if (model.Amount == 0)
+
+
+            if (model.Status == PaymentStatusEnum.AwaitingPayment)
                 Badges.Items.AddRange(badge,
                     new Badge
                     {
                         Text = "Ожидает оплаты",
                         Color = BadgeColor.Warning
+                    });
+            else if (model.Status == PaymentStatusEnum.PaidFor)
+                Badges.Items.AddRange(badge,
+                    new Badge
+                    {
+                        Text = "Оплачено",
+                        Color = BadgeColor.Success
+                    });
+            else if (model.DeadlineEnd < DateTime.Now && model.Status != PaymentStatusEnum.PaidFor)
+                Badges.Items.AddRange(badge,
+                    new Badge
+                    {
+                        Text = "Просрочено",
+                        Color = BadgeColor.Danger
+                    });
+            else if (model.Amount == 0)
+                Badges.Items.AddRange(badge,
+                    new Badge
+                    {
+                        Text = "Расчет",
+                        Color = BadgeColor.Primary
                     });
             Layout = BuildLayout();
         }
@@ -47,16 +70,16 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList
         {
             return new GridLayout(grid =>
             {
-                grid.Add(Price).Row(0).Columns(from: 0, to: 1);
-                grid.Add(DocumentName).Row(0).Column(2);
+                grid.Add(DocumentName).Row(0).Columns(from: 0, to: 1);
+                grid.Add(Price).Row(0).Column(2);
                 grid.Add(new HorizontalStack(Badges)).Row(0).Columns(from:3,to:4).AlignedToRight();
                 grid.Add(new GridLayout(x =>
                 {
-                    x.Add(AdoptionDate).StretchedHorizontally(); ;
+                    x.Add(DocumentNumber).StretchedHorizontally(); ;
                 })).Row(1).Columns(from: 0, to: 1).StretchedHorizontally();
                 grid.Add(new GridLayout(x =>
                 {
-                    x.Add(DocumentNumber).StretchedHorizontally();
+                    x.Add(AdoptionDate).StretchedHorizontally();
                 })).Row(1).Column(2).StretchedHorizontally();
             });
         }

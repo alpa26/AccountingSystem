@@ -18,12 +18,33 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm
             AdoptionDate.Style = TextStyle.LightDescription;
             Badges.Items.Clear();
             var badge = new Badge();
-            if (model.Amount == 0)
+            if (model.Status == PaymentStatusEnum.AwaitingPayment)
                 Badges.Items.AddRange(badge,
                     new Badge
                     {
                         Text = "Ожидает оплаты",
                         Color = BadgeColor.Warning
+                    });
+            else if (model.Status == PaymentStatusEnum.PaidFor)
+                Badges.Items.AddRange(badge,
+                    new Badge
+                    {
+                        Text = "Оплачено",
+                        Color = BadgeColor.Success
+                    });
+            else if (model.DeadlineEnd < DateTime.Now && model.Status != PaymentStatusEnum.PaidFor)
+                Badges.Items.AddRange(badge,
+                    new Badge
+                    {
+                        Text = "Просрочено",
+                        Color = BadgeColor.Danger
+                    });
+            else if (model.Amount == 0 || model.Status == PaymentStatusEnum.Сalculation)
+                Badges.Items.AddRange(badge,
+                    new Badge
+                    {
+                        Text = "Расчет",
+                        Color = BadgeColor.Primary
                     });
             Layout = BuildLayout();
         }
@@ -32,7 +53,6 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm
         {
             Price.Text = "Сумма {0}".FormatWith(Model.Amount == 0 ? "-" : Model.Amount);
             AdoptionDate.Text = $"с {Model.DeadlineStart.ToString("dd MMMM yyyy")} до {Model.DeadlineEnd.ToString("dd MMMM yyyy")}";
-
         }
 
         private Layout BuildLayout()
@@ -45,7 +65,6 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm
                     x.Add(AdoptionDate).StretchedHorizontally();
                 })).Row(1).Columns(0).StretchedHorizontally();
                 grid.Add(new HorizontalStack(Badges)).Row(0).Column(1).AlignedToRight();
-
             });
         }
     }

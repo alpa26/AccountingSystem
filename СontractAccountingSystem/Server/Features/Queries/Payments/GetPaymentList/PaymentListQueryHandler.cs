@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using Salazki.Presentation.Elements;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Entities;
 using СontractAccountingSystem.Server.Services;
@@ -25,16 +26,25 @@ namespace СontractAccountingSystem.Server.Queries.Payments.GetPaymentList
             var kontrAgentList = await _repository.FindListAsync<KontrAgent>();
             var orgList = await _repository.FindListAsync<Organization>();
 
+            var statusList = await _repository.FindListAsync<PaymentStatus>();
+
+
             var paymentModelList = new List<PaymentTermModel>();
             var DBPayments = await _repository.FindListAsync<Payment>();
             foreach (var entity in DBPayments)
-                paymentModelList.Add(_mapper.Map<PaymentTermModel>(entity));
+            {
+                var newitem = _mapper.Map<PaymentTermModel>(entity);
+                var status = statusList.FirstOrDefault(x => x.Id == entity.PaymentStatusId);
+                newitem.Status = (PaymentStatusEnum)Enum.Parse(typeof(PaymentStatusEnum), status.Name);
+                paymentModelList.Add(newitem);
+            }
 
             foreach (var item in paymentModelList)
             {
                 var doc = docList.FirstOrDefault(x => x.Number == item.DocumentNumber);
                 var ka = kontrAgentList.FirstOrDefault(x => x.Id == doc.KontrAgentId);
                 var org = orgList.FirstOrDefault(x => x.Id == doc.OrganizationId);
+
 
                 item.DocumentNumber = doc.Number;
                 item.DocumentName = doc.Name;

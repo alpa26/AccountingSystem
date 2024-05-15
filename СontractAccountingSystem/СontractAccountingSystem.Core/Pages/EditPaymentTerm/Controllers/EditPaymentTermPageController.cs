@@ -27,7 +27,7 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm.Controllers
             model.DocumentName = Element.Model.DocumentName ?? "";
             model.KontrAgentName = Element.Model.KontrAgentName ?? new KontrAgentModel();
             model.OrganizationName = Element.Model.OrganizationName ?? new OrganizationModel();
-
+            model.Status = Element.Status.Value.Value;
             model.LaborHoursWorked = Element.LaborHours.Items.Select(x => { x.DocumentNumber = Element.DocumentNumber.Text; return x; }).ToArray();
             foreach (var item in model.LaborHoursWorked)
                 Console.WriteLine("?" + item.ToString());
@@ -35,6 +35,7 @@ namespace СontractAccountingSystem.Core.Pages.EditPaymentTerm.Controllers
         }
         private async Task Save(PaymentTermModel model)
         {
+            ModelManager.PublishModelUpdated(model);
             await Task.Delay(200);
         }
     }

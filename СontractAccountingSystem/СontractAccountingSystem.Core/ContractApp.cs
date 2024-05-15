@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using DK.WebClient.Core.Services;
 using System.Net;
 using СontractAccountingSystem.Core.Pages.Logon;
+using СontractAccountingSystem.Core.Services;
 
 namespace СontractAccountingSystem.Core
 {
@@ -55,6 +56,7 @@ namespace СontractAccountingSystem.Core
 
         protected override async Task<bool> TryAuthorize()
         {
+            SecurityService.UserRole = "admin";
             return true;
             var cookieService = Service<ICookieService>.GetInstance();
             var sid = await cookieService.GetValue(".AspNetCore.Cookies");

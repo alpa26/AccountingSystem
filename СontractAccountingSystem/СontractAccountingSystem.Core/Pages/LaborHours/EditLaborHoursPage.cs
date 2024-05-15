@@ -10,7 +10,7 @@ namespace СontractAccountingSystem.Core.Pages.LaborHours
         [Required]
         public WorkerAutocomplete WorkerName { get; } = new WorkerAutocomplete("Рабочий");
 
-        public ValueInput<decimal> HourlyRate { get; } = new ValueInput<decimal>("Рублей в час", x =>
+        public ValueInput<decimal> HourlyRate { get; } = new ValueInput<decimal>("Почасовая ставка", x =>
         {
             decimal result;
             if (decimal.TryParse(x, out result))

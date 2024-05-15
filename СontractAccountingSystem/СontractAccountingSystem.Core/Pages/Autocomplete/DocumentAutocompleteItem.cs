@@ -21,7 +21,7 @@ namespace СontractAccountingSystem.Core.Pages.Autocomplete
         protected override void Setup()
         {
             Name.Text = Model.DocumentName;
-            DocumentNumber.Text = Model.DocumentNumber;
+            DocumentNumber.Text = $"№{Model.DocumentNumber}";
         }
     }
 }

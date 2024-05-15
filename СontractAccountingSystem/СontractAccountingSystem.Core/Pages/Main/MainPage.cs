@@ -150,6 +150,7 @@ namespace СontractAccountingSystem.Core.Pages.Main
                     Application.Current.Logoff();
                 },
             };
+            supportButton.VisibleIfInRole("admin");
 
             supportButton = new BarButton(PanelIconType.Gear)
             {

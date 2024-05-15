@@ -21,7 +21,7 @@ namespace СontractAccountingSystem.Core.Pages.LaborHours1
         protected override void Setup()
         {
             WorkerName.Text = Model.WorkerName is null ? "" : Model.WorkerName.FullName;
-            HourlyRate.Text = Model.HourlyRate.ToString();
+            HourlyRate.Text = $"{Model.HourlyRate} р/ч";
             StaffPosition.Text = Model.WorkerName is null ? "" : Model.WorkerName.StaffPosition;
         }
         private Layout BuildLayout()

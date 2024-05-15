@@ -14,12 +14,12 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         internal bool IsNew { get; set; } = false;
 
         [Required]
-        public TextInput DocumentNumber { get; } = new TextInput("Номер Договора") { MaxLength = 7, MaxDisplayLength = 12, Placeholder = "0000-00", DisplayTextDelegate = x => $"№ {x}" };
+        public TextInput DocumentNumber { get; } = new TextInput("Номер Договора") { MaxLength = 7, MaxDisplayLength = 12, DisplayTextDelegate = x => $"№ {x}" };
 
         [Required]
         public DatePeriodInput Deadline { get; } = new DatePeriodInput("Срок исполнения") { Placeholder = "Введите значение" };
 
-        [Required]
+
         public ValueInput<decimal> FullPrice { get; } = new ValueInput<decimal>("Общая Сумма", x =>
         {
             decimal result;
@@ -37,7 +37,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         public KontrAgentAutocomplete KontrAgentName { get; } = new KontrAgentAutocomplete("КонтрАгент");
 
         [Required]
-        public OrganizationAutocomplete OrganizationName { get; } = new OrganizationAutocomplete("Название организации");
+        public OrganizationAutocomplete OrganizationName { get; } = new OrganizationAutocomplete("Исполнитель");
 
         public MultiValueAutocomplete<RelateDocumentModel> RelatedDocument { get; } = new MultiValueAutocomplete<RelateDocumentModel>("Доп Документы")
         {
@@ -56,7 +56,10 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
 
         public CollectionEditor<PaymentTermModel> PaymentTerms { get; } = new CollectionEditor<PaymentTermModel>("Сроки оплаты");
 
-        public CollectionEditor<LaborHoursModel> LaborHours { get; } = new CollectionEditor<LaborHoursModel>("Сроки оплаты");
+        public CollectionEditor<LaborHoursModel> LaborHours { get; } = new CollectionEditor<LaborHoursModel>("Почасовые ставки");
+
+        public Button CalculateButton { get; } = new Button($"Рассчитать");
+
 
         public EditDocumentPage(string type) : this(null, type)
         {
@@ -92,31 +95,48 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 Content.AddRange(
                 DocumentNumber,
                 Deadline,
-                FullPrice, PaymentType, PaymentTerms,
-                KontrAgentName, OrganizationName, RelatedDocument,
-                EssenceOfAgreement, Comment
-                );
-            }
-            if (Type == "Договор на фактические услуги")
-            {
-                Content.AddRange(
-                DocumentNumber,
-                Deadline, LaborHours,
-                FullPrice, PaymentType, PaymentTerms,
-                KontrAgentName, RelatedDocument,
-                EssenceOfAgreement, Comment
-                );
-            }
-            if (Type == "Лицензионный договор")
-            {
-                Content.AddRange(
-                DocumentNumber, EssenceOfAgreement,
-                Deadline,
-                FullPrice, PaymentType, PaymentTerms,
                 KontrAgentName, OrganizationName, RelatedDocument,
                 Comment
                 );
             }
+            if (Type == "Дополнительное соглашение к договору на раб.")
+            {
+                RelatedDocument.ValuesCountLimit = 1;
+                Content.AddRange(
+                DocumentNumber,
+                Deadline,
+                PaymentType, PaymentTerms, CalculateButton, FullPrice,
+                KontrAgentName, OrganizationName, RelatedDocument,
+                EssenceOfAgreement, Comment
+                );
+            }
+            if (Type == "Договор на фактические услуги" || Type == "Дополнительное соглашение к договору на усл.")
+            {
+                if (Type == "Дополнительное соглашение к договору на усл.")
+                    RelatedDocument.ValuesCountLimit = 1;
+                Content.AddRange(
+                DocumentNumber,
+                Deadline, LaborHours, KontrAgentName,
+                PaymentType, PaymentTerms, CalculateButton, FullPrice,
+                RelatedDocument,
+                EssenceOfAgreement, Comment
+                );
+            }
+            if (Type == "Лицензионный договор" || Type == "Дополнительное соглашение к договору на лиц.")
+            {
+                if (Type == "Дополнительное соглашение к договору на лиц.")
+                    RelatedDocument.ValuesCountLimit = 1;
+                Content.AddRange(
+                   DocumentNumber, Deadline,
+                   KontrAgentName, OrganizationName,
+                   PaymentType, PaymentTerms, CalculateButton, FullPrice,
+                   RelatedDocument,
+                   EssenceOfAgreement,
+                   Comment
+                   );
+            }
+
+            
             if (Model.DocumentNumber == null)
                 Title = $"Новый {Type.ToLower()}";
             else
@@ -148,6 +168,14 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
 
             if(Model.RelatedDocuments is not null && Model.RelatedDocuments.Length!=0)
                 RelatedDocument.Value = Model.RelatedDocuments;
+
+            CalculateButton.AsyncActionDelegate = async () =>
+            {
+                FullPrice.Value = 0;
+                if (PaymentTerms.Items.Count != 0)
+                    foreach (var item in PaymentTerms.Items)
+                        FullPrice.Value += item.Amount;
+            };
         }
 
         private ArchiveDocumentModel CreateModel()

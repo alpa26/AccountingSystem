@@ -16,6 +16,8 @@ namespace СontractAccountingSystem.Core.Models
         public KontrAgentModel KontrAgentName { get;set; }
         public OrganizationModel OrganizationName { get; set; }
 
+
+        public decimal FullPrice { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime DeadlineStart { get; set; }
         public DateTime DeadlineEnd { get; set; }

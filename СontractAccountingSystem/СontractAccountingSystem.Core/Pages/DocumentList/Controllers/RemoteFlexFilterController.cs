@@ -15,6 +15,8 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
     internal class RemoteFlexFilterController : Controller<DocumentListPage>
     {
         private readonly TokenType<string> _documentNumberTokenType = new("Номер документа");
+        private readonly TokenType<string> _documentTypeTokenType = new("Тип документа");
+
         //private readonly TokenType<string> _detailNameTokenType = new("Наименование документа");
         private readonly TokenType<KontrAgentModel> _kontrAgentTokenType = new("Контрагент");
         private readonly TokenType<OrganizationModel> _organozationTokenType = new("Исполнитель");
@@ -25,7 +27,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
 
         //private readonly TokenType<decimal> _priceTokenType = new("Сумма");
 
-
+        private int ListCount;
 
         /// <summary>
         /// Вызов любого метода Element.Filtering.SetupXXX переопределяет панель фильтрации, чтобы проверить как работатет данный способ фильтрации, нужно
@@ -43,7 +45,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
                 x.SearchTokensAsyncDelegate = SearchTokens;
                 x.BuildNewTokensFromPatternDelegate = BuildNewToken;
             });
-            Element.Filtering.HideFilterPanel();
+            Element.Filtering.ShowFilterPanel();
         }
 
         private Task<List<Token>> BuildNewToken(string text)
@@ -65,6 +67,15 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
                 if (!document.DocumentNumber.Contains(arg.SearchPattern))
                     continue;
                 possibleTokensList.Add(_documentNumberTokenType.GetToken(document.DocumentNumber));
+            }
+
+            foreach (var document in documents)
+            {
+                if (arg.UsedTokens.Any(x => x.Type == _documentTypeTokenType && x.Text == document.DocumentType))
+                    continue;
+                if (!document.DocumentType.Contains(arg.SearchPattern))
+                    continue;
+                possibleTokensList.Add(_documentTypeTokenType.GetToken(document.DocumentType));
             }
 
             var kontrAgents = await Service<IOrgStructureService>.GetInstance().LoadKontrAgents();
@@ -158,24 +169,31 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
 
         private async Task<List<DocumentListItemModel>> LoadItems(DataRequest request)
         {
-            var result = await LoadDocuments();
             var tokens = request.GetTokens();
-            if (tokens.Count == 0)
-                return result.ToList();
-            return result.Where(model =>
+            if (Element.DataSource.Models.Count == 0 || tokens.Count != 0)
             {
-                foreach (var token in tokens)
+                var result = await LoadDocuments();
+                
+                if (tokens.Count == 0)
+                    return result.ToList();
+                return result.Where(model =>
                 {
-                    if (!MatchToken(token, model))
-                        return false;
-                }
-                return true;
-            }).ToList();
+                    foreach (var token in tokens)
+                    {
+                        if (!MatchToken(token, model))
+                            return false;
+                    }
+                    return true;
+                }).ToList();
+            }
+            else return null;
         }
 
         private bool MatchToken(Token token, DocumentListItemModel model)
         {
             if (token.Type == _documentNumberTokenType && (model.DocumentNumber == token.Text))
+                return true;
+            if (token.Type == _documentTypeTokenType && (model.DocumentType == token.Text))
                 return true;
             if (token.Type == _kontrAgentTokenType && (model.KontrAgentName?.Id == ((Token<KontrAgentModel>)token).Value.Id))
                 return true;
@@ -191,6 +209,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
                 return true;
             return false;
         }
+
 
         public Dictionary<int, string> MonthDictionary = new Dictionary<int, string>()
         {
@@ -215,7 +234,8 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var res = await response.Content.ReadAsAsync<IEnumerable<DocumentListItemModel>>();
-                return res.OrderByDescending(x => x.CreateDate).ToList();
+                ListCount = res.Count();
+                return res.OrderByDescending(x => x.DeadlineEnd).ToList();
             }
             else return null;
         }

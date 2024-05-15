@@ -74,10 +74,10 @@ public class AppDbContext : DbContext
                 .HasDefaultValue(DateTime.UtcNow.Date)
         );
 
-        modelBuilder.Entity<Document>(user =>
-        {
-            user.HasIndex(x => x.Number).IsUnique(true);
-        });
+        //modelBuilder.Entity<Document>(user =>
+        //{
+        //    user.HasIndex(x => x.Number).IsUnique(true);
+        //});
 
         modelBuilder.Entity<User>(user =>
         {

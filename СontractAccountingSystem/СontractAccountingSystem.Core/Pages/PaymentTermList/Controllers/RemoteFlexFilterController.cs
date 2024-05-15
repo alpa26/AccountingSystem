@@ -157,19 +157,23 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList.Controllers
 
         private async Task<List<PaymentTermModel>> LoadItems(DataRequest request)
         {
-            var result = await LoadPayments();
             var tokens = request.GetTokens();
-            if (tokens.Count == 0)
-                return result.ToList();
-            return result.Where(model =>
+            if (Element.DataSource.Models.Count == 0 || tokens.Count != 0)
             {
-                foreach (var token in tokens)
+                var result = await LoadPayments();
+                if (tokens.Count == 0)
+                    return result.ToList();
+                return result.Where(model =>
                 {
-                    if (!MatchToken(token, model))
-                        return false;
-                }
-                return true;
-            }).ToList();
+                    foreach (var token in tokens)
+                    {
+                        if (!MatchToken(token, model))
+                            return false;
+                    }
+                    return true;
+                }).ToList();
+            }
+            else return null;
         }
 
         private bool MatchToken(Token token, PaymentTermModel model)

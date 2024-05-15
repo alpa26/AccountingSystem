@@ -85,12 +85,14 @@ namespace СontractAccountingSystem.Core.Services
             return PersonsList.ToList();
         }
 
-        public async Task<IList<RelateDocumentModel>> LoadRelatedDocumentsByType(string type)
+        public async Task<IList<RelateDocumentModel>> LoadRelatedDocumentsByType(string doctype)
         {
+            string restype = DocToRelatedDoc[doctype];
             await Task.Delay(500);
             var newList = new List<RelateDocumentModel>();
             foreach (var document in DocumentList)
-                if (document.DocumentType == type)
+            {
+                if (document.DocumentType == restype)
                     newList.Add(new RelateDocumentModel
                     {
                         Id = Guid.NewGuid(),
@@ -98,7 +100,20 @@ namespace СontractAccountingSystem.Core.Services
                         DocumentName = document.Name,
                         DocumentNumber = document.DocumentNumber
                     });
+            }   
             return newList.ToList();
         }
+
+        private Dictionary<string, string> DocToRelatedDoc = new Dictionary<string, string>()
+        {
+            {"Договор на работы","Дополнительное соглашение к договору на раб."},
+            {"Дополнительное соглашение к договору на раб.","Договор на работы"},
+
+            {"Договор на фактические услуги","Дополнительное соглашение к договору на усл."},
+            {"Дополнительное соглашение к договору на усл.","Договор на фактические услуги"},
+
+            {"Лицензионный договор","Дополнительное соглашение к договору на лиц."},
+            {"Дополнительное соглашение к договору на лиц.","Лицензионный договор"}
+        };
     }
 }
