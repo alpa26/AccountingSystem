@@ -31,7 +31,7 @@ namespace СontractAccountingSystem.Server.Controllers
         }
 
         [HttpGet("list")]
-        public async Task<List<KontrAgent>> GetKontrAgentList()
+        public async Task<List<KontrAgentModel>> GetKontrAgentList()
         {
             return await _mediator.Send(new KontrAgentListQuery());
         }

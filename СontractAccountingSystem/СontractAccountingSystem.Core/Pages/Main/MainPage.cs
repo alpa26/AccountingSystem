@@ -8,6 +8,8 @@ using СontractAccountingSystem.Core.Pages.Logon;
 using СontractAccountingSystem.Core.Pages.DocumentList;
 using СontractAccountingSystem.Core.Pages.DocumentTypesList;
 using СontractAccountingSystem.Core.Pages.PaymentTermList;
+using СontractAccountingSystem.Core.Pages.Settings;
+using СontractAccountingSystem.Core.Pages.Settings.EditUser;
 
 namespace СontractAccountingSystem.Core.Pages.Main
 {
@@ -22,8 +24,7 @@ namespace СontractAccountingSystem.Core.Pages.Main
         // Settings buttons
         public NavigationButton KontgAgentButton { get; private set; }
         public NavigationButton EmployeeButton { get; private set; }
-        public NavigationButton WorkersButton { get; private set; }
-        public NavigationButton OrganizationButton { get; private set; }
+        public NavigationButton Setting { get; private set; }
 
         public MainPage()
         {
@@ -73,11 +74,7 @@ namespace СontractAccountingSystem.Core.Pages.Main
                 Icon = PanelIconType.Book,
                 IndicatorCounter = 5,
                 IndicatorLevel = IndicatorLevel.High,
-                CreatePageDelegate = () => new EmptyPage
-                {
-                    Title = "Контрагенты",
-                    Text = "РАЗДЕЛ КОНТРАГЕНТОВ В РАЗРАБОТКЕ"
-                }
+                CreatePageDelegate = () => new KontrAgentTabsPage()
             };
 
             EmployeeButton = new NavigationButton
@@ -86,33 +83,14 @@ namespace СontractAccountingSystem.Core.Pages.Main
                 Icon = PanelIconType.Person,
                 IndicatorCounter = 25,
                 IndicatorLevel = IndicatorLevel.Low,
-                CreatePageDelegate = () => new EmptyPage
-                {
-                    Title = "Пользователи системы",
-                    Text = "РАЗДЕЛ ПОЛЬЗОВАТЕЛЕЙ В РАЗРАБОТКЕ"
-                }
+                CreatePageDelegate = () => new UserTypeListPage()
             };
 
-            WorkersButton = new NavigationButton
+            Setting = new NavigationButton
             {
-                Text = "Работники",
-                Icon = PanelIconType.Drawer,
-                CreatePageDelegate = () => new EmptyPage
-                {
-                    Title = "Работники",
-                    Text = "РАЗДЕЛ РАБОТНИКОВ В РАЗРАБОТКЕ"
-                }
-            };
-
-            OrganizationButton = new NavigationButton
-            {
-                Text = "Организации",
-                Icon = PanelIconType.DocumentBoxes,
-                CreatePageDelegate = () => new EmptyPage
-                {
-                    Title = "Организации",
-                    Text = "РАЗДЕЛ ОРГАНИЗАЦИЙ В РАЗРАБОТКЕ"
-                }
+                Text = "Сущности",
+                Icon = PanelIconType.Pile,
+                CreatePageDelegate = () => new SettingsPage()
             };
 
 
@@ -159,7 +137,7 @@ namespace СontractAccountingSystem.Core.Pages.Main
                 {
                     NavigationPanel.NavigationButtons.Clear();
                     NavigationPanel.NavigationButtons
-                                   .AddRange(KontgAgentButton, EmployeeButton, WorkersButton, OrganizationButton);
+                                   .AddRange(KontgAgentButton, EmployeeButton, Setting);
                     KontgAgentButton.Selected = true;
 
                     Application.Current.Bar.Buttons.Clear();

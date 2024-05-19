@@ -34,13 +34,10 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
                     return res.OrderByDescending(x => x.CreateDate).ToList();
                 }
                 else
-                {
                     return null;
-                }
             }
             else
                 return null;
-
         }
     }
 }

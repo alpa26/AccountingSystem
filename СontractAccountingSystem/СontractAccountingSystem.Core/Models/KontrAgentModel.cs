@@ -10,7 +10,16 @@ namespace СontractAccountingSystem.Core.Models
     {
         public Guid Id { get; set; }
         public string FullName { get; set; } = string.Empty;
+        public string Type { get; set; } = string.Empty;
         public string INN { get; set; } = string.Empty;
+        public string KPP { get; set; } = string.Empty;
+        public string OGRN { get; set; } = string.Empty;
+
+        public string ContactPersonName { get; set; } = string.Empty;
+        public string ContactPhone { get; set; } = string.Empty;
+        public string ContactEmail { get; set; } = string.Empty;
+        public string Address { get; set; } = string.Empty;
+
 
         public override bool Equals(object obj)
         {
