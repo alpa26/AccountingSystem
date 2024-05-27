@@ -27,18 +27,18 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditKontrAgent.Controlle
                 return ValidationResult.Valid;
             });
 
-            Element.KPP.ValidationRules.Add(x =>
-            {
-                if (Element.Type == "Юридическое лицо") { 
-                        int minLength = 9;
-                    if (x.Text.Length < minLength)
-                        return ValidationResult.Error($"КПП должен быть не менее {minLength} символов");
-                    if (!Regex.IsMatch(x.Text, @"^[0-9]+$"))
-                        return ValidationResult.Error($"КПП должен состоять из цифр");
-                }
-                return ValidationResult.Valid;
+            //Element.KPP.ValidationRules.Add(x =>
+            //{
+            //    if (Element.Type == "Юридическое лицо") { 
+            //            int minLength = 9;
+            //        if (x.Text.Length < minLength)
+            //            return ValidationResult.Error($"КПП должен быть не менее {minLength} символов");
+            //        if (!Regex.IsMatch(x.Text, @"^[0-9]+$"))
+            //            return ValidationResult.Error($"КПП должен состоять из цифр");
+            //    }
+            //    return ValidationResult.Valid;
 
-            });
+            //});
 
             Element.OGRN.ValidationRules.Add(x =>
             {
@@ -77,13 +77,13 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditKontrAgent.Controlle
                 return ValidationResult.Valid;
             });
 
-            Element.ContactEmail.ValidationRules.Add(x =>
-            {
-                Regex emailRegex = new Regex(@"^[-a-z0-9!#$%&'*+/=?^_`{|}~]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*@([a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\.)*(aero|arpa|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])$");
-                if (!emailRegex.IsMatch(x.Text.ToLower()))
-                    return ValidationResult.Error("Почта должна соответствовать формату: 'some@mail.ru'");
-                return ValidationResult.Valid;
-            });
+            //Element.ContactEmail.ValidationRules.Add(x =>
+            //{
+            //    Regex emailRegex = new Regex(@"^[-a-z0-9!#$%&'*+/=?^_`{|}~]+(\.[-a-z0-9!#$%&'*+/=?^_`{|}~]+)*@([a-z0-9]([-a-z0-9]{0,61}[a-z0-9])?\.)*(aero|arpa|asia|biz|cat|com|coop|edu|gov|info|int|jobs|mil|mobi|museum|name|net|org|pro|tel|travel|[a-z][a-z])$");
+            //    if (!emailRegex.IsMatch(x.Text.ToLower()))
+            //        return ValidationResult.Error("Почта должна соответствовать формату: 'some@mail.ru'");
+            //    return ValidationResult.Valid;
+            //});
         }
     }
 }

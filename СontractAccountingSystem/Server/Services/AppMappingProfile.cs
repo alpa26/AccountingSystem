@@ -13,14 +13,9 @@ namespace СontractAccountingSystem.Server.Services
             CreateMap<LaborHoursModel, WorkedLaborHours>().ReverseMap();
             CreateMap<PersonModel, Worker>().ReverseMap();
             CreateMap<KontrAgentModel, KontrAgent>().ReverseMap();
-
-
-            CreateMap<RelateDocuments, RelateDocumentModel>()
-                .ForMember(dest=> dest.RelatedDocumentId, opt => opt.MapFrom(src => src.Document2Id));
-
-
             CreateMap<Document, ArchiveDocumentModel>().ReverseMap();
-
+            CreateMap<RelateDocuments, RelateDocumentModel>()
+            .ForMember(dest => dest.RelatedDocumentId, opt => opt.MapFrom(src => src.Document2Id));
         }
     }
 }

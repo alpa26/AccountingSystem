@@ -6,6 +6,8 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using СontractAccountingSystem.Server.Entities;
+using СontractAccountingSystem.Server.Features.Commands.Users.UserRegister;
+using СontractAccountingSystem.Core.Models;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
@@ -13,25 +15,15 @@ namespace СontractAccountingSystem.Server.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        public class LoginRequestModel
-        {
-            public string Login { get; set; }
-            public string Password { get; set; }
-        }
 
-        public class RegRequestModel
-        {
-            public string Login { get; set; }
-            public string FullName { get; set; }
-            public string Mail { get; set; }
-            public string Password { get; set; }
-        }
+        private readonly IMediator _mediator;
 
         private readonly UserManager<User> _userManager;
 
-        public AuthController(UserManager<User> userManager, SignInManager<User> signInManager)
+        public AuthController(UserManager<User> userManager, IMediator mediator)
         {
             _userManager = userManager;
+            _mediator = mediator;
         }
 
 
@@ -39,15 +31,12 @@ namespace СontractAccountingSystem.Server.Controllers
         public async Task<IActionResult> Login([FromBody] LoginRequestModel request)
         {
             if (request == null)
-            {
                 return BadRequest("Invalid request data");
-            }
 
             var user = await _userManager.FindByNameAsync(request.Login);
             if (user is null)
                 BadRequest("User Not Found"); 
             
-
             if (await _userManager.CheckPasswordAsync(user, request.Password)) {
                 var claims = new List<Claim> { new Claim(ClaimTypes.Name , user.UserName) };
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
@@ -60,35 +49,17 @@ namespace СontractAccountingSystem.Server.Controllers
 
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegRequestModel request)
+        public async Task<IActionResult> Register([FromBody] UserModel request)
         {
             if (request == null)
                 return BadRequest("Invalid request data");
 
-            var fullname = request.FullName.Split(' ');
-            var user = new User
-            {
-                UserName = request.Login,
-                FirstName = fullname[1],
-                SecondName = fullname[0],
-                LastName = fullname[2],
-                Email = request.Mail,
-                Role = null,
-                RoleId = new Guid("00000000-0000-0000-0000-000000000000")
-            };
-            try {
-                var res = await _userManager.CreateAsync(user, request.Password);
-                if (res.Succeeded)
-                {
-                    return Ok("Succeeded");
-                }
-                else
-                    return BadRequest("NotSucceeded");
-            }
-            catch (Exception ex) {
+            var res = await _mediator.Send(new UserCreateCommand(request));
 
-            }
-            return BadRequest("NotSucceeded");
+            if (res.Success)
+                return Ok("Succeeded");
+            else
+                return BadRequest(res.Message);
         }
 
         [HttpPost("logout")]
@@ -99,4 +70,9 @@ namespace СontractAccountingSystem.Server.Controllers
         }
     }
 
+    public class LoginRequestModel
+    {
+        public string Login { get; set; }
+        public string Password { get; set; }
+    }
 }

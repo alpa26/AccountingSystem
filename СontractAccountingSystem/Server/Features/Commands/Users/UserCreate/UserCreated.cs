@@ -1,13 +1,6 @@
-﻿using MediatR;
-
-namespace СontractAccountingSystem.Server.Commands.Users.UserCreate
+﻿namespace СontractAccountingSystem.Server.Features.Commands.Users.UserRegister
 {
-    public class UserCreated : INotification
+    public class UserCreated
     {
-        public Guid Id { get; set; }
-        public UserCreated(Guid id)
-        {
-            Id = id;
-        }
     }
 }

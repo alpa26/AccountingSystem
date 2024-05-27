@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using СontractAccountingSystem.Server.Entities;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Queries.Users.GetUserByName;
-using СontractAccountingSystem.Server.Commands.Users.UserCreate;
 using СontractAccountingSystem.Server.Queries.Users.GetUsersList;
 using СontractAccountingSystem.Server.Queries.Roles.GetRoleList;
 using СontractAccountingSystem.Server.Features.Queries.Users.GetWorkerList;
@@ -21,11 +20,11 @@ namespace СontractAccountingSystem.Server.Controllers
             _mediator = mediator;
         }
 
-        [HttpPost("create")]
-        public async Task<Guid> CreateUser(UserCreateCommand cmd)
-        {
-            return await _mediator.Send(cmd);
-        }
+        //[HttpPost("create")]
+        //public async Task<Guid> CreateUser(UserCreateCommand cmd)
+        //{
+        //    return await _mediator.Send(cmd);
+        //}
 
         [HttpPost("getbyname")]
         public async Task<User> GetUserList(UserByNameQuery query)

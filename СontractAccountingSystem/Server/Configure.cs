@@ -1,6 +1,9 @@
 ﻿using FluentValidation;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 using СontractAccountingSystem.Server.Services;
+using СontractAccountingSystem.Server.Services.Interfaces;
+using СontractAccountingSystem.Server.Settings;
 
 namespace СontractAccountingSystem.Server
 {
@@ -15,6 +18,7 @@ namespace СontractAccountingSystem.Server
 
             services.AddTransient<Repository>();
             services.AddTransient<DocumentService>();
+            services.AddSingleton<IEmailService, EmailService>();
 
 
             services.AddAutoMapper(typeof(AppMappingProfile));

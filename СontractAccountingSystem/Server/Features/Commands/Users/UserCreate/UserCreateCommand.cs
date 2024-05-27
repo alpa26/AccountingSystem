@@ -1,12 +1,16 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Server.Controllers;
 using СontractAccountingSystem.Server.Entities;
+using static СontractAccountingSystem.Server.Controllers.AuthController;
 
-namespace СontractAccountingSystem.Server.Commands.Users.UserCreate
+namespace СontractAccountingSystem.Server.Features.Commands.Users.UserRegister
 {
-    public class UserCreateCommand : IRequest<Guid>
+    public class UserCreateCommand : IRequest<RequestResult>
     {
-        public User User { get; set; }
-        public UserCreateCommand(User user)
+        public UserModel User { get; set; }
+        public UserCreateCommand(UserModel user)
         {
             User = user;
         }

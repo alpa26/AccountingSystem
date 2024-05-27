@@ -26,7 +26,7 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditUser.Controllers
             var model = new UserModel { Id = Element.Model.Id };
             model.FullName = $"{Element.SecondName.Value} {Element.FirstName.Value} {Element.LastName.Value}";
             model.Email = Element.Email.Value;
-            model.Phone = Element.Phone.Value;
+            model.Phone = Element.Phone.Value ?? "";
             model.Login = Element.Login.Text;
             model.Role = Element.Role.Value.Value;
 
@@ -36,14 +36,14 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditUser.Controllers
         {
             await Task.Delay(200);
 
-            /*
+
             using StringContent jsonContent = new(
                     JsonSerializer.Serialize(model),
                     Encoding.UTF8,
                     "application/json");
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-                using HttpResponseMessage response = await httpClient.PostAsync("api/auth/register", jsonContent);
-            */
+            using HttpResponseMessage response = await httpClient.PostAsync("api/auth/register", jsonContent);
+
         }
     }
 }

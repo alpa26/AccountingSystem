@@ -9,6 +9,9 @@ using ÑontractAccountingSystem.Server.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ÑontractAccountingSystem.Server.Entities;
+using Microsoft.Extensions.Configuration;
+using System;
+using ÑontractAccountingSystem.Server.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +21,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
+builder.Services.Configure<SmtpSetting>(
+    builder.Configuration
+        .GetSection("SMTP")
+        .GetSection("Providers")
+        .GetSection("mailersend")
+    );
 
 builder.Services.AddIdentity<User, Role>(options =>
 {

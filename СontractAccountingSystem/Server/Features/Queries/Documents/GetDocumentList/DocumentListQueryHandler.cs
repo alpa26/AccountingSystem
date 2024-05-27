@@ -42,8 +42,8 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
 
                 var paymentModelList = new List<PaymentTermModel>();
                 var paymententitiesList = await _repository.FindListByFilterAsync<Payment, Guid>("DocumentId", doc.Id);
-                foreach (var entity in paymententitiesList)
-                    paymentModelList.Add(_mapper.Map<PaymentTermModel>(entity));
+                foreach (var payment in paymententitiesList)
+                    paymentModelList.Add(_mapper.Map<PaymentTermModel>(payment));
 
 
                 foreach (var item in paymentModelList)
