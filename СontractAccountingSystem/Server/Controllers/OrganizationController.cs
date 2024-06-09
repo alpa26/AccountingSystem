@@ -39,7 +39,7 @@ namespace СontractAccountingSystem.Server.Controllers
         public async Task<List<OrganizationModel>> GetOrganizationList()
         {
             var claimrole = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
-            if (claimrole.Equals("admin"))
+            if (claimrole.Equals("admin") || claimrole.Equals("director"))
                 return await _mediator.Send(new OrganizationListQuery());
             else
             {
