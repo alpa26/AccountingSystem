@@ -6,6 +6,8 @@ using СontractAccountingSystem.Server.Entities.Interfaces;
 using System.Reflection;
 using Salazki.Presentation.Elements;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.Linq.Expressions;
+using Newtonsoft.Json.Linq;
 
 namespace СontractAccountingSystem.Server.Services
 {
@@ -59,17 +61,12 @@ namespace СontractAccountingSystem.Server.Services
             return await GetCollection<T>().ToListAsync();
         }
 
-        //public Task<List<T>> FindAsync<T>(Expression<Func<T, bool>> predicate) where T : class, IEntity
-        //{
-        //    throw new NotImplementedException();
-        //}
 
 
         public async Task<T?> FindByIdAsync<T>(Guid? id) where T : class, IEntity
         {
             return await GetCollection<T>().FirstOrDefaultAsync(x => x.Id == id);
         }
-
 
         //FindListByFilterAsync<RelateDocuments,Guid>("Document1Id", id);
         public async Task<List<T>> FindListByFilterAsync<T, TValue>(string? stringProperty, TValue value) where T : class, IEntity

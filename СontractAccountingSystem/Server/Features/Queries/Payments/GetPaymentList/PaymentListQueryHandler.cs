@@ -30,7 +30,9 @@ namespace СontractAccountingSystem.Server.Queries.Payments.GetPaymentList
 
 
             var paymentModelList = new List<PaymentTermModel>();
+
             var DBPayments = await _repository.FindListAsync<Payment>();
+
             foreach (var entity in DBPayments)
             {
                 var newitem = _mapper.Map<PaymentTermModel>(entity);

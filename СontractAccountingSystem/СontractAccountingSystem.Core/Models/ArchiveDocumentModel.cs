@@ -18,9 +18,7 @@ namespace СontractAccountingSystem.Core.Models
         public OrganizationModel OrganizationName { get; set; }
         public decimal FullPrice { get; set; }
         public string Comment { get; set; }
-
-        //public string PaymentType { get; set; }
-
+        public DocStatusEnum Status { get; set; }
         public PaymentTypeEnum PaymentType { get; set; }
         public DateTime CreateDate { get; set; }
         public DateTime DeadlineStart { get; set; }

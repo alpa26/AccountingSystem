@@ -8,6 +8,7 @@ using System.Security.Claims;
 using СontractAccountingSystem.Server.Entities;
 using СontractAccountingSystem.Server.Features.Commands.Users.UserRegister;
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Server.Queries.Users.GetUserByName;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
@@ -17,11 +18,12 @@ namespace СontractAccountingSystem.Server.Controllers
     {
 
         private readonly IMediator _mediator;
-
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
-        public AuthController(UserManager<User> userManager, IMediator mediator)
+        public AuthController(UserManager<User> userManager, IMediator mediator, SignInManager<User> signInManager)
         {
+            _signInManager = signInManager;
             _userManager = userManager;
             _mediator = mediator;
         }
@@ -32,21 +34,24 @@ namespace СontractAccountingSystem.Server.Controllers
         {
             if (request == null)
                 return BadRequest("Invalid request data");
-
-            var user = await _userManager.FindByNameAsync(request.Login);
+            var user = await _mediator.Send(new UserByNameQuery(request.Login));
             if (user is null)
-                BadRequest("User Not Found"); 
-            
-            if (await _userManager.CheckPasswordAsync(user, request.Password)) {
-                var claims = new List<Claim> { new Claim(ClaimTypes.Name , user.UserName) };
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, 
-                    new ClaimsPrincipal(new ClaimsIdentity(claims, "Cookies")));
-                return Ok("Request successfully processed");
-
+                return BadRequest("User Not Found");
+            try
+            {
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
+                            new ClaimsPrincipal(new ClaimsIdentity(new List<Claim>(), "Cookies")));
+                var result = await _signInManager.PasswordSignInAsync(user.UserName, request.Password, true, lockoutOnFailure: false);
+                if (result.Succeeded)
+                {
+                    HttpContext.Response.Headers.Add("Role", user.Role.Name);
+                    return Ok();
+                }
+                else HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             }
+            catch (Exception ex) { }
             return BadRequest("Wrond password");
         }
-
 
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserModel request)
@@ -57,7 +62,7 @@ namespace СontractAccountingSystem.Server.Controllers
             var res = await _mediator.Send(new UserCreateCommand(request));
 
             if (res.Success)
-                return Ok("Succeeded");
+                return Ok();
             else
                 return BadRequest(res.Message);
         }
@@ -65,8 +70,9 @@ namespace СontractAccountingSystem.Server.Controllers
         [HttpPost("logout")]
         public async Task Logout()
         {
+            await _signInManager.SignOutAsync();
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            Ok("Succeeded");
+            Ok();
         }
     }
 

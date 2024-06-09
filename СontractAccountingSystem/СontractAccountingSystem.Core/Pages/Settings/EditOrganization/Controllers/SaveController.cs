@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Pages.Settings.EditWorker;
+using System.Text.Json;
+using СontractAccountingSystem.Core.Services;
+using СontractAccountingSystem.Core.Services.Interfaces;
 
 namespace СontractAccountingSystem.Core.Pages.Settings.EditOrganization.Controllers
 {
@@ -26,16 +29,12 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditOrganization.Control
         }
         private async Task Save(OrganizationModel model)
         {
-            await Task.Delay(200);
-
-            /*
             using StringContent jsonContent = new(
                     JsonSerializer.Serialize(model),
                     Encoding.UTF8,
                     "application/json");
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-                using HttpResponseMessage response = await httpClient.PostAsync("api/auth/register", jsonContent);
-            */
+            using HttpResponseMessage response = await httpClient.PostAsync("api/organizations/create", jsonContent);
         }
     }
 }

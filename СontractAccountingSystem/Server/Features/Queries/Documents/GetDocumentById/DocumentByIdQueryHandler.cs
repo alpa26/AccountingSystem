@@ -32,6 +32,7 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
             var doc = await _repository.FindByIdAsync<Document>(request.Id);
             doc.Type = await _repository.FindByIdAsync<DocType>(doc.TypeId);
             doc.PaymentType = await _repository.FindByIdAsync<DocPayType>(doc.PaymentTypeId);
+            doc.DocStatus = await _repository.FindByIdAsync<DocStatus>(doc.DocStatusId);
             doc.KontrAgent = await _repository.FindByIdAsync<KontrAgent>(doc.KontrAgentId);
             doc.Organization = await _repository.FindByIdAsync<Organization>(doc.OrganizationId);
 
@@ -88,6 +89,8 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
                 //},
                 Comment = doc.Comment,
                 PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), doc.PaymentType.Name),
+                Status = (DocStatusEnum)Enum.Parse(typeof(DocStatusEnum), doc.DocStatus.Name),
+
                 OrganizationName = doc.Organization == null ? null : new OrganizationModel() { Id = doc.Organization.Id, Name = doc.Organization.Name },
                 CreateDate = doc.CreatedDate,
                 DeadlineStart = doc.DeadlineStart,

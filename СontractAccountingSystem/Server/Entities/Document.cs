@@ -31,7 +31,6 @@ namespace СontractAccountingSystem.Server.Entities
         public Guid PaymentTypeId { get; set; }
         public Guid KontrAgentId { get; set; }
         public Guid? OrganizationId { get; set; }
-        public Guid? EmployeeId { get; set; }
 
 
         // Другие свойства
@@ -45,9 +44,8 @@ namespace СontractAccountingSystem.Server.Entities
         public Organization Organization { get; set; }
         [NotMapped]
         public KontrAgent KontrAgent { get; set; } 
-        [NotMapped]
-        public User Employee { get; set; }
 
+        public List<User> Users { get; } = new List<User>();
 
 
         //[NotMapped]

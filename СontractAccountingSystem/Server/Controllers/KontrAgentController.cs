@@ -1,11 +1,15 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Commands.KontrAgents.KontrAgentCreate;
 using СontractAccountingSystem.Server.Entities;
+using СontractAccountingSystem.Server.Queries.Documents.GetDocumentList;
+using СontractAccountingSystem.Server.Queries.Documents.GetDocumentListByAccess;
 using СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentById;
 using СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentList;
+using СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentListByAccess;
 
 
 namespace СontractAccountingSystem.Server.Controllers
@@ -21,10 +25,10 @@ namespace СontractAccountingSystem.Server.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreateKontrAgent([FromBody] KontrAgent request)
+        public async Task<IActionResult> CreateKontrAgent([FromBody] KontrAgentModel request)
         {
             var res = await _mediator.Send(new KontrAgentCreateCommand(request));
-            if (res)
+            if (res.Success)
                 return Ok();
             else
                 return BadRequest();
@@ -33,7 +37,15 @@ namespace СontractAccountingSystem.Server.Controllers
         [HttpGet("list")]
         public async Task<List<KontrAgentModel>> GetKontrAgentList()
         {
-            return await _mediator.Send(new KontrAgentListQuery());
+            var claimrole = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
+            if (claimrole.Equals("admin"))
+                return await _mediator.Send(new KontrAgentListQuery());
+            else
+            {
+                string claimid = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                return await _mediator.Send(new KontrAgentListByAccessQuery(new Guid(claimid)));
+
+            }
         }
 
         [HttpGet("getbyid")]

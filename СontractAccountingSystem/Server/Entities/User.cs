@@ -24,6 +24,10 @@ public class User : IdentityUser<Guid>, IEntity
     public Guid RoleId { get; set; }
     public Role Role { get; set; } = new();
 
+    public List<Document> Documents { get; set; } = new List<Document>();
+    public List<KontrAgent> KontrAgents { get; set; } = new List<KontrAgent>();
+    public List<Organization> Organizations { get; set; } = new List<Organization>();
+
     public User()
     {
 

@@ -13,6 +13,8 @@ public class Organization : IEntity
     [Key]
     public Guid Id { get; set; }
     public string Name { get; set; } = "null";
+    public List<User> Users { get; } = new List<User>();
+
     public Organization()
     {
     }

@@ -42,10 +42,9 @@ namespace СontractAccountingSystem.Core.Pages.Logon
                 var response = await httpClient.PostAsync("api/auth/login", jsonContent);
                 if (response.IsSuccessStatusCode)
                 {
-                    IEnumerable<string> cookies = response.Headers.SingleOrDefault(header => header.Key == "Set-Cookie").Value;
-
+                    response.Headers.TryGetValues("Role", out var role);
+                    SecurityService.UserRole = role?.FirstOrDefault();
                     Close();
-
                 }
                 else
                 {

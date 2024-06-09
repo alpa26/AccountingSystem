@@ -25,12 +25,6 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList.Controllers
 
         //private readonly TokenType<decimal> _priceTokenType = new("Сумма");
 
-
-
-        /// <summary>
-        /// Вызов любого метода Element.Filtering.SetupXXX переопределяет панель фильтрации, чтобы проверить как работатет данный способ фильтрации, нужно
-        /// в CanBind вернуть true, а в XXXFilterExampleController установить CanBind => false;
-        /// </summary>
         protected override bool CanStart => true;
 
         protected override void Start()
@@ -162,8 +156,11 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList.Controllers
             {
                 var result = await LoadPayments();
                 if (tokens.Count == 0)
+                {
+                    Element.Subtitle = $"Общая сумма: {result.Sum(x => x.Amount)}";
                     return result.ToList();
-                return result.Where(model =>
+                }
+                var res = result.Where(model =>
                 {
                     foreach (var token in tokens)
                     {
@@ -172,6 +169,8 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList.Controllers
                     }
                     return true;
                 }).ToList();
+                Element.Subtitle = $"Общая сумма: {res.Sum(x => x.Amount)}";
+                return res;
             }
             else return null;
         }

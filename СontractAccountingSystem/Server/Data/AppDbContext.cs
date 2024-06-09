@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Salazki.Security;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using СontractAccountingSystem.Server.Entities.Interfaces;
 
 namespace СontractAccountingSystem.Server.Data;
 
-public class AppDbContext : DbContext
+public class AppDbContext : IdentityDbContext<User, Role, Guid>
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
@@ -45,6 +46,7 @@ public class AppDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Worker>().ToTable("workers");
         modelBuilder.Entity<DocStatus>().ToTable("doc_statuses");
         modelBuilder.Entity<DocType>().ToTable("document_types");
@@ -74,6 +76,34 @@ public class AppDbContext : DbContext
                 .HasDefaultValue(DateTime.UtcNow.Date)
         );
 
+        modelBuilder.Entity<User>()
+        .HasMany(e => e.Documents)
+        .WithMany(e => e.Users)
+        .UsingEntity(
+            "userdocument",
+            r => r.HasOne(typeof(Document)).WithMany().HasForeignKey("DocumentId"),
+            l => l.HasOne(typeof(User)).WithMany().HasForeignKey("UserId"),
+            j => j.HasKey("UserId", "DocumentId"));
+
+
+        modelBuilder.Entity<User>()
+        .HasMany(e => e.KontrAgents)
+        .WithMany(e => e.Users)
+        .UsingEntity(
+            "userkontragent",
+            r => r.HasOne(typeof(KontrAgent)).WithMany().HasForeignKey("KontrAgentId"),
+            l => l.HasOne(typeof(User)).WithMany().HasForeignKey("UserId"),
+            j => j.HasKey("UserId", "KontrAgentId"));
+
+        modelBuilder.Entity<User>()
+        .HasMany(e => e.Organizations)
+        .WithMany(e => e.Users)
+        .UsingEntity(
+            "userorganization",
+            l => l.HasOne(typeof(Organization)).WithMany().HasForeignKey("OrganizationId"),
+            r => r.HasOne(typeof(User)).WithMany().HasForeignKey("UserId"),
+            j => j.HasKey("UserId", "OrganizationId"));
+
         //modelBuilder.Entity<Document>(user =>
         //{
         //    user.HasIndex(x => x.Number).IsUnique(true);
@@ -102,8 +132,6 @@ public class AppDbContext : DbContext
         modelBuilder.Entity<Document>().HasOne(d => d.PaymentType).WithMany()
         .HasForeignKey(x => x.PaymentTypeId).OnDelete(DeleteBehavior.Restrict);
 
-        modelBuilder.Entity<Document>().HasOne(d => d.Employee).WithMany()
-        .HasForeignKey(x => x.EmployeeId).OnDelete(DeleteBehavior.Restrict).IsRequired(false);
 
         modelBuilder.Entity<Document>().HasOne(d => d.KontrAgent).WithMany()
         .HasForeignKey(x => x.KontrAgentId).OnDelete(DeleteBehavior.Restrict);

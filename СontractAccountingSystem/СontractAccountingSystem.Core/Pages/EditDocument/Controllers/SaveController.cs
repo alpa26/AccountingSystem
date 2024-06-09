@@ -50,6 +50,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument.Controllers
                 KontrAgentName = Element.KontrAgentName.Value,
                 FullPrice = Element.FullPrice.Value,
                 Comment = Element.Comment.Text.IsNullOrEmpty() ? "Нет комментариев" : Element.Comment.Text,
+                Status = Element.Status.Value.Value,
                 PaymentType = Element.PaymentType.Value.Value,
                 CreateDate = DateTime.Now,
                 DeadlineStart = Element.Deadline.Value.From.Value,

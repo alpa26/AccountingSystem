@@ -22,6 +22,8 @@ namespace СontractAccountingSystem.Server.Features.CreateDocument
         public async Task<Guid> Handle(CreateDocumentCommand request, CancellationToken cancellationToken)
         {
             var paymentTypes = await _repository.FindListAsync<DocPayType>();
+            var docStatuses = await _repository.FindListAsync<DocStatus>();
+
             var doctypes = await _repository.FindListAsync<DocType>();
             Document doc = null;
             doc = new Document()
@@ -40,8 +42,8 @@ namespace СontractAccountingSystem.Server.Features.CreateDocument
                 KontrAgentId = request.Document.KontrAgentName.Id,
                 TypeId = doctypes.First(x => x.Name == request.Document.DocumentType).Id,
                 PaymentTypeId = paymentTypes.First(x => x.Name == request.Document.PaymentType.ToString()).Id,
+                DocStatusId = docStatuses.First(x => x.Name == request.Document.Status.ToString()).Id,
 
-                EmployeeId = new Guid("00000000-0000-0000-0000-000000000000"), //!
             };
 
             var res = await _repository.CreateAsync(doc);

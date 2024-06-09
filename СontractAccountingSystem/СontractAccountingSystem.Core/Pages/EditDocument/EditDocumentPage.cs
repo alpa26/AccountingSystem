@@ -19,6 +19,8 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
         [Required]
         public DatePeriodInput Deadline { get; } = new DatePeriodInput("Срок исполнения") { Placeholder = "Введите значение" };
 
+        [Required]
+        public ComboBox<DocStatusEnum?> Status { get; } = new ComboBox<DocStatusEnum?>("Статус");
 
         public ValueInput<decimal> FullPrice { get; } = new ValueInput<decimal>("Общая Сумма", x =>
         {
@@ -95,6 +97,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 Content.AddRange(
                 DocumentNumber,
                 Deadline,
+                Status,
                 KontrAgentName, OrganizationName, RelatedDocument,
                 Comment
                 );
@@ -105,6 +108,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                 Content.AddRange(
                 DocumentNumber,
                 Deadline,
+                Status,
                 PaymentType, PaymentTerms, CalculateButton, FullPrice,
                 KontrAgentName, OrganizationName, RelatedDocument,
                 EssenceOfAgreement, Comment
@@ -116,7 +120,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
                     RelatedDocument.ValuesCountLimit = 1;
                 Content.AddRange(
                 DocumentNumber,
-                Deadline, LaborHours, KontrAgentName,
+                Deadline, Status, LaborHours, KontrAgentName,
                 PaymentType, PaymentTerms, CalculateButton, FullPrice,
                 RelatedDocument,
                 EssenceOfAgreement, Comment
@@ -148,6 +152,7 @@ namespace СontractAccountingSystem.Core.Pages.EditDocument
             KontrAgentName.Value = Model.KontrAgentName;
             OrganizationName.Value = Model.OrganizationName;
             Comment.Text = Model.Comment;
+            Status.Value = Model.Status;
             PaymentType.Value = Model.PaymentType;
             WorkerName.Value = Model.WorkerName;
             if (Model.DocumentNumber != null)

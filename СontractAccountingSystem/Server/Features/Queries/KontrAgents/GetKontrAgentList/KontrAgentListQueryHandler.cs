@@ -29,6 +29,7 @@ namespace СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentList
             foreach (var item in items)
             {
                 var model = _mapper.Map<KontrAgentModel>(item);
+                model.ContactPersonName = item.ContactPerson;
                 var type = kaTypes.FirstOrDefault(x => x.Id == item.TypeId);
                 model.Type = type.Name;
                 reslist.Add(model);

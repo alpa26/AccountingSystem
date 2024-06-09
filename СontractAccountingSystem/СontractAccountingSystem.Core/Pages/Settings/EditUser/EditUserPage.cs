@@ -6,11 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
+using СontractAccountingSystem.Core.Pages.Autocomplete;
 
 namespace СontractAccountingSystem.Core.Pages.Settings.EditUser
 {
     public class EditUserPage : EditFormPage<UserModel>
     {
+        internal bool IsNew { get; set; } = false;
         [Required]
         public TextInput Login { get; } = new TextInput("Придумайте логин");
         [Required]
@@ -26,30 +28,46 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditUser
 
         public TextInput Phone { get; } = new TextInput("Телефон");
 
+        public MultiValueAutocomplete<KontrAgentModel> KontrAgents { get; } =
+            new MultiValueAutocomplete<KontrAgentModel>("Контрагенты");
+        public MultiValueAutocomplete<OrganizationModel> Organizations { get; } =
+            new MultiValueAutocomplete<OrganizationModel>("Организации");
+        public MultiValueAutocomplete<RelateDocumentModel> Documents { get; } = 
+            new MultiValueAutocomplete<RelateDocumentModel>("Доп Документы");
 
         public EditUserPage(UserModel model) : base(model)
         {
+            Title = "Новый пользователь";
+            Subtitle = "Укажите данные пользователя и права доступа";
             CreateModelDelegate = CreateModel;
 
-            if(Model.FullName is not null)
-            {
-                var name = Model.FullName.Split(' ');
-                if (name.Length == 3)
-                {
-                    FirstName.Text = name[1];
-                    SecondName.Text = name[0];
-                    LastName.Text = name[2];
-                }
-            }
+            KontrAgents.BuildAutocompleteDelegate = () => new KontrAgentAutocomplete() { Placeholder = "Введите контрагента" };
+            Organizations.BuildAutocompleteDelegate = () => new OrganizationAutocomplete() { Placeholder = "Введите исполнителя" };
+            Documents.BuildAutocompleteDelegate = () => new DocumentAutocomplete() { Placeholder = "Введите номер документа или тип" };
 
+        }
+
+        protected override void Setup()
+        {
             Login.Text = Model.Login;
+            FirstName.Text = Model.FirstName;
+            SecondName.Text = Model.SecondName;
+            LastName.Text = Model.LastName;
+
+            Role.Value = Model.Role;
             Email.Text = Model.Email;
             Phone.Text = Model.Phone;
-
+            if (Model.KontrAgents is not null && Model.KontrAgents.Count != 0)
+                KontrAgents.Value = Model.KontrAgents.ToArray();
+            if (Model.Organizations is not null && Model.Organizations.Count != 0)
+                Organizations.Value = Model.Organizations.ToArray();
+            if (Model.Documents is not null && Model.Documents.Count != 0)
+                Documents.Value = Model.Documents.ToArray();
         }
 
         private UserModel CreateModel()
         {
+            IsNew = true;
             return new UserModel()
             {
                 Id = new Guid()

@@ -11,6 +11,7 @@ using DK.WebClient.Core.Services;
 using System.Net;
 using СontractAccountingSystem.Core.Pages.Logon;
 using СontractAccountingSystem.Core.Services;
+using СontractAccountingSystem.Core.Services.Interfaces;
 
 namespace СontractAccountingSystem.Core
 {
@@ -57,13 +58,13 @@ namespace СontractAccountingSystem.Core
         protected override async Task<bool> TryAuthorize()
         {
             SecurityService.UserRole = "admin";
-            return true;
             var cookieService = Service<ICookieService>.GetInstance();
             var sid = await cookieService.GetValue(".AspNetCore.Cookies");
             try
             {
                 if ((!string.IsNullOrEmpty(sid)))
                 {
+                    SetRole();
                     return true;
                 }
             }
@@ -79,6 +80,14 @@ namespace СontractAccountingSystem.Core
                 } 
             }
             return false;
+        }
+
+        public async void SetRole()
+        {
+            var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
+            var response = await httpClient.GetAsync("api/users/getrole");
+            response.Headers.TryGetValues("Role", out var role);
+            SecurityService.UserRole = role?.FirstOrDefault();
         }
     }
 }

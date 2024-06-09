@@ -1,11 +1,15 @@
 ﻿using Salazki.Presentation.Elements;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace СontractAccountingSystem.Core.Pages.DocumentList
 {
@@ -53,51 +57,34 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList
             else if (Model.DocumentType == "Дополнительное соглашение к договору на лиц.")
                 DocumentType.Text = "Д.С.  к  Д.  на лиц.";
             Badges.Items.Clear();
-            if (DateTime.Now < Model.DeadlineStart && Model.FullPrice != 0)
+
+
+            if (DateTime.Now > Model.DeadlineEnd && Model.Status != DocStatusEnum.Expired || Model.Status == DocStatusEnum.Expired)
                 Badges.Items.AddRange(new Badge
                 {
-                    Text = "Активен",
-                    Color = BadgeColor.Success
+                    Text = "Завершен",
+                    Color = BadgeColor.Default
                 }
                 );
-            else if (DateTime.Now < Model.DeadlineStart && Model.FullPrice == 0)
+            else
+            {
+                string text = typeof(DocStatusEnum)
+                                .GetField(Model.Status.ToString())
+                                .GetCustomAttribute<DescriptionAttribute>()
+                                ?.Description;
+                BadgeColor color = BadgeColor.Default;
+                if (Model.Status == DocStatusEnum.Active)
+                    color = BadgeColor.Success;
+                else if (Model.Status == DocStatusEnum.CustomerApproval || Model.Status == DocStatusEnum.Calculation)
+                    color = BadgeColor.Primary;
+                else if(Model.Status == DocStatusEnum.Completed)
+                    color = BadgeColor.Default;
                 Badges.Items.AddRange(new Badge
                 {
-                    Text = "На согласовании",
-                    Color = BadgeColor.Primary
+                    Text = text,
+                    Color = color
                 }
                 );
-            else { 
-                if (DateTime.Now > Model.DeadlineEnd && (Model.FullPrice != 0 || Model.DocumentType == "Договор на работы"))
-                    Badges.Items.AddRange(new Badge
-                    {
-                        Text = "Завершен",
-                        Color = BadgeColor.Default
-                    }
-                    );
-                else if (DateTime.Now > Model.DeadlineEnd && Model.FullPrice == 0 && Model.DocumentType != "Договор на работы")
-                    Badges.Items.AddRange(new Badge
-                    {
-                        Text = "Просрочен",
-                        Color = BadgeColor.Danger
-                    }
-                    );
-                else {
-                    if (Model.DeadlineStart < DateTime.Now && DateTime.Now < Model.DeadlineEnd && (Model.FullPrice != 0 || Model.DocumentType == "Договор на работы"))
-                        Badges.Items.AddRange(
-                        new Badge
-                        {
-                            Text = "Активен",
-                            Color = BadgeColor.Success
-                        });
-                    else if (Model.DeadlineStart < DateTime.Now && DateTime.Now < Model.DeadlineEnd && Model.FullPrice == 0 && Model.DocumentType != "Договор на работы")
-                        Badges.Items.AddRange(
-                        new Badge
-                        {
-                            Text = "Расчет",
-                            Color = BadgeColor.Primary
-                        });
-                }
             }
         }
 

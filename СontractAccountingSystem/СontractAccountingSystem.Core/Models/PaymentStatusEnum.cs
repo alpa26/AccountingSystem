@@ -11,6 +11,6 @@ namespace СontractAccountingSystem.Core.Models
         [Description("Расчет")] Сalculation,
         [Description("Ожидает оплаты")] AwaitingPayment,
         [Description("Оплачено")] PaidFor,
-        [Description("Просрочено")] Overdue
+        [Description("Просрочено")] Expired
     }
 }

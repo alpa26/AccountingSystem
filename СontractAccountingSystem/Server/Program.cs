@@ -5,12 +5,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using ÑontractAccountingSystem.Server;
 using ÑontractAccountingSystem.Server.Data;
-
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using ÑontractAccountingSystem.Server.Entities;
-using Microsoft.Extensions.Configuration;
-using System;
 using ÑontractAccountingSystem.Server.Settings;
 
 var builder = WebApplication.CreateBuilder(args);

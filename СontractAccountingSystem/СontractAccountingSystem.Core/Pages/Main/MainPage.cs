@@ -72,7 +72,6 @@ namespace СontractAccountingSystem.Core.Pages.Main
             {
                 Text = "Контрагенты",
                 Icon = PanelIconType.Book,
-                IndicatorCounter = 5,
                 IndicatorLevel = IndicatorLevel.High,
                 CreatePageDelegate = () => new KontrAgentTabsPage()
             };
@@ -81,14 +80,13 @@ namespace СontractAccountingSystem.Core.Pages.Main
             {
                 Text = "Пользователи",
                 Icon = PanelIconType.Person,
-                IndicatorCounter = 25,
                 IndicatorLevel = IndicatorLevel.Low,
-                CreatePageDelegate = () => new UserTypeListPage()
+                CreatePageDelegate = () => new UserSettingPage()
             };
 
             Setting = new NavigationButton
             {
-                Text = "Сущности",
+                Text = "Прочее",
                 Icon = PanelIconType.Pile,
                 CreatePageDelegate = () => new SettingsPage()
             };
@@ -128,8 +126,7 @@ namespace СontractAccountingSystem.Core.Pages.Main
                     Application.Current.Logoff();
                 },
             };
-            supportButton.VisibleIfInRole("admin");
-
+            //supportButton.VisibleIfInRoles("admin");
             supportButton = new BarButton(PanelIconType.Gear)
             {
                 Hint = "Настройки",
@@ -163,7 +160,9 @@ namespace СontractAccountingSystem.Core.Pages.Main
 
             //Application.Current.Bar.Buttons.Add(profileButton);
             Application.Current.Bar.Buttons.Clear();
-            Application.Current.Bar.Buttons.AddRange(supportButton, infoButton,logoutButton);
+            if(SecurityService.UserRole =="admin")
+                Application.Current.Bar.Buttons.AddRange(supportButton, infoButton,logoutButton);
+            else Application.Current.Bar.Buttons.AddRange(infoButton, logoutButton);
         }
     }
 }

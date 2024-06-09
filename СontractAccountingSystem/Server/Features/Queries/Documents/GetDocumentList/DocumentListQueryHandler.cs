@@ -45,6 +45,7 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
                 foreach (var payment in paymententitiesList)
                     paymentModelList.Add(_mapper.Map<PaymentTermModel>(payment));
 
+                doc.DocStatus = await _repository.FindByIdAsync<DocStatus>(doc.DocStatusId);
 
                 foreach (var item in paymentModelList)
                 {
@@ -71,6 +72,8 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentList
                     //},
                     Comment = doc.Comment,
                     PaymentType = (PaymentTypeEnum)Enum.Parse(typeof(PaymentTypeEnum), doc.PaymentType.Name),
+                    Status = (DocStatusEnum)Enum.Parse(typeof(DocStatusEnum), doc.DocStatus.Name),
+
                     OrganizationName = doc.Organization == null ? null : new OrganizationModel() { Id = org.Id, Name = org.Name },
                     CreateDate = doc.CreatedDate,
                     DeadlineStart = doc.DeadlineStart,

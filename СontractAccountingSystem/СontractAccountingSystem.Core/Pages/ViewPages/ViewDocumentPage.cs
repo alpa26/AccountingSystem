@@ -24,7 +24,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
         public TextField<string> Deadline { get; } = new TextField<string>("Сроки исполнения");
         public TextField<DateTime> DeadlineStart { get; } = new TextField<DateTime>("Начало срока исполнения");
         public TextField<DateTime> DeadlineEnd { get; } = new TextField<DateTime>("Конец срока исполнения");
-
+        public TextField Status { get; } = new TextField("Статус");
         public TextField PaymentType { get; } = new TextField("Тип оплаты");
 
         public TextField<PersonModel> WorkerName { get; } = new TextField<PersonModel>("Сотрудник");
@@ -64,6 +64,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Content.AddRange(
                 DocumentName,
                 Deadline,
+                Status,
                 KontrAgentName, OrganizationName,
                 RelateDocuments,
                 Comment
@@ -79,6 +80,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Content.AddRange(
                 DocumentName,
                 Deadline,
+                Status,
                 KontrAgentName, OrganizationName,
                 PaymentType, PaymentTerms, Amount,
                 EssenceOfAgreement, RelateDocuments,
@@ -99,7 +101,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Subtitle = $"Дата добавления {Model.CreateDate.ToString("dd.MM.yyyy")}";
                 Content.AddRange(
                 DocumentName,
-                Deadline, KontrAgentName,
+                Deadline, Status, KontrAgentName,
                 LaborHours,
                 PaymentType, PaymentTerms, Amount,
                 RelateDocuments, EssenceOfAgreement,
@@ -120,7 +122,7 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
                 Subtitle = $"Дата добавления {Model.CreateDate.ToString("dd.MM.yyyy")}";
                 Content.AddRange(
                 DocumentName,
-                Deadline,
+                Deadline, Status,
                 KontrAgentName, OrganizationName,
                 PaymentType, PaymentTerms, Amount,
                 RelateDocuments, EssenceOfAgreement,
@@ -136,6 +138,10 @@ namespace СontractAccountingSystem.Core.Pages.ViewPages
             //DeadlineStart.Value = Model.DeadlineStart;
             //DeadlineEnd.Value = Model.DeadlineEnd;
             EssenceOfAgreement.Text = Model.EssenceOfAgreement;
+            Status.Text = typeof(DocStatusEnum)
+                                .GetField(Model.Status.ToString())
+                                .GetCustomAttribute<DescriptionAttribute>()
+                                ?.Description;
             PaymentType.Text = typeof(PaymentTypeEnum)
                                 .GetField(Model.PaymentType.ToString())
                                 .GetCustomAttribute<DescriptionAttribute>()

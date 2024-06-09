@@ -24,25 +24,40 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditUser.Controllers
         private UserModel UpdateModel()
         {
             var model = new UserModel { Id = Element.Model.Id };
-            model.FullName = $"{Element.SecondName.Value} {Element.FirstName.Value} {Element.LastName.Value}";
+            model.FirstName = Element.FirstName.Value ?? "";
+            model.SecondName = Element.SecondName.Value ?? "";
+            model.LastName = Element.LastName.Value ?? "";
             model.Email = Element.Email.Value;
             model.Phone = Element.Phone.Value ?? "";
             model.Login = Element.Login.Text;
             model.Role = Element.Role.Value.Value;
+            if (Element.KontrAgents.Value is null) model.KontrAgents = new List<KontrAgentModel> { };
+            else model.KontrAgents = Element.KontrAgents.Value.Distinct().ToList();
+
+            if (Element.Organizations.Value is null) model.Organizations = new List<OrganizationModel> { };
+            else model.Organizations = Element.Organizations.Value.Distinct().ToList();
+
+            if (Element.Documents.Value is null) model.Documents = new List<RelateDocumentModel> { };
+            else model.Documents = Element.Documents.Value.Distinct().ToList();
 
             return model;
         }
         private async Task Save(UserModel model)
         {
-            await Task.Delay(200);
-
-
             using StringContent jsonContent = new(
                     JsonSerializer.Serialize(model),
                     Encoding.UTF8,
                     "application/json");
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-            using HttpResponseMessage response = await httpClient.PostAsync("api/auth/register", jsonContent);
+            if (Element.IsNew)
+                await httpClient.PostAsync("api/auth/register", jsonContent);
+            else
+            {
+                await httpClient.PostAsync("api/users/edit", jsonContent);
+                ModelManager.PublishModelUpdated(model);
+
+            }
+
 
         }
     }

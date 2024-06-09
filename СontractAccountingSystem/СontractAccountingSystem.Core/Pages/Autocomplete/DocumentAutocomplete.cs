@@ -12,7 +12,7 @@ namespace СontractAccountingSystem.Core.Pages.Autocomplete
     public class DocumentAutocomplete : Autocomplete<RelateDocumentModel>
     {
         public string Type { get; set; }
-        public DocumentAutocomplete(string type,string caption = null) : base(caption)
+        public DocumentAutocomplete(string type=null,string caption = null) : base(caption)
         {
 
             Type = type;
@@ -23,7 +23,11 @@ namespace СontractAccountingSystem.Core.Pages.Autocomplete
 
         private async Task<List<RelateDocumentModel>> Search(DataRequest request)
         {
-            var relateDocuments = await Service<IOrgStructureService>.GetInstance().LoadRelatedDocumentsByType(Type);
+            IList<RelateDocumentModel> relateDocuments;
+            if(Type ==null)
+                relateDocuments = await Service<IOrgStructureService>.GetInstance().LoadRelatedDocuments();
+            else 
+                relateDocuments = await Service<IOrgStructureService>.GetInstance().LoadRelatedDocumentsByType(Type);
             var pattern = request.SearchPattern?.ToLower();
             if (pattern.IsNullOrEmpty())
                 return null;

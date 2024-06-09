@@ -5,7 +5,7 @@ using СontractAccountingSystem.Server.Queries.Roles.GetRoleList;
 using СontractAccountingSystem.Server.Queries.Users.GetUsersList;
 using СontractAccountingSystem.Server.Services;
 
-namespace СontractAccountingSystem.Server.Features.Queries.Users.GetWorkerList
+namespace СontractAccountingSystem.Server.Features.Queries.Workers.GetWorkerList
 {
     public class WorkerListQueryHandler : IRequestHandler<WorkerListQuery, List<PersonModel>>
     {

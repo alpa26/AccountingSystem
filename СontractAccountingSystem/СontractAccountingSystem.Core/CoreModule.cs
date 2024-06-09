@@ -15,6 +15,7 @@ using DK.WebClient.Core.Services;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Pages.PaymentTermList;
 using СontractAccountingSystem.Core.Pages.EditPaymentTerm;
+using СontractAccountingSystem.Core.Pages.Settings.ListPages.UserList;
 
 namespace СontractAccountingSystem.Core
 {
@@ -38,6 +39,8 @@ namespace СontractAccountingSystem.Core
             base.Start();
             ModelManager.RegisterModelConverter<ArchiveDocumentModel, DocumentListItemModel>(x => x.ConvertToListItem());
             ModelManager.RegisterModelConverter<PaymentTermModel, PaymentTermItem>(x => x.ConvertToListItem());
+            ModelManager.RegisterModelConverter<UserModel, UserListItem>(x => x.ConvertToListItem());
+
         }
     }
 }

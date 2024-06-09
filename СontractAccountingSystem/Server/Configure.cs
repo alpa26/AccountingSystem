@@ -17,6 +17,7 @@ namespace СontractAccountingSystem.Server
             services.AddValidatorsFromAssembly(assembly1);
 
             services.AddTransient<Repository>();
+            services.AddTransient<UserRepository>();
             services.AddTransient<DocumentService>();
             services.AddSingleton<IEmailService, EmailService>();
 

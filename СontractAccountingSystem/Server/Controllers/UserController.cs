@@ -4,8 +4,9 @@ using СontractAccountingSystem.Server.Entities;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Queries.Users.GetUserByName;
 using СontractAccountingSystem.Server.Queries.Users.GetUsersList;
-using СontractAccountingSystem.Server.Queries.Roles.GetRoleList;
-using СontractAccountingSystem.Server.Features.Queries.Users.GetWorkerList;
+using СontractAccountingSystem.Server.Features.Commands.Users.ChangeUser;
+using СontractAccountingSystem.Server.Queries.Users.GetUserById;
+using System.Security.Claims;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
@@ -20,28 +21,40 @@ namespace СontractAccountingSystem.Server.Controllers
             _mediator = mediator;
         }
 
-        //[HttpPost("create")]
-        //public async Task<Guid> CreateUser(UserCreateCommand cmd)
-        //{
-        //    return await _mediator.Send(cmd);
-        //}
+        [HttpPost("edit")]
+        public async Task GetUserList(UserModel user)
+        {
+            await _mediator.Send(new ChangeUserCommand(user));
+        }
 
         [HttpPost("getbyname")]
-        public async Task<User> GetUserList(UserByNameQuery query)
+        public async Task<User> GetUserList(string name)
         {
-            return await _mediator.Send(query);
+            return await _mediator.Send(new UserByNameQuery(name));
+        }
+
+        [HttpPost("getbyid")]
+        public async Task<UserModel> GetUserByIdList(Guid id)
+        {
+            return await _mediator.Send(new UserByIdQuery(id));
+        }
+
+        [HttpGet("getrole")]
+        public async Task<IActionResult> GetRoleInHeader()
+        {
+            if (HttpContext.User.Identity.IsAuthenticated)
+            {
+                var claimrole = HttpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role).Value;
+                HttpContext.Response.Headers.Add("Role", claimrole);
+                return Ok();
+            }
+            else return BadRequest();
         }
 
         [HttpGet("list")]
-        public async Task<User[]> GetUserList()
+        public async Task<List<UserModel>> GetUserList()
         {
             return await _mediator.Send(new UserListQuery());
-        }
-
-        [HttpGet("workerlist")]
-        public async Task<List<PersonModel>> GetWorkerList()
-        {
-            return await _mediator.Send(new WorkerListQuery());
         }
     }
 }

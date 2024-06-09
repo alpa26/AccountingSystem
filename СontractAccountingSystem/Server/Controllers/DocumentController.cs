@@ -1,6 +1,7 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using System.Security.Claims;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Commands.Documents.ChangeDocument;
 using СontractAccountingSystem.Server.Features.Commands.Documents.DeleteDocument;
@@ -11,6 +12,7 @@ using СontractAccountingSystem.Server.Features.CreateDocument;
 using СontractAccountingSystem.Server.Features.CreatePayment;
 using СontractAccountingSystem.Server.Queries.Documents.GetDocumentById;
 using СontractAccountingSystem.Server.Queries.Documents.GetDocumentList;
+using СontractAccountingSystem.Server.Queries.Documents.GetDocumentListByAccess;
 
 namespace СontractAccountingSystem.Server.Controllers
 {
@@ -88,11 +90,19 @@ namespace СontractAccountingSystem.Server.Controllers
         //{
         //    return await _mediator.Send(new DocumentListQuery());
         //}
-
         [HttpGet("geteditlist")]
         public async Task<List<ArchiveDocumentModel>> GetDocumentEditList()
         {
-            return await _mediator.Send(new DocumentListQuery());
+            var claimrole = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.Role).Value;
+            if(claimrole.Equals("admin"))
+                return await _mediator.Send(new DocumentListQuery());
+            else
+            {
+                string claimid = HttpContext.User.Claims.First(c => c.Type == ClaimTypes.NameIdentifier).Value;
+                return await _mediator.Send(new DocumentListByAccessQuery(new Guid(claimid)));
+
+            }
+
         }
 
         [HttpDelete("delete")]

@@ -45,7 +45,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
                 x.SearchTokensAsyncDelegate = SearchTokens;
                 x.BuildNewTokensFromPatternDelegate = BuildNewToken;
             });
-            Element.Filtering.ShowFilterPanel();
+            Element.Filtering.HideFilterPanel();
         }
 
         private Task<List<Token>> BuildNewToken(string text)
@@ -235,7 +235,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
             {
                 var res = await response.Content.ReadAsAsync<IEnumerable<DocumentListItemModel>>();
                 ListCount = res.Count();
-                return res.OrderByDescending(x => x.DeadlineEnd).ToList();
+                return res.OrderByDescending(x => x.DeadlineStart).ToList();
             }
             else return null;
         }

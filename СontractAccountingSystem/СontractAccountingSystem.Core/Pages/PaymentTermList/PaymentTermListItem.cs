@@ -26,8 +26,14 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList
             Badges.Items.Clear();
             var badge = new Badge();
 
-
-            if (model.Status == PaymentStatusEnum.AwaitingPayment)
+            if (model.DeadlineEnd < DateTime.Now && model.Status != PaymentStatusEnum.PaidFor || model.Status == PaymentStatusEnum.Expired)
+                Badges.Items.AddRange(badge,
+                    new Badge
+                    {
+                        Text = "Просрочено",
+                        Color = BadgeColor.Danger
+                    });
+            else if(model.Status == PaymentStatusEnum.AwaitingPayment)
                 Badges.Items.AddRange(badge,
                     new Badge
                     {
@@ -41,14 +47,7 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList
                         Text = "Оплачено",
                         Color = BadgeColor.Success
                     });
-            else if (model.DeadlineEnd < DateTime.Now && model.Status != PaymentStatusEnum.PaidFor)
-                Badges.Items.AddRange(badge,
-                    new Badge
-                    {
-                        Text = "Просрочено",
-                        Color = BadgeColor.Danger
-                    });
-            else if (model.Amount == 0)
+            else if (model.Amount == 0 || model.Status == PaymentStatusEnum.Сalculation)
                 Badges.Items.AddRange(badge,
                     new Badge
                     {

@@ -34,7 +34,7 @@ namespace СontractAccountingSystem.Core.Services
         public async Task RefreshData()
         {
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-            PersonsList = await LoadModelList<PersonModel>(httpClient, "users/workerlist");
+            PersonsList = await LoadModelList<PersonModel>(httpClient, "workers/list");
             KontrAgentList = await LoadModelList<KontrAgentModel>(httpClient, "kontragent/list");
             OrganizationList = await LoadModelList<OrganizationModel>(httpClient, "organizations/list");
             DocumentList = await LoadModelList<ArchiveDocumentModel>(httpClient, "documents/geteditlist");
@@ -83,6 +83,21 @@ namespace СontractAccountingSystem.Core.Services
         {
             await Task.Delay(500);
             return PersonsList.ToList();
+        }
+
+        public async Task<IList<RelateDocumentModel>> LoadRelatedDocuments()
+        {
+            await Task.Delay(500);
+            var newList = new List<RelateDocumentModel>();
+            foreach (var document in DocumentList)
+                   newList.Add(new RelateDocumentModel
+                   {
+                       Id = Guid.NewGuid(),
+                       RelatedDocumentId = document.Id,
+                       DocumentName = document.Name,
+                       DocumentNumber = document.DocumentNumber
+                   });
+            return newList.ToList();
         }
 
         public async Task<IList<RelateDocumentModel>> LoadRelatedDocumentsByType(string doctype)

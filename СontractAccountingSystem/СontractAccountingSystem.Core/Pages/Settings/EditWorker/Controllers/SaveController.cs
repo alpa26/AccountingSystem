@@ -7,6 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Pages.Settings.EditUser;
+using System.Text.Json;
+using СontractAccountingSystem.Core.Services;
+using СontractAccountingSystem.Core.Services.Interfaces;
 
 namespace СontractAccountingSystem.Core.Pages.Settings.EditWorker.Controllers
 {
@@ -29,14 +32,14 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditWorker.Controllers
         {
             await Task.Delay(200);
 
-            /*
+
             using StringContent jsonContent = new(
                     JsonSerializer.Serialize(model),
                     Encoding.UTF8,
                     "application/json");
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-                using HttpResponseMessage response = await httpClient.PostAsync("api/auth/register", jsonContent);
-            */
+            using HttpResponseMessage response = await httpClient.PostAsync("api/workers/create", jsonContent);
+
         }
     }
 }

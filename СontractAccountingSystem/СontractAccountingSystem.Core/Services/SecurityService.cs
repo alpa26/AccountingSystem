@@ -17,6 +17,8 @@ namespace СontractAccountingSystem.Core.Services
         public SecurityService()
         {
             _roles[SecurityRoles.Adminisrator] = new Role(SecurityRoles.Adminisrator, (_, _) => true);
+            _roles[SecurityRoles.Director] = new Role(SecurityRoles.Director, (_, _) => true);
+
         }
 
         private bool IsActionGrantedForOperator(string action, object? subject)
@@ -116,6 +118,8 @@ namespace СontractAccountingSystem.Core.Services
             _role = _securityService.GetRole(SecurityRoles.Operator);
             if (SecurityService.UserRole == "admin")
                 _role = _securityService.GetRole(SecurityRoles.Adminisrator);
+            if (SecurityService.UserRole == "director")
+                _role = _securityService.GetRole(SecurityRoles.Director);
         }
 
         public IUser Owner { get; }
@@ -154,5 +158,7 @@ namespace СontractAccountingSystem.Core.Services
         public static readonly string Operator = nameof(Operator);
         public static readonly string Reader = nameof(Reader);
         public static readonly string Adminisrator = "admin";
+        public static readonly string Director = "director";
+
     }
 }

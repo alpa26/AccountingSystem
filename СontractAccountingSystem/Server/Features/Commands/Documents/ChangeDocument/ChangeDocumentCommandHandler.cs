@@ -31,6 +31,7 @@ namespace СontractAccountingSystem.Server.Commands.Documents.ChangeDocument
         {
 
             var paymentTypes = await _repository.FindListAsync<DocPayType>();
+            var docStatus = await _repository.FindListAsync<DocStatus>();
             var doctypes = await _repository.FindListAsync<DocType>();
 
 
@@ -70,8 +71,9 @@ namespace СontractAccountingSystem.Server.Commands.Documents.ChangeDocument
             doc.KontrAgentId = request.Document.KontrAgentName.Id;
             doc.TypeId = doctypes.First(x => x.Name == request.Document.DocumentType).Id;
             doc.PaymentTypeId = paymentTypes.First(x => x.Name == request.Document.PaymentType.ToString()).Id;
+            doc.DocStatusId = docStatus.First(x => x.Name == request.Document.Status.ToString()).Id;
 
-            
+
 
             var res = await _repository.ChangeAsync(doc);
 

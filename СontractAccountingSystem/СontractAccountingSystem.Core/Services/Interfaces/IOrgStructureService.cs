@@ -16,6 +16,7 @@ namespace СontractAccountingSystem.Core.Services.Interfaces
         Task<IList<PaymentTermModel>> LoadPayments();
 
         Task<IList<ArchiveDocumentModel>> LoadDocuments();
+        Task<IList<RelateDocumentModel>> LoadRelatedDocuments();
         Task<IList<RelateDocumentModel>> LoadRelatedDocumentsByType(string type);
         Task<IList<OrganizationModel>> LoadOrganizations();
 
