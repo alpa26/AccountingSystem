@@ -20,10 +20,10 @@ namespace СontractAccountingSystem.Core.Pages.Settings.ListPages.KontrAgentList
             ListEmptyText = "Контрагенты не добавлены";
 
 
-            RegisterBuildItemDelegate(x => new KontrAgentAutocompleteItem(x));
+            RegisterBuildItemDelegate(x => new KontrAgentListItem(x));
 
-            //CreateItemPageDelegate = x => new ViewDocumentPage(x.Id);
-            //AutoSelectFirstItem = true;
+            CreateItemPageDelegate = x => new ViewKontrAgentPage(x);
+            AutoSelectFirstItem = true;
 
         }
     }

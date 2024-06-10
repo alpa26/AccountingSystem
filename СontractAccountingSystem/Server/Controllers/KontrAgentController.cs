@@ -5,6 +5,9 @@ using System.Security.Claims;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Server.Commands.KontrAgents.KontrAgentCreate;
 using СontractAccountingSystem.Server.Entities;
+using СontractAccountingSystem.Server.Features.Commands.Documents.DeleteDocument;
+using СontractAccountingSystem.Server.Features.Commands.Documents.DeleteKontrAgent;
+using СontractAccountingSystem.Server.Features.Commands.KontrAgents.ChangeKontrAgent;
 using СontractAccountingSystem.Server.Queries.Documents.GetDocumentList;
 using СontractAccountingSystem.Server.Queries.Documents.GetDocumentListByAccess;
 using СontractAccountingSystem.Server.Queries.KontrAgents.GetKontrAgentById;
@@ -34,6 +37,16 @@ namespace СontractAccountingSystem.Server.Controllers
                 return BadRequest();
         }
 
+        [HttpPost("edit")]
+        public async Task<IActionResult> ChangeKontrAgent([FromBody] KontrAgentModel request)
+        {
+            var res = await _mediator.Send(new ChangeKontrAgentCommand(request));
+            if (res.Success)
+                return Ok();
+            else
+                return BadRequest();
+        }
+
         [HttpGet("list")]
         public async Task<List<KontrAgentModel>> GetKontrAgentList()
         {
@@ -52,6 +65,16 @@ namespace СontractAccountingSystem.Server.Controllers
         public async Task<KontrAgent> GetKontrAgentById(Guid id)
         {
             return await _mediator.Send(new KontrAgentByIdQuery(id));
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> DeleteKontrAgent(Guid id)
+        {
+            var res = await _mediator.Send(new DeleteKontrAgentCommand(id));
+            if (res)
+                return Ok();
+            else
+                return BadRequest();
         }
     }
 }

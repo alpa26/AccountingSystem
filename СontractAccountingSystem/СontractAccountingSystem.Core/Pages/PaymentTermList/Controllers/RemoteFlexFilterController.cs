@@ -217,7 +217,7 @@ namespace СontractAccountingSystem.Core.Pages.PaymentTermList.Controllers
             if (response.IsSuccessStatusCode)
             {
                 var res = await response.Content.ReadAsAsync<IEnumerable<PaymentTermModel>>();
-                return res.ToList();
+                return res.OrderByDescending(x => x.DeadlineEnd).ToList();
             }
             else return null;
         }

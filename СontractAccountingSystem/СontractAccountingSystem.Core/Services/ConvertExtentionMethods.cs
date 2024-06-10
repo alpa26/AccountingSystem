@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Pages.EditPaymentTerm;
 using СontractAccountingSystem.Core.Pages.PaymentTermList;
+using СontractAccountingSystem.Core.Pages.Settings.ListPages.KontrAgentList;
 using СontractAccountingSystem.Core.Pages.Settings.ListPages.UserList;
 
 namespace СontractAccountingSystem.Core.Services
@@ -40,6 +41,11 @@ namespace СontractAccountingSystem.Core.Services
         public static UserListItem ConvertToListItem(this UserModel self)
         {
             return new UserListItem(self);
+        }
+
+        public static KontrAgentListItem ConvertToListItem(this KontrAgentModel self)
+        {
+            return new KontrAgentListItem(self);
         }
     }
 }

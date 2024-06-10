@@ -39,9 +39,9 @@ namespace СontractAccountingSystem.Server.Queries.Documents.GetDocumentById
             var statusList = await _repository.FindListAsync<PaymentStatus>();
 
             var paymentModelList = new List<PaymentTermModel>();
-            var paymententitiesList = await _repository.FindListByFilterAsync<Payment, Guid>("DocumentId", doc.Id);
+            var paymentEntitiesList = await _repository.FindListByFilterAsync<Payment, Guid>("DocumentId", doc.Id);
 
-            foreach (var entity in paymententitiesList)
+            foreach (var entity in paymentEntitiesList)
             {
                 var newitem = _mapper.Map<PaymentTermModel>(entity);
                 var status = statusList.FirstOrDefault(x => x.Id == entity.PaymentStatusId);

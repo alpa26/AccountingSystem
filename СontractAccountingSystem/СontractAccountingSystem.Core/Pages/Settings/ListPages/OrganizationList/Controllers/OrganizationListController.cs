@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using СontractAccountingSystem.Core.Models;
 using СontractAccountingSystem.Core.Pages.DocumentList;
+using СontractAccountingSystem.Core.Services;
 using СontractAccountingSystem.Core.Services.Interfaces;
 
 namespace СontractAccountingSystem.Core.Pages.Settings.ListPages.OrganizationList.Controllers
@@ -23,9 +24,13 @@ namespace СontractAccountingSystem.Core.Pages.Settings.ListPages.OrganizationLi
         {
             if (Element.DataSource.Models.Count == 0)
             {
-                var orgs = await Service<IOrgStructureService>.GetInstance().LoadOrganizations();
-                if (orgs.Count != 0)
-                    return orgs.ToList();
+                var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
+                var response = await httpClient.GetAsync("api/organizations/list");
+                if (response.IsSuccessStatusCode)
+                {
+                    var res = await response.Content.ReadAsAsync<IEnumerable<OrganizationModel>>();
+                    return res.ToList();
+                }
                 else
                     return null;
             }

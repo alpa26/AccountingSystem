@@ -12,6 +12,7 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditKontrAgent
     public class EditKontrAgentPage : EditFormPage<KontrAgentModel>
     {
         internal string Type { get; set; }
+        internal bool IsNew { get; set; } = false;
 
 
         [Required]
@@ -85,6 +86,8 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditKontrAgent
 
         private KontrAgentModel CreateModel()
         {
+            IsNew = true;
+
             return new KontrAgentModel()
             {
                 Id = new Guid()

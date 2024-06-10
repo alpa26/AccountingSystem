@@ -235,7 +235,7 @@ namespace СontractAccountingSystem.Core.Pages.DocumentList.Controllers
             {
                 var res = await response.Content.ReadAsAsync<IEnumerable<DocumentListItemModel>>();
                 ListCount = res.Count();
-                return res.OrderByDescending(x => x.DeadlineStart).ToList();
+                return res.OrderByDescending(x => x.DeadlineEnd).ToList();
             }
             else return null;
         }

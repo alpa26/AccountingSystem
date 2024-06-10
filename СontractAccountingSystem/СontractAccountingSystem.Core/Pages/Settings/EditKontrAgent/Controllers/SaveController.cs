@@ -35,7 +35,6 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditKontrAgent.Controlle
             model.KPP = Element.KPP.Value;
             model.OGRN = Element.OGRN.Value;
             model.Type = Element.Type;
-
             model.ContactPersonName = Element.ContactPersonName.Value;
             model.ContactPhone = Element.ContactPhone.Value;
             model.ContactEmail = Element.ContactEmail.Value;
@@ -53,8 +52,13 @@ namespace СontractAccountingSystem.Core.Pages.Settings.EditKontrAgent.Controlle
                     Encoding.UTF8,
                     "application/json");
             var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
-            using HttpResponseMessage response = await httpClient.PostAsync("api/kontragent/create", jsonContent);
-
+            if (Element.IsNew)
+                await httpClient.PostAsync("api/kontragent/create", jsonContent);
+            else
+            {
+                await httpClient.PostAsync("api/kontragent/edit", jsonContent);
+                ModelManager.PublishModelUpdated(model);
+            }
         }
     }
 }

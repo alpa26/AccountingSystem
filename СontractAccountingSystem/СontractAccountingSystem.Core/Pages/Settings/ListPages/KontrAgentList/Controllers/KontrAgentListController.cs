@@ -23,9 +23,13 @@ namespace СontractAccountingSystem.Core.Pages.Settings.ListPages.KontrAgentList
         {
             if (Element.DataSource.Models.Count == 0)
             {
-                var kontrAgents = await Service<IOrgStructureService>.GetInstance().LoadKontrAgents();
-                if (kontrAgents.Count!=0)
-                    return kontrAgents.ToList();
+                var httpClient = ((SingletonHttpClient)Service<IHttpClient>.GetInstance()).HostHttpClient;
+                var response = await httpClient.GetAsync("api/kontragent/list");
+                if (response.IsSuccessStatusCode)
+                {
+                    var res = await response.Content.ReadAsAsync<IEnumerable<KontrAgentModel>>();
+                    return res.ToList();
+                }
                 else
                     return null;
             }
